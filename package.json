@@ -1,0 +1,17 @@
+{
+  "name": "chatspaces",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": ">= 0.10.x",
+    "npm": "1.1.x"
+  },
+  "dependencies": {
+    "client-sessions": ">= 0.1.1",
+    "connect": ">= 2.7.6",
+    "express": ">= 3.2.0",
+    "jade": ">= 0.29.0",
+    "nconf": ">= 0.6.7",
+    "express-persona": "git://github.com/jbuck/express-persona.git"
+  }
+}

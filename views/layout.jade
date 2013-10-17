@@ -1,0 +1,30 @@
+!!! 5
+html(ng-app='pea')
+  head
+    title Persona-Express-Angular
+    meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', name='viewport')
+    meta(content='yes', name='apple-mobile-web-app-capable')
+    meta(content='chrome=1', http-equiv='X-UA-Compatible')
+    base(href='/')
+    link(rel='shortcut icon', href='/images/favicon.png')
+    link(rel='stylesheet', href='/stylesheets/main.css')
+
+  body(ng-controller='AppCtrl')
+    #header
+      h1 Persona-Express-Angular
+      ul
+        li(ng-if='isAuthenticated')
+          a(href='javascript:;', ng-click='logout()') Logout
+        li(ng-if='!isAuthenticated')
+          a(href='javascript:;', ng-click='login()') Sign in
+
+    block content
+    #footer
+
+    script(src='https://login.persona.org/include.js')
+    script(src='/javascripts/vendor/jquery.js')
+    script(src='/javascripts/vendor/angular.js')
+    script(src='/javascripts/vendor/angular-route.js')
+    script(src='/javascripts/app.js')
+    script(src='/javascripts/factories.js')
+    script(src='/javascripts/controllers.js')
