@@ -1,16 +1,14 @@
-# Persona-Express-Angular Template
+# Chatspaces
 
 ## Installation instructions
 
 Clone the repository
 
-> git clone git://github.com/ednapiranha/persona-express-angular.git
-
-> curl http://npmjs.org/install.sh | sh
+> git clone git://github.com/mozilla/chatspaces.git
 
 Install node by using brew or through the website http://nodejs.org/#download
 
-> cd persona-express-angular
+> cd chatspaces
 
 > cp local.json-dist local.json
 
