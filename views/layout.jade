@@ -1,5 +1,5 @@
 !!! 5
-html(ng-app='pea')
+html(ng-app='chatspace')
   head
     title Persona-Express-Angular
     meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', name='viewport')
@@ -11,7 +11,7 @@ html(ng-app='pea')
 
   body(ng-controller='AppCtrl')
     #header
-      h1 Persona-Express-Angular
+      h1 chatspaces
       ul
         li(ng-if='isAuthenticated')
           a(href='javascript:;', ng-click='logout()') Logout

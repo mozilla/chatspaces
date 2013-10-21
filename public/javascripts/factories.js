@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pea.factories', []).
+angular.module('chatspace.factories', []).
   factory('persona', function ($rootScope, $http) {
     var resetUser = function () {
       localStorage.removeItem('personaEmail');

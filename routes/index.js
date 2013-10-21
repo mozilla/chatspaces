@@ -1,11 +1,18 @@
 'use strict';
 
-module.exports = function(app, isLoggedIn) {
+module.exports = function(app, nconf, isLoggedIn) {
+  var Parallax = require('meatspace-parallax');
+  var parallax = {};
+
   app.get('/login', isLoggedIn, function (req, res) {
-    // Persona email is already saved in the session but showing this so that you
-    // can set other session items and return in this payload.
+    if (!parallax[req.session.email]) {
+      parallax[req.session.email] = new Parallax(req.session.user, {
+        db: nconf.get('db') + '/users/' + req.session.email
+      });
+    }
+
     res.json({
-      email: req.session.email
+      message: 'logged in'
     });
   });
 

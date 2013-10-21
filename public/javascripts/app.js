@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('pea', [
+angular.module('chatspace', [
   'ngRoute',
-  'pea.factories',
-  'pea.controllers'
+  'chatspace.factories',
+  'chatspace.controllers'
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider

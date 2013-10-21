@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pea.controllers', []).
+angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
 
