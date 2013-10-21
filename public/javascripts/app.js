@@ -11,6 +11,14 @@ config(function ($routeProvider, $locationProvider) {
       controller: 'HomeCtrl',
       templateUrl: 'partials/home.html'
     })
+    .when('/profile', {
+      controller: 'ProfileCtrl',
+      templateUrl: 'partials/profile.html'
+    })
+    .when('/dashboard', {
+      controller: 'HomeCtrl',
+      templateUrl: 'partials/dashboard.html'
+    })
     .otherwise({
       redirectTo: '/'
     });

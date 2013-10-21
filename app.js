@@ -6,8 +6,14 @@ var nconf = require('nconf');
 var settings = require('./settings')(app, configurations, express);
 var Parallax = require('meatspace-parallax');
 var parallax = {};
+var level = require('level');
 
 nconf.argv().env().file({ file: 'local.json' });
+
+var usernamesDb = level(nconf.get('db') + '/usernames', {
+  createIfMissing: true,
+  valueEncoding: 'json'
+});
 
 // Filters for routes
 var isLoggedIn = function(req, res, next) {
@@ -30,6 +36,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, nconf, parallax, isLoggedIn);
+require('./routes')(app, nconf, parallax, usernamesDb, isLoggedIn);
 
 app.listen(process.env.PORT || nconf.get('port'));

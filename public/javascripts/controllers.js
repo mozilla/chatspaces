@@ -3,27 +3,32 @@
 angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
+    $rootScope.username = '';
+
+    $rootScope.isValidUser = function () {
+      if (!($rootScope.isAuthenticated || $rootScope.username)) {
+        $location.path('/');
+      }
+    };
+
     var email = localStorage.getItem('personaEmail');
 
     if (email) {
-      if (!$rootScope.email) {
-        $http({
-          url: '/login',
-          method: 'GET'
-        }).success(function (data) {
-
-          $rootScope.isAuthenticated = true;
-          $rootScope.email = data.email;
-        }).error(function (data) {
-
-          localStorage.removeItem('personaEmail')
-          console.log('Login failed because ' + data);
-        });
-      } else {
-        console.
-        $rootScope.email = email;
-      }
+      $rootScope.isAuthenticated = true;
     }
+
+    $http({
+      url: '/login',
+      method: 'GET'
+    }).success(function (data) {
+
+      $rootScope.email = data.email;
+      $rootScope.username = data.username
+    }).error(function (data) {
+
+      localStorage.removeItem('personaEmail')
+      console.log('Login failed because ' + data);
+    });
 
     $rootScope.login = function () {
       persona.login();
@@ -33,7 +38,20 @@ angular.module('chatspace.controllers', []).
       persona.logout();
     }
   }).
-  controller('HomeCtrl', function ($scope, persona, $rootScope, $http) {
+  controller('HomeCtrl', function ($scope, $rootScope, $location) {
     console.log('home view');
-    console.log($rootScope.email)
+    if ($rootScope.isAuthenticated) {
+      if (!$rootScope.username) {
+        $location.path('/profile');
+      } else {
+        $location.path('/dashboard');
+      }
+    }
+  }).
+  controller('DashboardCtrl', function ($scope, $rootScope, $http) {
+    console.log('dashboard view');
+    $rootScope.isValidUser();
+  }).
+  controller('ProfileCtrl', function ($scope, $rootScope, $http) {
+    console.log('profile page');
   });
