@@ -3,8 +3,9 @@
 angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
+    var email = localStorage.getItem('personaEmail');
 
-    if (localStorage.getItem('personaEmail')) {
+    if (email) {
       if (!$rootScope.email) {
         $http({
           url: '/login',
@@ -18,6 +19,9 @@ angular.module('chatspace.controllers', []).
           localStorage.removeItem('personaEmail')
           console.log('Login failed because ' + data);
         });
+      } else {
+        console.
+        $rootScope.email = email;
       }
     }
 
@@ -29,6 +33,7 @@ angular.module('chatspace.controllers', []).
       persona.logout();
     }
   }).
-  controller('HomeCtrl', function ($scope, persona, $http) {
+  controller('HomeCtrl', function ($scope, persona, $rootScope, $http) {
     console.log('home view');
+    console.log($rootScope.email)
   });

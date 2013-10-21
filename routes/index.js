@@ -1,17 +1,9 @@
 'use strict';
 
-module.exports = function(app, nconf, isLoggedIn) {
-  var Parallax = require('meatspace-parallax');
-  var parallax = {};
-
+module.exports = function(app, nconf, parallax, isLoggedIn) {
   app.get('/login', isLoggedIn, function (req, res) {
-    if (!parallax[req.session.email]) {
-      parallax[req.session.email] = new Parallax(req.session.user, {
-        db: nconf.get('db') + '/users/' + req.session.email
-      });
-    }
-
     res.json({
+      email: req.session.email,
       message: 'logged in'
     });
   });

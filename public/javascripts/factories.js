@@ -4,6 +4,7 @@ angular.module('chatspace.factories', []).
   factory('persona', function ($rootScope, $http) {
     var resetUser = function () {
       localStorage.removeItem('personaEmail');
+      $rootScope.email = false;
       $rootScope.isAuthenticated = false;
     };
 
@@ -25,7 +26,6 @@ angular.module('chatspace.factories', []).
               url: '/login',
               method: 'GET'
             }).success(function (data) {
-
               localStorage.setItem('personaEmail', data.email);
               $rootScope.isAuthenticated = true;
               $rootScope.email = data.email;
