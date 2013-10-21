@@ -8,6 +8,8 @@ Clone the repository
 
 Install node by using brew or through the website http://nodejs.org/#download
 
+> npm -g install nodemon
+
 > cd chatspaces
 
 > cp local.json-dist local.json
@@ -16,4 +18,4 @@ Install node by using brew or through the website http://nodejs.org/#download
 
 Run the site
 
-> node app.js
+> npm start
