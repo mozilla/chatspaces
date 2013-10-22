@@ -75,7 +75,8 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
               req.session.username = username;
 
               res.json({
-                username: username
+                username: username,
+                message: 'updated username'
               });
             }
           });

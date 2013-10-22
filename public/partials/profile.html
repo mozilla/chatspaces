@@ -1,7 +1,11 @@
 <h2>Your profile</h2>
 
 <h3>Update your username</h3>
+<p>Current username: {{ username }}</p>
 <form ng-submit="updateProfile()">
+  <div ng-if="info" class="info">
+    <p>{{ info }}</p>
+  </div>
   <div ng-if="errors" class="errors">
     <p>{{ errors }}</p>
   </div>

@@ -3,10 +3,23 @@
 angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
+    $rootScope.settings = false;
+
+    var settingsView = $('main');
 
     $rootScope.isValidUser = function () {
       if (!($rootScope.isAuthenticated || $rootScope.username)) {
         $location.path('/');
+      }
+    };
+
+    $rootScope.toggleSettings = function () {
+      if ($rootScope.settings) {
+        $rootScope.settings = false;
+        settingsView.removeClass('on').addClass('off');
+      } else {
+        $rootScope.settings = true;
+        settingsView.removeClass('off').addClass('on');
       }
     };
 
@@ -66,11 +79,12 @@ angular.module('chatspace.controllers', []).
         },
         method: 'PUT'
       }).success(function (data) {
-
+        $scope.errors = false;
+        $scope.info = data.message;
         $rootScope.username = data.username;
         $scope.username = data.username;
       }).error(function (data) {
-
+        $scope.info = false;
         $scope.errors = data.message;
         console.log('Invalid username ', data.message);
       });

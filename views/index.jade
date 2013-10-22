@@ -1,5 +1,9 @@
 extend layout
 
 block content
-  main(role='main')
-    div(ng-view)
+  main(role='main', class='off')
+    section.settings
+      h1 Settings
+    section.default
+      div(ng-view)
+

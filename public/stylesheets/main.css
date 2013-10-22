@@ -66,29 +66,127 @@ body, textarea, input {
 }
 
 h1, h2, h3 {
-    font-family: 'FiraSans-Regular', Arial, sans-serif;
+    color: #999;
     font-size: 1.8rem;
     line-height: 2rem;
     margin-bottom: 10px;
 }
 
+h3 {
+    background-color: #fff;
+    display: inline-block;
+    font-size: 1.4rem;
+    line-height: 1rem;
+    padding: 8px 10px;
+}
+
 #header, #wrapper {
-    margin: 5px auto 0 auto;
-    max-width: 800px;
-    min-width: 300px;
-    padding: 10px;
+    margin: 2px auto 0 auto;
+    width: 994px;
+    padding: 20px;
     position: relative;
 }
 
 #header {
-    background-color: #ccc;
+    background-color: #f1f1f1;
 }
 
 #wrapper {
     background-color: #f1f1f1;
+    height: 400px;
+    overflow: hidden;
+}
+
+#wrapper main > section {
+    position: absolute;
+    top: 20px;
+    width: 984px;
+}
+
+#wrapper main.off > section.settings {
+    left: -1024px;
+    -moz-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
+}
+
+#wrapper main.off > section.default {
+    left: 20px;
+    -moz-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
+}
+
+#wrapper main.on > section.settings {
+    left: 20px;
+    -moz-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
+}
+
+#wrapper main.on > section.default {
+    left: 1024px;
+    -moz-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
 }
 
 input {
-    font-size: 1.4rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
     padding: 5px;
+}
+
+.errors, .info {
+    font-family: 'FiraSans-Regular';
+    margin: 5px 0;
+    padding: 5px 10px;
+}
+
+.info {
+    background-color: #4bc066;
+    color: #e2ffe9;
+}
+
+.errors {
+    background-color: #ed3047;
+    color: #ffdde1;
+}
+
+@media only screen and (max-width: 993px) {
+    #header, #wrapper, #wrapper main > section {
+        width: 728px;
+    }
+
+    #wrapper main.off > section.settings {
+        left: -768px;
+    }
+
+    #wrapper main.on > section.default {
+        left: 758px;
+    }
+}
+
+@media only screen and (max-width: 727px) {
+    #header, #wrapper, #wrapper main > section {
+        width: 420px;
+    }
+
+    #wrapper main.off > section.settings {
+        left: -460px;
+    }
+
+    #wrapper main.on > section.default {
+        left: 450px;
+    }
+}
+
+@media only screen and (max-width: 459px) {
+    #header, #wrapper, #wrapper main > section {
+        width: 280px;
+    }
+
+    #wrapper main.off > section.settings {
+        left: -320px;
+    }
+
+    #wrapper main.on > section.default {
+        left: 310px;
+    }
 }

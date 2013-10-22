@@ -11,7 +11,7 @@ html(ng-app='chatspace')
 
   body(ng-controller='AppCtrl')
     #header
-      h1 chatspaces
+      button(class='toggle', ng-click='toggleSettings()') +
       ul
         li(ng-if='isAuthenticated')
           a(href='javascript:;', ng-click='logout()') Logout
@@ -20,6 +20,7 @@ html(ng-app='chatspace')
 
     #wrapper
       block content
+
     #footer
 
     script(src='https://login.persona.org/include.js')
