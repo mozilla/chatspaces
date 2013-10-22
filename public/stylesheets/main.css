@@ -82,47 +82,51 @@ h3 {
 
 #header, #wrapper {
     margin: 2px auto 0 auto;
-    width: 994px;
-    padding: 20px;
+    width: 1024px;
     position: relative;
 }
 
 #header {
     background-color: #f1f1f1;
+    height: 40px;
 }
 
 #wrapper {
     background-color: #f1f1f1;
-    height: 400px;
+    height: 440px;
     overflow: hidden;
 }
 
 #wrapper main > section {
+    background-color: #ccc;
+    height: 400px;
+    padding: 20px;
     position: absolute;
-    top: 20px;
+    top: 0;
     width: 984px;
 }
 
+#wrapper main > section.settings {
+    background-color: #111;
+    color: #eee;
+    width: 944px;
+}
+
 #wrapper main.off > section.settings {
-    left: -1024px;
+    left: -984px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
 
-#wrapper main.off > section.default {
-    left: 20px;
-    -moz-transition: 0.3s ease-out;
-    transition: 0.3s ease-out;
-}
-
+#wrapper main.off > section.default,
 #wrapper main.on > section.settings {
-    left: 20px;
+    left: 0;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
 
 #wrapper main.on > section.default {
-    left: 1024px;
+    left: 984px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
@@ -150,43 +154,67 @@ input {
 }
 
 @media only screen and (max-width: 993px) {
-    #header, #wrapper, #wrapper main > section {
+    #header, #wrapper {
         width: 728px;
     }
 
+    #wrapper main > section {
+        width: 688px;
+    }
+
+    #wrapper main > section.settings {
+        width: 648px;
+    }
+
     #wrapper main.off > section.settings {
-        left: -768px;
+        left: -688px;
     }
 
     #wrapper main.on > section.default {
-        left: 758px;
+        left: 688px;
     }
 }
 
 @media only screen and (max-width: 727px) {
-    #header, #wrapper, #wrapper main > section {
+    #header, #wrapper {
         width: 420px;
     }
 
+    #wrapper main > section {
+        width: 380px;
+    }
+
+    #wrapper main > section.settings {
+        width: 340px;
+    }
+
     #wrapper main.off > section.settings {
-        left: -460px;
+        left: -380px;
     }
 
     #wrapper main.on > section.default {
-        left: 450px;
+        left: 380px;
     }
 }
 
 @media only screen and (max-width: 459px) {
-    #header, #wrapper, #wrapper main > section {
+    #header, #wrapper {
         width: 280px;
     }
 
+    #wrapper main > section {
+        width: 240px;
+    }
+
+    #wrapper main > section.settings {
+        width: 200px;
+    }
+
     #wrapper main.off > section.settings {
-        left: -320px;
+        left: -240px;
     }
 
     #wrapper main.on > section.default {
-        left: 310px;
+        left: 240px;
     }
 }
