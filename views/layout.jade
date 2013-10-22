@@ -18,7 +18,8 @@ html(ng-app='chatspace')
         li(ng-if='!isAuthenticated')
           a(href='javascript:;', ng-click='login()') Sign in
 
-    block content
+    #wrapper
+      block content
     #footer
 
     script(src='https://login.persona.org/include.js')

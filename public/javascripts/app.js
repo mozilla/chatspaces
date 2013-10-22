@@ -16,7 +16,7 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/profile.html'
     })
     .when('/dashboard', {
-      controller: 'HomeCtrl',
+      controller: 'DashboardCtrl',
       templateUrl: 'partials/dashboard.html'
     })
     .otherwise({

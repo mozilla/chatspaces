@@ -3,7 +3,6 @@
 angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
-    $rootScope.username = '';
 
     $rootScope.isValidUser = function () {
       if (!($rootScope.isAuthenticated || $rootScope.username)) {
@@ -18,7 +17,7 @@ angular.module('chatspace.controllers', []).
     }
 
     $http({
-      url: '/login',
+      url: '/api/login',
       method: 'GET'
     }).success(function (data) {
 
@@ -27,7 +26,7 @@ angular.module('chatspace.controllers', []).
     }).error(function (data) {
 
       localStorage.removeItem('personaEmail')
-      console.log('Login failed because ' + data);
+      console.log('Login failed because ' + data.message);
     });
 
     $rootScope.login = function () {
@@ -42,6 +41,7 @@ angular.module('chatspace.controllers', []).
     console.log('home view');
     if ($rootScope.isAuthenticated) {
       if (!$rootScope.username) {
+        console.log('got here')
         $location.path('/profile');
       } else {
         $location.path('/dashboard');
@@ -52,8 +52,12 @@ angular.module('chatspace.controllers', []).
     console.log('dashboard view');
     $rootScope.isValidUser();
   }).
-  controller('ProfileCtrl', function ($scope, $rootScope, $http) {
+  controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
     console.log('profile page');
+    if (!$rootScope.isAuthenticated) {
+      $location.path('/');
+    }
+
     $scope.updateProfile = function () {
       $http({
         url: '/api/profile',
@@ -64,8 +68,10 @@ angular.module('chatspace.controllers', []).
       }).success(function (data) {
 
         $rootScope.username = data.username;
+        $scope.username = data.username;
       }).error(function (data) {
 
+        $scope.errors = data.message;
         console.log('Invalid username ', data.message);
       });
     };

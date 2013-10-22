@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chatspace.factories', []).
-  factory('persona', function ($rootScope, $http) {
+  factory('persona', function ($rootScope, $http, $location) {
     var resetUser = function () {
       localStorage.removeItem('personaEmail');
       $rootScope.email = false;
@@ -22,17 +22,20 @@ angular.module('chatspace.factories', []).
         }).success(function (data) {
 
           if (data.status === 'okay') {
+            $rootScope.isAuthenticated = true;
+
             $http({
-              url: '/login',
-              method: 'GET'
+              url: '/api/login',
+              method: 'POST'
             }).success(function (data) {
               localStorage.setItem('personaEmail', data.email);
-              $rootScope.isAuthenticated = true;
               $rootScope.email = data.email;
+              $rootScope.username = data.username;
+              $location.path('/dashboard');
+
             }).error(function (data) {
 
-              resetUser();
-              console.log('Login failed');
+              $location.path('/profile');
             });
           } else {
 

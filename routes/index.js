@@ -1,16 +1,23 @@
 'use strict';
 
 module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
-  app.get('/login', isLoggedIn, function (req, res) {
+  app.get('/', function (req, res) {
+    res.render('index');
+  });
+
+  app.post('/api/login', isLoggedIn, function (req, res) {
     usernamesDb.get('email!' + req.session.email, function (err, username) {
       if (err) {
         console.log('username not found, redirect to profile page');
-        res.redirect('/profile');
+        res.status(400);
+
+        res.json({
+          message: 'username not created'
+        });
       } else {
         req.session.username = username;
 
         res.json({
-          email: req.session.email,
           username: username
         });
       }
