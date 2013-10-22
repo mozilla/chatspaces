@@ -54,4 +54,19 @@ angular.module('chatspace.controllers', []).
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http) {
     console.log('profile page');
+    $scope.updateProfile = function () {
+      $http({
+        url: '/api/profile',
+        data: {
+          username: $scope.username
+        },
+        method: 'PUT'
+      }).success(function (data) {
+
+        $rootScope.username = data.username;
+      }).error(function (data) {
+
+        console.log('Invalid username ', data.message);
+      });
+    };
   });

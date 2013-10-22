@@ -4,10 +4,8 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
   app.get('/login', isLoggedIn, function (req, res) {
     usernamesDb.get('email!' + req.session.email, function (err, username) {
       if (err) {
-        res.status(400);
-        res.json({
-          message: err.toString()
-        });
+        console.log('username not found, redirect to profile page');
+        res.redirect('/profile');
       } else {
         req.session.username = username;
 
@@ -19,8 +17,12 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
     });
   });
 
-  app.post('/api/profile', isLoggedIn, function (req, res) {
-    var username = req.body.username.toString().toLowerCase().replace(/[^\w+$]/gi, '');
+  app.put('/api/profile', isLoggedIn, function (req, res) {
+    var username = '';
+
+    if (req.body.username) {
+      username = req.body.username.toString().toLowerCase().replace(/[^\w+$]/gi, '');
+    }
 
     if (username === req.session.username) {
       res.json({
