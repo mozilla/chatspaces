@@ -109,7 +109,15 @@ h3 {
 #wrapper main > section.settings {
     background-color: #111;
     color: #eee;
+    position: relative;
     width: 944px;
+}
+
+#wrapper main > section.settings li {
+    background-color: #555;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 20px;
 }
 
 #wrapper main.off > section.settings {

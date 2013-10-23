@@ -24,6 +24,12 @@ var isLoggedIn = function(req, res, next) {
       });
     }
 
+    usernamesDb.get('email!' + req.session.email, function (err, username) {
+      if (!err) {
+        req.session.username = username;
+      }
+    });
+    console.log(req.session.username)
     next();
   } else {
     res.status(400);
