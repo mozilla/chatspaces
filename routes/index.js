@@ -1,11 +1,13 @@
 'use strict';
 
 module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
+  var gravatar = require('gravatar');
+
   app.get('/', function (req, res) {
     res.render('index');
   });
 
-  app.post('/api/login', isLoggedIn, function (req, res) {
+  app.get('/api/login', isLoggedIn, function (req, res) {
     usernamesDb.get('email!' + req.session.email, function (err, username) {
       if (err) {
         console.log('username not found, redirect to profile page');
@@ -18,7 +20,9 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
         req.session.username = username;
 
         res.json({
-          username: username
+          email: req.session.email,
+          username: username,
+          gravatar: gravatar.url(req.session.email, { s: 80 })
         });
       }
     });

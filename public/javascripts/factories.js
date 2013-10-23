@@ -26,7 +26,7 @@ angular.module('chatspace.factories', []).
 
             $http({
               url: '/api/login',
-              method: 'POST'
+              method: 'GET'
             }).success(function (data) {
               localStorage.setItem('personaEmail', data.email);
               $rootScope.email = data.email;

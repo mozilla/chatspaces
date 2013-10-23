@@ -16,11 +16,12 @@ angular.module('chatspace.controllers', []).
     $rootScope.checkLogin = function () {
       $http({
         url: '/api/login',
-        method: 'POST'
+        method: 'GET'
       }).success(function (data) {
 
         $rootScope.email = data.email;
-        $rootScope.username = data.username
+        $rootScope.username = data.username;
+        $rootScope.gravatar = data.gravatar;
       }).error(function (data) {
 
         localStorage.removeItem('personaEmail')

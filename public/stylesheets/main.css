@@ -61,6 +61,11 @@ table {
     font-style: normal;
 }
 
+html, body {
+    height: 100%;
+    position: relative;
+}
+
 body, textarea, input {
     font-family: 'FiraSans-Light', Arial, sans-serif;
 }
@@ -81,25 +86,39 @@ h3 {
     padding: 8px 10px;
 }
 
+.toggle {
+    background-color: #333;
+    border: 0;
+    color: #eee;
+    font-size: 2.4rem;
+    font-weight: 600;
+    height: 40px;
+    line-height: 2.4rem;
+}
+
 #header, #wrapper {
-    margin: 2px auto 0 auto;
+    margin: 0 auto;
     width: 1024px;
-    position: relative;
 }
 
 #header {
-    background-color: #f1f1f1;
+    background-color: rgba(1, 1, 1, 0.4);
     height: 40px;
+    left: 50%;
+    margin-left: -512px;
+    position: fixed;
+    z-index: 2;
 }
 
-#wrapper {
+#wrapper, main {
     background-color: #f0f0f0;
-    height: 440px;
+    height: 100%;
     overflow: hidden;
+    position: relative;
 }
 
 #wrapper main > section {
-    height: 400px;
+    bottom: 10px;
     padding: 20px;
     position: absolute;
     top: 0;
@@ -111,6 +130,10 @@ h3 {
     color: #eee;
     position: relative;
     width: 944px;
+}
+
+main {
+    margin-top: 40px;
 }
 
 #wrapper main > section.settings h1 {
@@ -181,6 +204,10 @@ input {
         width: 728px;
     }
 
+    #header {
+        margin-left: -364px;
+    }
+
     #wrapper main > section {
         width: 688px;
     }
@@ -203,6 +230,10 @@ input {
         width: 420px;
     }
 
+    #header {
+        margin-left: -210px;
+    }
+
     #wrapper main > section {
         width: 380px;
     }
@@ -223,6 +254,10 @@ input {
 @media only screen and (max-width: 459px) {
     #header, #wrapper {
         width: 280px;
+    }
+
+    #header {
+        margin-left: -140px;
     }
 
     #wrapper main > section {
