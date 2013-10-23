@@ -7,7 +7,7 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
     res.render('index');
   });
 
-  app.get('/api/login', isLoggedIn, function (req, res) {
+  app.get('/api/profile', isLoggedIn, function (req, res) {
     usernamesDb.get('email!' + req.session.email, function (err, username) {
       if (err) {
         console.log('username not found, redirect to profile page');
@@ -86,7 +86,7 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
                 message: err.toString()
               });
             } else {
-              console.log('new username ', username)
+
               req.session.username = username;
 
               res.json({

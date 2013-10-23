@@ -1,8 +1,8 @@
 <button class="action add-message" title="new message" ng-click="toggleMessage()">+</button>
 
-<img src="{{ gravatar }}" class="avatar">
+<h2>Search for contacts</h2>
 
-<form ng-submit="sendMessage()" class="message">
+<form ng-submit="search()" class="message">
   <div ng-if="info" class="info">
     <p>{{ info }}</p>
   </div>

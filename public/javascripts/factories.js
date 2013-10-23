@@ -25,7 +25,7 @@ angular.module('chatspace.factories', []).
             $rootScope.isAuthenticated = true;
 
             $http({
-              url: '/api/login',
+              url: '/api/profile',
               method: 'GET'
             }).success(function (data) {
               localStorage.setItem('personaEmail', data.email);

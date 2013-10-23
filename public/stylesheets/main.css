@@ -107,21 +107,28 @@ h3 {
     border: 0;
     background-color: #ccc;
     color: #222;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.add-message {
+    background-color: #57dfb4;
+    color: #e1fff5;
     font-size: 2.4rem;
     font-weight: 600;
-    height: 55px;
+    height: 50px;
     position: absolute;
-    right: 0;
-    text-align: center;
-    top: 0;
-    width: 60px;
+    right: 10px;
+    text-shadow: #3c816b 0 0 1px;
+    top: 10px;
+    width: 50px;
 }
 
 .message {
     background-color: rgba(255, 255, 255, 0.8);
-    height: 200px;
+    height: 450px;
     left: 10px;
-    margin-top: -280px;
+    margin-top: -490px;
     padding: 20px;
     position: absolute;
     right: 10px;
@@ -157,6 +164,11 @@ h3 {
     position: relative;
 }
 
+.avatar {
+    margin: -10px -10px 0;
+    width: 50px;
+}
+
 #wrapper main > section {
     bottom: 10px;
     padding: 20px;
@@ -168,7 +180,6 @@ h3 {
 #wrapper main > section.settings {
     background-color: #b0b0b0;
     color: #eee;
-    position: relative;
     width: 944px;
 }
 
@@ -240,6 +251,11 @@ input {
 }
 
 @media only screen and (max-width: 993px) {
+    .message {
+        height: 300px;
+        margin-top: -340px;
+    }
+
     #header, #wrapper {
         width: 728px;
     }
@@ -269,6 +285,11 @@ input {
     textarea {
         height: 80px;
         width: 340px;
+    }
+
+    .message {
+        height: 400px;
+        margin-top: -440px;
     }
 
     #header, #wrapper {

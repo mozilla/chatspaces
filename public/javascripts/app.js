@@ -19,6 +19,10 @@ config(function ($routeProvider, $locationProvider) {
       controller: 'DashboardCtrl',
       templateUrl: 'partials/dashboard.html'
     })
+    .when('/friends', {
+      controller: 'FriendCtrl',
+      templateUrl: 'partials/friends.html'
+    })
     .otherwise({
       redirectTo: '/'
     });

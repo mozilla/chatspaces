@@ -14,8 +14,10 @@ angular.module('chatspace.controllers', []).
     };
 
     $rootScope.checkLogin = function () {
+      $rootScope.isValidUser();
+
       $http({
-        url: '/api/login',
+        url: '/api/profile',
         method: 'GET'
       }).success(function (data) {
 
@@ -58,25 +60,32 @@ angular.module('chatspace.controllers', []).
   controller('HomeCtrl', function ($scope, $rootScope, $location) {
     if ($rootScope.isAuthenticated) {
       if (!$rootScope.username) {
-        console.log('got here')
         $location.path('/profile');
       } else {
         $location.path('/dashboard');
       }
     }
   }).
+  controller('FriendCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.checkLogin();
+    $scope.showMessage = false;
+
+
+  }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http) {
-    $rootScope.isValidUser();
     $rootScope.checkLogin();
     $scope.showMessage = false;
 
     var newMessageForm = $('.message');
 
     $scope.toggleMessage = function () {
+      $scope.errors = false;
+      $scope.info = false;
+
       if ($scope.showMessage) {
         $scope.showMessage = false;
-        $scope.message = false;
-        $scope.picture = false;
+        $scope.message = '';
+        $scope.picture = '';
         newMessageForm.removeClass('on');
       } else {
         $scope.showMessage = true;
@@ -95,8 +104,8 @@ angular.module('chatspace.controllers', []).
       }).success(function (data) {
         $scope.errors = false;
         $scope.info = data.message;
-        $scope.message = false;
-        $scope.picture = false;
+        $scope.message = '';
+        $scope.picture = '';
       }).error(function (data) {
         $scope.info = false;
         $scope.errors = data.message;
