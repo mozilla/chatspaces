@@ -57,7 +57,7 @@ angular.module('chatspace.factories', []).
       }).success(function (data) {
 
         if (data.status === 'okay') {
-
+          $location.path('/');
           resetUser();
         } else {
 

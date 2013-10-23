@@ -66,17 +66,18 @@ body, textarea, input {
 }
 
 h1, h2, h3 {
-    color: #999;
+    color: #bbb;
     font-size: 1.8rem;
     line-height: 2rem;
     margin-bottom: 10px;
 }
 
 h3 {
-    background-color: #fff;
+    background-color: #f9f9f9;
     display: inline-block;
-    font-size: 1.4rem;
-    line-height: 1rem;
+    font-size: 1.3rem;
+    line-height: 1.2rem;
+    margin-bottom: 20px;
     padding: 8px 10px;
 }
 
@@ -92,13 +93,12 @@ h3 {
 }
 
 #wrapper {
-    background-color: #f1f1f1;
+    background-color: #f0f0f0;
     height: 440px;
     overflow: hidden;
 }
 
 #wrapper main > section {
-    background-color: #ccc;
     height: 400px;
     padding: 20px;
     position: absolute;
@@ -107,17 +107,31 @@ h3 {
 }
 
 #wrapper main > section.settings {
-    background-color: #111;
+    background-color: #b0b0b0;
     color: #eee;
     position: relative;
     width: 944px;
 }
 
+#wrapper main > section.settings h1 {
+    color: #fff;
+}
+
 #wrapper main > section.settings li {
-    background-color: #555;
-    margin-left: -20px;
-    margin-right: -20px;
+    background-color: #ccc;
+    margin: 0 -20px 2px -20px;
+}
+
+#wrapper main > section.settings li a {
+    color: #555;
+    font-size: 1.3rem;
+    display: block;
     padding: 20px;
+    text-decoration: none;
+}
+
+#wrapper main > section.settings li a:hover {
+    background-color: #fff;
 }
 
 #wrapper main.off > section.settings {
@@ -140,8 +154,9 @@ h3 {
 }
 
 input {
-    border: 1px solid #ccc;
+    border: 1px solid #aaa;
     font-size: 1rem;
+    margin: 10px 0;
     padding: 5px;
 }
 

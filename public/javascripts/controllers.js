@@ -55,7 +55,6 @@ angular.module('chatspace.controllers', []).
     }
   }).
   controller('HomeCtrl', function ($scope, $rootScope, $location) {
-    console.log('home view');
     if ($rootScope.isAuthenticated) {
       if (!$rootScope.username) {
         console.log('got here')
@@ -66,12 +65,12 @@ angular.module('chatspace.controllers', []).
     }
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http) {
-    console.log('dashboard view');
     $rootScope.isValidUser();
     $rootScope.checkLogin();
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
-    console.log('profile page');
+    $scope.currentUsername = $rootScope.username;
+
     if (!$rootScope.isAuthenticated) {
       $location.path('/');
     } else {
@@ -89,11 +88,10 @@ angular.module('chatspace.controllers', []).
         $scope.errors = false;
         $scope.info = data.message;
         $rootScope.username = data.username;
-        $scope.username = data.username;
+        $scope.username = $scope.currentUsername = data.username;
       }).error(function (data) {
         $scope.info = false;
         $scope.errors = data.message;
-        console.log('Invalid username ', data.message);
       });
     };
   });

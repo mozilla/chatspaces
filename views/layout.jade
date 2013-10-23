@@ -12,11 +12,6 @@ html(ng-app='chatspace')
   body(ng-controller='AppCtrl')
     #header
       button(class='toggle', ng-click='toggleSettings()') +
-      ul
-        li(ng-if='isAuthenticated')
-          a(href='javascript:;', ng-click='logout()') Logout
-        li(ng-if='!isAuthenticated')
-          a(href='javascript:;', ng-click='login()') Sign in
 
     #wrapper
       block content

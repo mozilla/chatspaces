@@ -5,14 +5,16 @@ block content
     section.settings
       h1 Chatspaces
       ul
-        li
-          a(href='javascript:;') Messages
-        li
+        li(ng-if='isAuthenticated', ng-click='toggleSettings()')
+          a(href='/dashboard') Messages
+        li(ng-if='isAuthenticated', ng-click='toggleSettings()')
           a(href='javascript:;') Friends
-        li
-          a(href='javascript:;') Profile
-        li
-          a(href='javascript:;') Logout
+        li(ng-if='isAuthenticated', ng-click='toggleSettings()')
+          a(href='/profile') Profile
+        li(ng-if='isAuthenticated', ng-click='toggleSettings()')
+          a(href='javascript:;', ng-click='logout()') Logout
+        li(ng-if='!isAuthenticated', ng-click='toggleSettings()')
+          a(href='javascript:;', ng-click='login()') Sign in
     section.default
       div(ng-view)
 
