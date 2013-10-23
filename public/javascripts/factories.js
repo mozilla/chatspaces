@@ -32,6 +32,7 @@ angular.module('chatspace.factories', []).
               $rootScope.email = data.email;
               $rootScope.username = data.username;
               $location.path('/dashboard');
+              $rootScope.toggleSettings();
 
             }).error(function (data) {
 
@@ -57,6 +58,7 @@ angular.module('chatspace.factories', []).
       }).success(function (data) {
 
         if (data.status === 'okay') {
+          $rootScope.toggleSettings();
           $location.path('/');
           resetUser();
         } else {
