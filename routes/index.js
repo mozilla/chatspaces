@@ -28,6 +28,17 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
     });
   });
 
+  app.post('/api/message', isLoggedIn, function (req, res) {
+    if (!req.body.message) {
+      res.status(400);
+      res.json({
+        message: 'message cannot be empty'
+      });
+    } else {
+
+    }
+  });
+
   app.put('/api/profile', isLoggedIn, function (req, res) {
     var username = '';
 

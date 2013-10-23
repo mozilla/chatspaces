@@ -68,6 +68,40 @@ angular.module('chatspace.controllers', []).
   controller('DashboardCtrl', function ($scope, $rootScope, $http) {
     $rootScope.isValidUser();
     $rootScope.checkLogin();
+    $scope.showMessage = false;
+
+    var newMessageForm = $('.message');
+
+    $scope.toggleMessage = function () {
+      if ($scope.showMessage) {
+        $scope.showMessage = false;
+        $scope.message = false;
+        $scope.picture = false;
+        newMessageForm.removeClass('on');
+      } else {
+        $scope.showMessage = true;
+        newMessageForm.addClass('on');
+      }
+    };
+
+    $scope.sendMessage = function () {
+      $http({
+        url: '/api/message',
+        data: {
+          message: $scope.message,
+          picture: $scope.picture
+        },
+        method: 'POST'
+      }).success(function (data) {
+        $scope.errors = false;
+        $scope.info = data.message;
+        $scope.message = false;
+        $scope.picture = false;
+      }).error(function (data) {
+        $scope.info = false;
+        $scope.errors = data.message;
+      });
+    };
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
     $scope.currentUsername = $rootScope.username;

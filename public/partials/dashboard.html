@@ -1,3 +1,18 @@
 <h2>Dashboard</h2>
 
+<button class="action" title="new message" ng-click="toggleMessage()">+</button>
+
 <img src="{{ gravatar }}" width="50">
+
+<form ng-submit="sendMessage()" class="message">
+  <div ng-if="info" class="info">
+    <p>{{ info }}</p>
+  </div>
+  <div ng-if="errors" class="errors">
+    <p>{{ errors }}</p>
+  </div>
+  <textarea ng-model="message"></textarea>
+  <input type="hidden" name="picture" id="picture">
+  <button type="submit">Send</button>
+  <a href="javascript:;" ng-click="toggleMessage()">X</a>
+</form>
