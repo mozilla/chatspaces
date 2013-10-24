@@ -26,8 +26,8 @@ angular.module('chatspace.controllers', []).
         $rootScope.gravatar = data.gravatar;
       }).error(function (data) {
 
-        localStorage.removeItem('personaEmail')
-        console.log('Login failed because ' + data.message);
+        $rootScope.email = data.email;
+        $rootScope.gravatar = data.gravatar;
       });
     };
 
@@ -69,11 +69,47 @@ angular.module('chatspace.controllers', []).
   controller('FriendCtrl', function ($scope, $rootScope, $http) {
     $rootScope.checkLogin();
     $scope.showMessage = false;
+    $scope.users = [];
+    $scope.user = '';
 
+    $scope.requestFriend = function (user) {
+      $http({
+        url: '/api/friend',
+        data: {
+          username: user.username
+        },
+        method: 'POST'
+      }).success(function (data) {
+        $scope.users = [];
+        $scope.info = data.message;
+      }).error(function (data) {
+        $scope.errors = data.message;
+      });
+    };
 
+    $scope.searchUsers = function () {
+      if ($scope.user) {
+        $http({
+          url: '/api/search',
+          data: {
+            username: $scope.user.toString().trim()
+          },
+          method: 'POST'
+        }).success(function (data) {
+          $scope.users = data.users;
+        }).error(function (data) {
+          $scope.errors = data.message;
+        });
+      } else {
+        $scope.users = [];
+      }
+    };
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http) {
-    $rootScope.checkLogin();
+    if (!$rootScope.isAuthenticated) {
+      $location.path('/');
+    }
+
     $scope.showMessage = false;
 
     var newMessageForm = $('.message');

@@ -29,7 +29,7 @@ var isLoggedIn = function(req, res, next) {
         req.session.username = username;
       }
     });
-    console.log(req.session.username)
+
     next();
   } else {
     res.status(400);

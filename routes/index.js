@@ -11,10 +11,10 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
     usernamesDb.get('email!' + req.session.email, function (err, username) {
       if (err) {
         console.log('username not found, redirect to profile page');
-        res.status(400);
 
         res.json({
-          message: 'username not created'
+          email: req.session.email,
+          gravatar: gravatar.url(req.session.email, { s: 80 })
         });
       } else {
         req.session.username = username;
@@ -26,6 +26,55 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
         });
       }
     });
+  });
+
+  app.post('/api/friend', isLoggedIn, function (req, res) {
+    parallax[req.session.email].getOrAddFriend(req.body.username, function (err, user) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not send friend request'
+        });
+      } else {
+        res.json({
+          user: user
+        });
+      }
+    });
+  });
+
+  app.post('/api/search', isLoggedIn, function (req, res) {
+    if (!req.body.username) {
+      res.status(400);
+      res.json({
+        message: 'username cannot be empty'
+      });
+    } else {
+      var users = [];
+
+      usernamesDb.createReadStream({
+
+        start: 'username!' + req.body.username,
+        end: 'username!' + req.body.username + '\xff'
+      }).on('data', function (data) {
+
+        users.push({
+          username: data.key.split('!')[1],
+          avatar: data.value
+        });
+      }).on('error', function (err) {
+
+        res.status(400);
+        res.json({
+          message: err.toString()
+        });
+      }).on('end', function () {
+
+        res.json({
+          users: users
+        });
+      });
+    }
   });
 
   app.post('/api/message', isLoggedIn, function (req, res) {
@@ -75,7 +124,7 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
             {
               type: 'put',
               key: 'username!' + username,
-              value: req.session.email
+              value: gravatar.url(req.session.email)
             }
           ];
 

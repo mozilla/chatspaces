@@ -2,15 +2,10 @@
 
 <h2>Search for contacts</h2>
 
-<form ng-submit="search()" class="message">
-  <div ng-if="info" class="info">
-    <p>{{ info }}</p>
-  </div>
-  <div ng-if="errors" class="errors">
-    <p>{{ errors }}</p>
-  </div>
-  <textarea ng-model="message"></textarea>
-  <input type="hidden" name="picture" id="picture">
-  <button type="submit" class="action">Send</button>
-  <button type="button" ng-click="toggleMessage()" class="action">X</a>
-</form>
+<input ng-change="searchUsers()" ng-model="user" placeholder="Type in a username">
+
+<ul class="search-results">
+  <li ng-repeat="user in users track by $index" ng-click="requestFriend(user)">
+    <img src="{{ user.avatar }}"><span>{{ user.username }}</span>
+  </li>
+<ul>

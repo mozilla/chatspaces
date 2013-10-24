@@ -23,6 +23,7 @@ angular.module('chatspace.factories', []).
 
           if (data.status === 'okay') {
             $rootScope.isAuthenticated = true;
+            $rootScope.toggleSettings();
 
             $http({
               url: '/api/profile',
@@ -31,8 +32,8 @@ angular.module('chatspace.factories', []).
               localStorage.setItem('personaEmail', data.email);
               $rootScope.email = data.email;
               $rootScope.username = data.username;
+              $rootScope.gravatar = data.gravatar;
               $location.path('/dashboard');
-              $rootScope.toggleSettings();
 
             }).error(function (data) {
 
