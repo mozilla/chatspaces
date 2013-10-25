@@ -1,7 +1,9 @@
 'use strict';
 
-module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
+module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
   var gravatar = require('gravatar');
+
+  var IMAGE_SIZE = 80;
 
   app.get('/', function (req, res) {
     res.render('index');
@@ -14,7 +16,7 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
 
         res.json({
           email: req.session.email,
-          gravatar: gravatar.url(req.session.email, { s: 80 })
+          gravatar: gravatar.url(req.session.email, { s: IMAGE_SIZE })
         });
       } else {
         req.session.username = username;
@@ -22,7 +24,48 @@ module.exports = function(app, nconf, parallax, usernamesDb, isLoggedIn) {
         res.json({
           email: req.session.email,
           username: username,
-          gravatar: gravatar.url(req.session.email, { s: 80 })
+          gravatar: gravatar.url(req.session.email, { s: IMAGE_SIZE })
+        });
+      }
+    });
+  });
+
+  app.get('/api/friend/:username', isLoggedIn, function (req, res) {
+    parallax[req.session.email].getOrAddFriend(req.params.username, function (err, user) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not send friend request or find friend'
+        });
+      } else {
+        res.json({
+          user: user
+        });
+      }
+    });
+  });
+
+  app.get('/api/friends', isLoggedIn, function (req, res) {
+    parallax[req.session.email].getFriends(function (err, users) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not send friend request'
+        });
+      } else {
+        var friends = [];
+
+        users.friends.forEach(function (f) {
+          usernamesDb.get('username!' + f.key, function (err, e) {
+            if (!err) {
+              io.sockets.in(req.session.email).emit('friend', {
+                friend: {
+                  username: f.key,
+                  avatar: gravatar.url(e, { s: IMAGE_SIZE })
+                }
+              });
+            }
+          });
         });
       }
     });

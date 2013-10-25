@@ -20,10 +20,13 @@ angular.module('chatspace.controllers', []).
         url: '/api/profile',
         method: 'GET'
       }).success(function (data) {
-
         $rootScope.email = data.email;
         $rootScope.username = data.username;
         $rootScope.gravatar = data.gravatar;
+
+        socket.emit('join', {
+          email: data.email
+        });
       }).error(function (data) {
 
         $rootScope.email = data.email;
@@ -71,6 +74,20 @@ angular.module('chatspace.controllers', []).
     $scope.showMessage = false;
     $scope.users = [];
     $scope.user = '';
+    $scope.friends = [];
+
+    $http({
+      url: '/api/friends',
+      method: 'GET'
+    });
+
+    socket.on('connect', function () {
+      socket.on('friend', function (data) {
+        $scope.$apply(function () {
+          $scope.friends.unshift(data.friend);
+        });
+      });
+    });
 
     $scope.requestFriend = function (user) {
       $http({

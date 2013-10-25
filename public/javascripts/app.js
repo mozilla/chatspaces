@@ -1,5 +1,8 @@
 'use strict';
 
+var socket = io.connect(location.protocol + '//' + location.hostname +
+  (location.port ? ':' + location.port : ''));
+
 angular.module('chatspace', [
   'ngRoute',
   'chatspace.factories',

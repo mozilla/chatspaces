@@ -3,6 +3,10 @@
 angular.module('chatspace.factories', []).
   factory('persona', function ($rootScope, $http, $location) {
     var resetUser = function () {
+      socket.emit('disconnect', {
+        email: $rootScope.email
+      });
+
       localStorage.removeItem('personaEmail');
       $rootScope.email = false;
       $rootScope.isAuthenticated = false;
@@ -33,7 +37,12 @@ angular.module('chatspace.factories', []).
               $rootScope.email = data.email;
               $rootScope.username = data.username;
               $rootScope.gravatar = data.gravatar;
-              $location.path('/dashboard');
+
+              if (data.username) {
+                $location.path('/dashboard');
+              } else {
+                $location.path('/profile');
+              }
 
             }).error(function (data) {
 

@@ -8,6 +8,19 @@ var Parallax = require('meatspace-parallax');
 var parallax = {};
 var level = require('level');
 
+var io = require('socket.io').listen(server);
+
+io.configure(function () {
+  io.set('transports', ['websocket']);
+  io.set('log level', 1);
+});
+
+io.sockets.on('connection', function (socket) {
+  socket.on('join', function (data) {
+    socket.join(data.email);
+  });
+});
+
 nconf.argv().env().file({ file: 'local.json' });
 
 var usernamesDb = level(nconf.get('db') + '/usernames', {
@@ -42,6 +55,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, nconf, parallax, usernamesDb, isLoggedIn);
+require('./routes')(app, io, nconf, parallax, usernamesDb, isLoggedIn);
 
-app.listen(process.env.PORT || nconf.get('port'));
+server.listen(process.env.PORT || nconf.get('port'));
