@@ -127,7 +127,33 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
         message: 'message cannot be empty'
       });
     } else {
-      console.log(req.body)
+      var recipient = req.body.recipients[0];
+      var recipients = req.body.recipients.slice(1, req.body.recipients.length);
+
+      parallax[req.session.email].addChat(recipient, req.body.message, {
+        ttl: false,
+        media: req.body.picture,
+        recipients: recipients
+      }, function (err, c) {
+        if (!err) {
+          console.log(c);
+          recipients.forEach(function (r) {
+            parallax[req.session.email].addChat(r, req.body.message, {
+              ttl: false,
+              media: req.body.picture,
+              recipients: recipients
+            }, function (err, c) {
+              if (!err) {
+                console.log(c);
+              }
+            });
+          });
+
+          res.json({
+            message: 'done'
+          })
+        }
+      });
     }
   });
 
