@@ -61,7 +61,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
               io.sockets.in(req.session.email).emit('friend', {
                 friend: {
                   username: f.key,
-                  avatar: gravatar.url(e, { s: IMAGE_SIZE })
+                  avatar: e
                 }
               });
             }
@@ -127,7 +127,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
         message: 'message cannot be empty'
       });
     } else {
-
+      console.log(req.body)
     }
   });
 

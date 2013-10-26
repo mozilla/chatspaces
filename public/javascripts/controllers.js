@@ -4,8 +4,17 @@ angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
     $rootScope.settings = false;
+    $rootScope.friends = {};
 
     var settingsView = $('main');
+
+    socket.on('connect', function () {
+      socket.on('friend', function (data) {
+        $scope.$apply(function () {
+          $rootScope.friends[data.friend.username] = data.friend.avatar;
+        });
+      });
+    });
 
     $rootScope.isValidUser = function () {
       if (!($rootScope.isAuthenticated || $rootScope.username)) {
@@ -74,19 +83,10 @@ angular.module('chatspace.controllers', []).
     $scope.showMessage = false;
     $scope.users = [];
     $scope.user = '';
-    $scope.friends = [];
 
     $http({
       url: '/api/friends',
       method: 'GET'
-    });
-
-    socket.on('connect', function () {
-      socket.on('friend', function (data) {
-        $scope.$apply(function () {
-          $scope.friends.unshift(data.friend);
-        });
-      });
     });
 
     $scope.requestFriend = function (user) {
@@ -127,9 +127,20 @@ angular.module('chatspace.controllers', []).
       $location.path('/');
     }
 
+    $scope.recipients = {};
+
+    $http({
+      url: '/api/friends',
+      method: 'GET'
+    });
+
     $scope.showMessage = false;
 
     var newMessageForm = $('.message');
+
+    $scope.addRecipient = function (user) {
+      $scope.recipients[user] = user;
+    };
 
     $scope.toggleMessage = function () {
       $scope.errors = false;
@@ -147,14 +158,22 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.sendMessage = function () {
+      var recipientArr = [];
+
+      for (var r in $scope.recipients) {
+        recipientArr.push(r);
+      }
+
       $http({
         url: '/api/message',
         data: {
           message: $scope.message,
-          picture: $scope.picture
+          picture: $scope.picture,
+          recipients: recipientArr
         },
         method: 'POST'
       }).success(function (data) {
+        $scope.recipients = {};
         $scope.errors = false;
         $scope.info = data.message;
         $scope.message = '';

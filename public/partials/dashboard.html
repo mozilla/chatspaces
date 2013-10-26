@@ -11,6 +11,14 @@
   </div>
   <textarea ng-model="message"></textarea>
   <input type="hidden" name="picture" id="picture">
+  <ul class="search-results">
+    <li ng-repeat="(key, value) in friends track by $index">
+      <a href="javascript:;" ng-click="addRecipient(key)">
+        <img src="{{ value }}"><span>{{ key }}</span>
+      </a>
+    </li>
+  <ul>
+  <input name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index">
   <button type="submit" class="action">Send</button>
   <button type="button" ng-click="toggleMessage()" class="action">X</a>
 </form>

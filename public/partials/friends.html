@@ -13,7 +13,7 @@
 <h2>Added contacts</h2>
 
 <ul class="search-results">
-  <li ng-repeat="friend in friends track by $index">
-    <img src="{{ friend.avatar }}"><span>{{ friend.username }}</span>
+  <li ng-repeat="(key, value) in friends track by $index">
+    <img src="{{ value }}"><span>{{ key }}</span>
   </li>
 <ul>
