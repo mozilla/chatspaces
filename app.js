@@ -7,6 +7,7 @@ var settings = require('./settings')(app, configurations, express);
 var Parallax = require('meatspace-parallax');
 var parallax = {};
 var level = require('level');
+var gravatar = require('gravatar');
 
 var io = require('socket.io').listen(server);
 
@@ -17,7 +18,7 @@ io.configure(function () {
 
 io.sockets.on('connection', function (socket) {
   socket.on('join', function (data) {
-    socket.join(data.email);
+    socket.join(gravatar.url(data.email));
   });
 });
 
@@ -55,6 +56,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, io, nconf, parallax, usernamesDb, isLoggedIn);
+require('./routes')(app, io, nconf, parallax, usernamesDb, gravatar, isLoggedIn);
 
 server.listen(process.env.PORT || nconf.get('port'));

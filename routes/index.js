@@ -1,8 +1,6 @@
 'use strict';
 
-module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
-  var gravatar = require('gravatar');
-
+module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLoggedIn) {
   var IMAGE_SIZE = 80;
 
   app.get('/', function (req, res) {
@@ -58,7 +56,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
         users.friends.forEach(function (f) {
           usernamesDb.get('username!' + f.key, function (err, e) {
             if (!err) {
-              io.sockets.in(req.session.email).emit('friend', {
+              io.sockets.in(gravatar.url(req.session.email)).emit('friend', {
                 friend: {
                   username: f.key,
                   avatar: e
@@ -127,32 +125,29 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
         message: 'message cannot be empty'
       });
     } else {
-      var recipient = req.body.recipients[0];
       var recipients = req.body.recipients.slice(1, req.body.recipients.length);
 
-      parallax[req.session.email].addChat(recipient, req.body.message, {
-        ttl: false,
-        media: req.body.picture,
-        recipients: recipients
-      }, function (err, c) {
-        if (!err) {
-
-          recipients.forEach(function (r) {
-            parallax[req.session.email].addChat(r, req.body.message, {
-              ttl: false,
-              media: req.body.picture,
-              recipients: recipients
-            }, function (err, c) {
+      recipients.forEach(function (recipient) {
+        parallax[req.session.email].addChat(recipient, req.body.message, {
+          ttl: false,
+          media: req.body.picture,
+          recipients: recipients
+        }, function (err, chat) {
+          if (!err) {
+            usernamesDb.get('username!' + recipient, function (err, email) {
               if (!err) {
-                console.log(c);
+                console.log('sending socket response to ', email)
+                io.sockets.in(gravatar.url(email)).emit('message', {
+                  chats: chat
+                });
               }
             });
-          });
+          }
+        });
+      });
 
-          res.json({
-            message: 'done'
-          })
-        }
+      res.json({
+        message: 'done'
       });
     }
   });

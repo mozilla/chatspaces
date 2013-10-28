@@ -5,6 +5,7 @@ angular.module('chatspace.controllers', []).
     $rootScope.isAuthenticated = false;
     $rootScope.settings = false;
     $rootScope.friends = {};
+    $rootScope.messages = {};
 
     var settingsView = $('main');
 
@@ -12,6 +13,12 @@ angular.module('chatspace.controllers', []).
       socket.on('friend', function (data) {
         $scope.$apply(function () {
           $rootScope.friends[data.friend.username] = data.friend.avatar;
+        });
+      });
+
+      socket.on('message', function (data) {
+        $scope.$apply(function () {
+          $rootScope.messages[data.chat.value.created] = data.chat.value;
         });
       });
     });
@@ -127,6 +134,8 @@ angular.module('chatspace.controllers', []).
       $location.path('/');
     }
 
+    var videoShooter;
+    var preview = $('#video-preview');
     $scope.recipients = {};
 
     $http({
@@ -135,8 +144,41 @@ angular.module('chatspace.controllers', []).
     });
 
     $scope.showMessage = false;
+    $scope.posting = false;
 
     var newMessageForm = $('.message');
+
+    var escapeHtml = function (text) {
+      if (text) {
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+    };
+
+    var getScreenshot = function (callback, numFrames, interval) {
+      if (videoShooter) {
+        videoShooter.getShot(callback, numFrames, interval);
+      } else {
+        callback('');
+      }
+    };
+
+    // lazy "always" prompt for now until we figure out the correct behaviour
+    if ($rootScope.isAuthenticated && navigator.getMedia) {
+      GumHelper.startVideoStreaming(function errorCb(err) {
+
+        console.log('error ', err)
+      }, function successCallback(stream, videoElement, width, height) {
+
+        videoElement.width = width / 5;
+        videoElement.height = height / 5;
+        preview.append(videoElement);
+        videoElement.play();
+        videoShooter = new VideoShooter(videoElement);
+      });
+    }
 
     $scope.addRecipient = function (user) {
       $scope.recipients[user] = user;
@@ -164,24 +206,26 @@ angular.module('chatspace.controllers', []).
         recipientArr.push(r);
       }
 
-      $http({
-        url: '/api/message',
-        data: {
-          message: $scope.message,
-          picture: $scope.picture,
-          recipients: recipientArr
-        },
-        method: 'POST'
-      }).success(function (data) {
-        $scope.recipients = {};
-        $scope.errors = false;
-        $scope.info = data.message;
-        $scope.message = '';
-        $scope.picture = '';
-      }).error(function (data) {
-        $scope.info = false;
-        $scope.errors = data.message;
-      });
+      getScreenshot(function (pictureData) {
+        $http({
+          url: '/api/message',
+          data: {
+            message: escapeHtml($scope.message),
+            picture: escapeHtml($scope.picture),
+            recipients: recipientArr
+          },
+          method: 'POST'
+        }).success(function (data) {
+          $scope.recipients = {};
+          $scope.errors = false;
+          $scope.info = data.message;
+          $scope.message = '';
+          $scope.picture = '';
+        }).error(function (data) {
+          $scope.info = false;
+          $scope.errors = data.message;
+        });
+      }, 10, 0.2);
     };
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
