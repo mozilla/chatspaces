@@ -136,7 +136,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
         recipients: recipients
       }, function (err, c) {
         if (!err) {
-          console.log(c);
+
           recipients.forEach(function (r) {
             parallax[req.session.email].addChat(r, req.body.message, {
               ttl: false,
