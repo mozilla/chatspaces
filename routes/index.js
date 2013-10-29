@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLoggedIn) {
+module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Parallax, isLoggedIn) {
   var gravatarUrl = function (userHash) {
     return 'http://www.gravatar.com/avatar/' + userHash + '?s=80';
   }
@@ -73,7 +73,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
   });
 
   app.get('/api/messages/:username', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].getChats(req.params.username, false, true, function (err, chats) {
+    parallax[req.session.userHash].getChats(req.params.username, req.params.username, true, function (err, chats) {
       if (err) {
         res.status(400);
         res.json({
@@ -97,9 +97,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
         });
       } else {
         usernamesDb.get('username!' + user.user, function (err, userHash) {
-          console.log(err, userHash)
           if (!err) {
-            console.log('adding to friend side');
             if (!parallax[userHash]) {
               parallax[userHash] = new Parallax(userHash, {
                 db: nconf.get('db') + '/users/' + userHash
@@ -107,7 +105,6 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
             }
 
             parallax[userHash].getOrAddFriend(req.session.username, function (err, sender) {
-              console.log('sending to both')
               if (!err) {
                 io.sockets.in(req.session.userHash).emit('friend', {
                   friend: {
@@ -176,21 +173,40 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
       });
     } else {
       var recipients = req.body.recipients;
+      var chat = {
+        media: req.body.picture,
+        recipients: recipients
+      };
 
       recipients.forEach(function (recipient) {
-        parallax[req.session.userHash].addChat(recipient, req.body.message, {
-          ttl: false,
-          media: req.body.picture,
-          recipients: recipients
-        }, function (err, chat) {
+        parallax[req.session.userHash].addChat(recipient, req.body.message, chat, function (err, c) {
           if (err) {
             console.log('error ', err);
           } else {
-            usernamesDb.get('username!' + recipient, function (err, email) {
-              if (!err) {
-                console.log('sending socket response to ', email)
-                io.sockets.in(crypto.createHash('md5').update(email).digest('hex')).emit('message', {
-                  chats: chat
+            usernamesDb.get('username!' + recipient, function (err, userHash) {
+              if (err) {
+
+                res.status(400);
+                res.json({
+                  message: 'could not retrieve recipient userhash'
+                });
+              } else {
+
+                if (!parallax[userHash]) {
+                  parallax[userHash] = new Parallax(userHash, {
+                    db: nconf.get('db') + '/users/' + userHash
+                  });
+                }
+                console.log(userHash, chat, req.session.userHash, recipient, req.session.username)
+                parallax[userHash].addChat(req.session.username, req.body.message, chat, function (err, c) {
+                  if (err) {
+                    console.log('could not send to ', userHash);
+                  } else {
+                    console.log('sending socket response to ', userHash)
+                    io.sockets.in(userHash).emit('message', {
+                      chats: chat
+                    });
+                  }
                 });
               }
             });

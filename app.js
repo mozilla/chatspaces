@@ -60,6 +60,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, io, nconf, parallax, usernamesDb, crypto, isLoggedIn);
+require('./routes')(app, io, nconf, parallax, usernamesDb, crypto, Parallax, isLoggedIn);
 
 server.listen(process.env.PORT || nconf.get('port'));
