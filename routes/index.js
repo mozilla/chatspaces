@@ -202,7 +202,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
             {
               type: 'put',
               key: 'username!' + username,
-              value: gravatarUrl(req.session.userHash)
+              value: req.session.userHash
             }
           ];
 
