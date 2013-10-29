@@ -143,6 +143,7 @@ angular.module('chatspace.controllers', []).
       method: 'GET'
     });
 
+
     $scope.showMessage = false;
     $scope.posting = false;
 
@@ -185,6 +186,7 @@ angular.module('chatspace.controllers', []).
         url: '/api/messages/' + username,
         method: 'GET'
       }).success(function (data) {
+        console.log(data.chats)
         $rootScope.messages = data.chats;
         $scope.errors = false;
       }).error(function (data) {
@@ -224,7 +226,7 @@ angular.module('chatspace.controllers', []).
           url: '/api/message',
           data: {
             message: escapeHtml($scope.message),
-            picture: escapeHtml($scope.picture),
+            picture: escapeHtml(pictureData),
             recipients: recipientArr
           },
           method: 'POST'

@@ -160,7 +160,7 @@ h3 {
 #wrapper, main {
     background-color: #f0f0f0;
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
 }
 
@@ -225,6 +225,54 @@ main {
     left: 984px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
+}
+
+.dashboard-content {
+    clear: both;
+    display: block;
+    float: left;
+    width: 100%;
+}
+
+#friend-results {
+    float: left;
+    width: 90px;
+}
+
+#message-list {
+    display: block;
+    float: left;
+    width: 500px;
+}
+
+#message-list li {
+    background-color: #fff;
+    clear: both;
+    float: left;
+    height: 85px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+#message-list li img {
+    width: 80px;
+}
+
+#message-list li img, #message-list li .no-image {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+
+#message-list li .no-image {
+    background-color: #fff;
+    height: 80px;
+    width: 80px;
+}
+
+#message-list li span {
+    display: inline-block;
+    padding: 5px;
 }
 
 input {

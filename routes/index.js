@@ -80,9 +80,11 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
           message: 'could not retrieve messages'
         });
       } else {
-        console.log(chats)
+        chats.chats.forEach(function (c) {
+          console.log(c)
+        });
         res.json({
-          chats: chats
+          chats: chats.chats
         });
       }
     });

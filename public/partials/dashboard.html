@@ -2,11 +2,21 @@
 
 <img src="{{ gravatar }}" class="avatar">
 
-<ul class="friend-results">
-  <li ng-repeat="(key, value) in friends track by $index">
-    <img src="{{ value }}" ng-click="getMessages(key)"><span>{{ key }}</span>
-  </li>
-<ul>
+<div class="dashboard-content">
+  <ul id="friend-results">
+    <li ng-repeat="(key, value) in friends track by $index">
+      <img src="{{ value }}" ng-click="getMessages(key)"><span>{{ key }}</span>
+    </li>
+  </ul>
+
+  <ul id="message-list">
+    <li ng-repeat="(key, value) in messages track by $index">
+      <div class="no-image" ng-if="!value.value.media"></div>
+      <img src="{{ value.value.media }}" ng-if="value.value.media">
+      <span>sent to: {{ value.value.recipients }}<br>{{ value.value.message }}</span>
+    </li>
+  </ul>
+</div>
 
 <form ng-submit="sendMessage()" class="message">
   <div ng-if="info" class="info">
