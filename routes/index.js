@@ -57,12 +57,12 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
         var friends = [];
 
         users.friends.forEach(function (f) {
-          usernamesDb.get('username!' + f.key, function (err, e) {
+          usernamesDb.get('username!' + f.key, function (err, userHash) {
             if (!err) {
               io.sockets.in(req.session.userHash).emit('friend', {
                 friend: {
                   username: f.key,
-                  avatar: e
+                  avatar: gravatarUrl(userHash)
                 }
               });
             }
@@ -96,8 +96,39 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
           message: 'could not send friend request'
         });
       } else {
-        res.json({
-          user: user
+        usernamesDb.get('username!' + user.user, function (err, userHash) {
+          console.log(err, userHash)
+          if (!err) {
+            console.log('adding to friend side');
+            if (!parallax[userHash]) {
+              parallax[userHash] = new Parallax(userHash, {
+                db: nconf.get('db') + '/users/' + userHash
+              });
+            }
+
+            parallax[userHash].getOrAddFriend(req.session.username, function (err, sender) {
+              console.log('sending to both')
+              if (!err) {
+                io.sockets.in(req.session.userHash).emit('friend', {
+                  friend: {
+                    username: user.user,
+                    avatar: gravatarUrl(userHash)
+                  }
+                });
+
+                io.sockets.in(userHash).emit('friend', {
+                  friend: {
+                    username: sender.user,
+                    avatar: gravatarUrl(req.session.userHash)
+                  }
+                });
+
+                res.json({
+                  message: 'added friend!'
+                });
+              }
+            });
+          }
         });
       }
     });
@@ -120,7 +151,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
 
         users.push({
           username: data.key.split('!')[1],
-          avatar: data.value
+          avatar: gravatarUrl(data.value)
         });
       }).on('error', function (err) {
 

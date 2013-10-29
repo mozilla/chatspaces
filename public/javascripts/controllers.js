@@ -105,7 +105,6 @@ angular.module('chatspace.controllers', []).
         },
         method: 'POST'
       }).success(function (data) {
-        $scope.users = [];
         $scope.info = data.message;
       }).error(function (data) {
         $scope.errors = data.message;

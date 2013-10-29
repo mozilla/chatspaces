@@ -18,8 +18,10 @@ io.configure(function () {
 
 io.sockets.on('connection', function (socket) {
   socket.on('join', function (data) {
+    console.log('socket join by ', crypto.createHash('md5').update(data.email).digest('hex'))
     socket.join(crypto.createHash('md5').update(data.email).digest('hex'));
   });
+
 });
 
 nconf.argv().env().file({ file: 'local.json' });
