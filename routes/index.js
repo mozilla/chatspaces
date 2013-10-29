@@ -1,6 +1,7 @@
 'use strict';
 
-module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLoggedIn) {
+module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
+  var gravatar = require('gravatar');
   var IMAGE_SIZE = 80;
 
   app.get('/', function (req, res) {
@@ -22,14 +23,15 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLog
         res.json({
           email: req.session.email,
           username: username,
-          gravatar: gravatar.url(req.session.email, { s: IMAGE_SIZE })
+          gravatar: gravatar.url(req.session.email, { s: IMAGE_SIZE }),
+          userHash: req.session.userHash
         });
       }
     });
   });
 
   app.get('/api/friend/:username', isLoggedIn, function (req, res) {
-    parallax[req.session.email].getOrAddFriend(req.params.username, function (err, user) {
+    parallax[req.session.userHash].getOrAddFriend(req.params.username, function (err, user) {
       if (err) {
         res.status(400);
         res.json({
@@ -44,7 +46,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLog
   });
 
   app.get('/api/friends', isLoggedIn, function (req, res) {
-    parallax[req.session.email].getFriends(function (err, users) {
+    parallax[req.session.userHash].getFriends(function (err, users) {
       if (err) {
         res.status(400);
         res.json({
@@ -56,7 +58,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLog
         users.friends.forEach(function (f) {
           usernamesDb.get('username!' + f.key, function (err, e) {
             if (!err) {
-              io.sockets.in(gravatar.url(req.session.email)).emit('friend', {
+              io.sockets.in(req.session.userHash).emit('friend', {
                 friend: {
                   username: f.key,
                   avatar: e
@@ -69,8 +71,25 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLog
     });
   });
 
+  app.get('/api/messages/:username', isLoggedIn, function (req, res) {
+    console.log(req.params.username)
+    parallax[req.session.userHash].getChats(req.params.username, function (err, chats) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not retrieve messages'
+        });
+      } else {
+        console.log(chats)
+        res.json({
+          chats: chats
+        });
+      }
+    });
+  });
+
   app.post('/api/friend', isLoggedIn, function (req, res) {
-    parallax[req.session.email].getOrAddFriend(req.body.username, function (err, user) {
+    parallax[req.session.userHash].getOrAddFriend(req.body.username, function (err, user) {
       if (err) {
         res.status(400);
         res.json({
@@ -128,7 +147,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, gravatar, isLog
       var recipients = req.body.recipients.slice(1, req.body.recipients.length);
 
       recipients.forEach(function (recipient) {
-        parallax[req.session.email].addChat(recipient, req.body.message, {
+        parallax[req.session.userHash].addChat(recipient, req.body.message, {
           ttl: false,
           media: req.body.picture,
           recipients: recipients

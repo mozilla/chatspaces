@@ -7,7 +7,7 @@ var settings = require('./settings')(app, configurations, express);
 var Parallax = require('meatspace-parallax');
 var parallax = {};
 var level = require('level');
-var gravatar = require('gravatar');
+var crypto = require('crypto');
 
 var io = require('socket.io').listen(server);
 
@@ -18,7 +18,7 @@ io.configure(function () {
 
 io.sockets.on('connection', function (socket) {
   socket.on('join', function (data) {
-    socket.join(gravatar.url(data.email));
+    socket.join(crypto.createHash('md5').update(data.email).digest('hex'));
   });
 });
 
@@ -32,9 +32,11 @@ var usernamesDb = level(nconf.get('db') + '/usernames', {
 // Filters for routes
 var isLoggedIn = function(req, res, next) {
   if (req.session.email) {
-    if (!parallax[req.session.email]) {
-      parallax[req.session.email] = new Parallax(req.session.user, {
-        db: nconf.get('db') + '/users/' + req.session.email
+    req.session.userHash = crypto.createHash('md5').update(req.session.email).digest('hex');
+
+    if (!parallax[req.session.userHash]) {
+      parallax[req.session.userHash] = new Parallax(req.session.userHash, {
+        db: nconf.get('db') + '/users/' + req.session.userHash
       });
     }
 
@@ -56,6 +58,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, io, nconf, parallax, usernamesDb, gravatar, isLoggedIn);
+require('./routes')(app, io, nconf, parallax, usernamesDb, isLoggedIn);
 
 server.listen(process.env.PORT || nconf.get('port'));

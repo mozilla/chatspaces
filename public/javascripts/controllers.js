@@ -39,6 +39,7 @@ angular.module('chatspace.controllers', []).
         $rootScope.email = data.email;
         $rootScope.username = data.username;
         $rootScope.gravatar = data.gravatar;
+        $rootScope.userHash = data.userHash;
 
         socket.emit('join', {
           email: data.email
@@ -179,6 +180,19 @@ angular.module('chatspace.controllers', []).
         videoShooter = new VideoShooter(videoElement);
       });
     }
+
+    $scope.getMessages = function (username) {
+      $http({
+        url: '/api/messages/' + username,
+        method: 'GET'
+      }).success(function (data) {
+        $rootScope.messages = data.chats;
+        $scope.errors = false;
+      }).error(function (data) {
+        $scope.info = false;
+        $scope.errors = data.message;
+      });
+    };
 
     $scope.addRecipient = function (user) {
       $scope.recipients[user] = user;

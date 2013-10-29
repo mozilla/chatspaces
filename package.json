@@ -19,6 +19,7 @@
     "meatspace-parallax": "0.1.2",
     "level": "0.10.0",
     "gravatar": "*",
-    "socket.io": ">= 0.9.16"
+    "socket.io": ">= 0.9.16",
+    "crypto": "0.0.3"
   }
 }
