@@ -1,8 +1,9 @@
 'use strict';
 
 module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLoggedIn) {
-  var gravatar = require('gravatar');
-  var IMAGE_SIZE = 80;
+  var gravatarUrl = function (userHash) {
+    return 'http://www.gravatar.com/avatar/' + userHash + '?s=80';
+  }
 
   app.get('/', function (req, res) {
     res.render('index');
@@ -15,7 +16,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
 
         res.json({
           email: req.session.email,
-          gravatar: gravatar.url(req.session.email, { s: IMAGE_SIZE })
+          gravatar: gravatarUrl(req.session.userHash)
         });
       } else {
         req.session.username = username;
@@ -23,7 +24,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
         res.json({
           email: req.session.email,
           username: username,
-          gravatar: gravatar.url(req.session.email, { s: IMAGE_SIZE }),
+          gravatar: gravatarUrl(req.session.userHash),
           userHash: req.session.userHash
         });
       }
@@ -143,7 +144,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
         message: 'message cannot be empty'
       });
     } else {
-      var recipients = req.body.recipients.slice(1, req.body.recipients.length);
+      var recipients = req.body.recipients;
 
       recipients.forEach(function (recipient) {
         parallax[req.session.userHash].addChat(recipient, req.body.message, {
@@ -151,7 +152,9 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
           media: req.body.picture,
           recipients: recipients
         }, function (err, chat) {
-          if (!err) {
+          if (err) {
+            console.log('error ', err);
+          } else {
             usernamesDb.get('username!' + recipient, function (err, email) {
               if (!err) {
                 console.log('sending socket response to ', email)
@@ -199,7 +202,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLogge
             {
               type: 'put',
               key: 'username!' + username,
-              value: gravatar.url(req.session.email)
+              value: gravatarUrl(req.session.userHash)
             }
           ];
 
