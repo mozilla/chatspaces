@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
+module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, isLoggedIn) {
   var gravatar = require('gravatar');
   var IMAGE_SIZE = 80;
 
@@ -72,8 +72,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
   });
 
   app.get('/api/messages/:username', isLoggedIn, function (req, res) {
-    console.log(req.params.username)
-    parallax[req.session.userHash].getChats(req.params.username, function (err, chats) {
+    parallax[req.session.userHash].getChats(req.params.username, false, true, function (err, chats) {
       if (err) {
         res.status(400);
         res.json({
@@ -156,7 +155,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
             usernamesDb.get('username!' + recipient, function (err, email) {
               if (!err) {
                 console.log('sending socket response to ', email)
-                io.sockets.in(gravatar.url(email)).emit('message', {
+                io.sockets.in(crypto.createHash('md5').update(email).digest('hex')).emit('message', {
                   chats: chat
                 });
               }
@@ -178,13 +177,6 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
       username = req.body.username.toString().toLowerCase().replace(/[^\w+$]/gi, '');
     }
 
-    if (username === req.session.username) {
-      res.json({
-        username: username
-      });
-      return;
-    }
-
     if (username.length < 1) {
       res.status(400);
       res.json({
@@ -193,7 +185,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
     } else {
 
       usernamesDb.get('username!' + username, function (err, u) {
-        if (err) {
+        if (err || !u) {
           var opts = [
             {
               type: 'del',
@@ -228,10 +220,17 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, isLoggedIn) {
             }
           });
         } else {
-          res.status(400);
-          res.json({
-            message: 'username taken'
-          });
+          if (username === req.session.username) {
+            res.json({
+              username: username
+            });
+            return;
+          } else {
+            res.status(400);
+            res.json({
+              message: 'username taken'
+            });
+          }
         }
       });
     }
