@@ -156,14 +156,6 @@
     };
 
 
-    // Make it compatible for require.js/AMD loader(s)
-    if(typeof define === 'function' && define.amd) {
-        define(function() { return GumHelper; });
-    } else if(module !== undefined && module.exports) {
-        // And for npm/node.js
-        module.exports = GumHelper;
-    } else {
-        window.GumHelper = GumHelper;
-    }
+    window.GumHelper = GumHelper;
 
 })();
