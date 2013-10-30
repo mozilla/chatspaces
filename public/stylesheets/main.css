@@ -239,6 +239,14 @@ main {
     width: 90px;
 }
 
+#friend-results li {
+    border: 2px solid transparent;
+}
+
+#friend-results li.on {
+    border: 2px solid #f00;
+}
+
 #message-list {
     display: block;
     float: left;

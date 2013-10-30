@@ -5,7 +5,7 @@
 <div class="dashboard-content">
   <ul id="friend-results">
     <li ng-repeat="(key, value) in friends track by $index">
-      <img src="{{ value }}" ng-click="getMessages(key)"><span>{{ key }}</span>
+      <img src="{{ value }}" ng-click="getMessages(key, $index)"><span>{{ key }}</span>
     </li>
   </ul>
 

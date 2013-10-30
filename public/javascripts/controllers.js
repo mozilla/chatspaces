@@ -143,7 +143,6 @@ angular.module('chatspace.controllers', []).
       method: 'GET'
     });
 
-
     $scope.showMessage = false;
     $scope.posting = false;
 
@@ -181,12 +180,14 @@ angular.module('chatspace.controllers', []).
       });
     }
 
-    $scope.getMessages = function (username) {
+    $scope.getMessages = function (username, idx) {
+      $('#friend-results li').removeClass('on');
+      $('#friend-results li')[idx].className = 'on';
+
       $http({
         url: '/api/messages/' + username,
         method: 'GET'
       }).success(function (data) {
-        console.log(data.chats)
         $rootScope.messages = data.chats;
         $scope.errors = false;
       }).error(function (data) {
