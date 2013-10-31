@@ -1,11 +1,13 @@
 <button class="action add-message" title="new message" ng-click="toggleMessage()">+</button>
 
-<img src="{{ gravatar }}" class="avatar">
+<div class="profile">
+  <img src="{{ gravatar }}" class="avatar">
+</div>
 
 <div class="dashboard-content">
   <ul id="friend-results">
     <li ng-repeat="(key, value) in friends track by $index">
-      <img src="{{ value }}" ng-click="getMessages(key, $index)"><span>{{ key }}</span>
+      <img src="{{ value }}" ng-click="getMessages(key, $index)" class="avatar"><span>{{ key }}</span>
     </li>
   </ul>
 
@@ -31,7 +33,7 @@
   <ul class="search-results">
     <li ng-repeat="(key, value) in friends track by $index">
       <a href="javascript:;" ng-click="addRecipient(key)">
-        <img src="{{ value }}"><span>{{ key }}</span>
+        <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
       </a>
     </li>
   <ul>

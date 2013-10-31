@@ -234,17 +234,41 @@ main {
     width: 100%;
 }
 
+.profile {
+    float: left;
+    margin: 10px 10px 30px 10px;
+    width: 100%;
+}
+
 #friend-results {
     float: left;
-    width: 90px;
+    margin-right: 20px;
+    width: 180px;
+}
+
+#friend-results li, .search-results li {
+    border: 2px solid transparent;
+    height: 60px;
+    line-height: 50px;
+    padding: 5px;
+    margin-bottom: 5px;
+    width: 140px;
 }
 
 #friend-results li {
-    border: 2px solid transparent;
+    padding: 20px;
+}
+
+.avatar {
+    border-radius: 100px;
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+    width: 70px;
 }
 
 #friend-results li.on {
-    border: 2px solid #f00;
+    border: 2px dashed #ccc;
 }
 
 #message-list {

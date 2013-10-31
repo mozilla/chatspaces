@@ -4,7 +4,7 @@
 
 <ul class="search-results">
   <li ng-repeat="user in users track by $index" ng-click="requestFriend(user)">
-    <img src="{{ user.avatar }}"><span>{{ user.username }}</span>
+    <img src="{{ user.avatar }}" class="avatar"><span>{{ user.username }}</span>
   </li>
 <ul>
 
@@ -12,6 +12,6 @@
 
 <ul class="search-results">
   <li ng-repeat="(key, value) in friends track by $index">
-    <img src="{{ value }}"><span>{{ key }}</span>
+    <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
   </li>
 <ul>

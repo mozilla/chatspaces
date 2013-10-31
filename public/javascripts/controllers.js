@@ -181,6 +181,7 @@ angular.module('chatspace.controllers', []).
     }
 
     $scope.getMessages = function (username, idx) {
+      $rootScope.messages = [];
       $('#friend-results li').removeClass('on');
       $('#friend-results li')[idx].className = 'on';
 
