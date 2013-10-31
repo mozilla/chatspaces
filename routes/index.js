@@ -196,16 +196,9 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
                     db: nconf.get('db') + '/users/' + userHash
                   });
                 }
-                console.log(userHash, chat, req.session.userHash, recipient, req.session.username)
-                parallax[userHash].addChat(req.session.username, req.body.message, chat, function (err, c) {
-                  if (err) {
-                    console.log('could not send to ', userHash);
-                  } else {
-                    console.log('sending socket response to ', userHash)
-                    io.sockets.in(userHash).emit('message', {
-                      chats: chat
-                    });
-                  }
+
+                io.sockets.in(userHash).emit('message', {
+                  chats: chat
                 });
               }
             });
