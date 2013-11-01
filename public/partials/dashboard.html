@@ -17,6 +17,7 @@
       <div class="no-image" ng-if="!value.value.media"></div>
       <img src="{{ value.value.media }}" ng-if="value.value.media">
       <span>sent to: {{ value.value.recipients }}<br>{{ value.value.message }}</span>
+      <button class="delete" ng-click="deleteMessage(value.value.senderKey, $index)">X</button>
     </li>
   </ul>
 </div>

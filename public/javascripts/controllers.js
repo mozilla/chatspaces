@@ -6,6 +6,7 @@ angular.module('chatspace.controllers', []).
     $rootScope.settings = false;
     $rootScope.friends = {};
     $rootScope.messages = {};
+    $rootScope.currentFriend;
 
     var settingsView = $('main');
 
@@ -18,7 +19,7 @@ angular.module('chatspace.controllers', []).
 
       socket.on('message', function (data) {
         $scope.$apply(function () {
-          $rootScope.messages[data.chat.value.created] = data.chat.value;
+          $rootScope.messages[data.chat.value.senderKey] = data.chat.value;
         });
       });
     });
@@ -98,7 +99,6 @@ angular.module('chatspace.controllers', []).
     });
 
     $scope.deleteFriend = function (user) {
-      console.log(user)
       var verify = confirm('Are you sure you want to unfriend ' + user + '? :(');
 
       if (verify) {
@@ -122,6 +122,8 @@ angular.module('chatspace.controllers', []).
         },
         method: 'POST'
       }).success(function (data) {
+        $scope.users = [];
+        $scope.user = '';
         $scope.info = data.message;
       }).error(function (data) {
         $scope.errors = data.message;
@@ -197,8 +199,28 @@ angular.module('chatspace.controllers', []).
       });
     }
 
+    $scope.deleteMessage = function (key, idx) {
+      var verify = confirm('Are you sure you want to delete this message? :(');
+
+      if (verify && $rootScope.currentFriend) {
+        $http({
+          url: '/api/message/' + $rootScope.currentFriend + '/' + key,
+          method: 'DELETE'
+        }).success(function (data) {
+          console.log($rootScope.messages, key)
+          //delete $rootScope.messages[key];
+          console.log()
+          $('#message-list li')[idx].remove();
+          $scope.info = data.message;
+        }).error(function (data) {
+          $scope.errors = data.message;
+        });
+      }
+    };
+
     $scope.getMessages = function (username, idx) {
-      $rootScope.messages = [];
+      $rootScope.messages = {};
+      $rootScope.currentFriend = username;
       $('#friend-results li').removeClass('on');
       $('#friend-results li')[idx].className = 'on';
 

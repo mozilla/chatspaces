@@ -172,6 +172,10 @@ h3 {
     position: relative;
 }
 
+main {
+    z-index: 3;
+}
+
 .avatar {
     margin: -10px -10px 0;
     width: 50px;
@@ -184,6 +188,10 @@ h3 {
     width: 50px;
 }
 
+.friends-view {
+    padding: 20px;
+}
+
 #wrapper main > section {
     bottom: 10px;
     position: absolute;
@@ -194,6 +202,7 @@ h3 {
 #wrapper main > section.settings {
     background-color: #b0b0b0;
     color: #eee;
+    padding: 20px;
     width: 944px;
 }
 
@@ -235,6 +244,11 @@ main {
     transition: 0.3s ease-out;
 }
 
+#wrapper main.on #top-bar {
+    position: absolute;
+    top: 0;
+}
+
 #wrapper main.on > section.default {
     left: 984px;
     -moz-transition: 0.3s ease-out;
@@ -259,7 +273,7 @@ main {
     width: 180px;
 }
 
-#friend-results li, .search-results li {
+#friend-results li, .search-results li, .contact-results li {
     border: 2px solid transparent;
     height: 60px;
     line-height: 50px;
@@ -268,14 +282,39 @@ main {
     width: 140px;
 }
 
-.search-results li {
-    float: left;
-    margin-bottom: 10px;
-    position: relative;
-    width: 170px;
+.search-results {
+    display: block;
+    position: absolute;
+    top: 105px;
+    z-index: 2;
 }
 
-.search-results .delete {
+.search-results li, .contact-results li {
+    float: left;
+    line-height: 40px;
+    margin-bottom: 10px;
+    padding: 10px 10px 0 10px;
+    position: relative;
+    width: 162px;
+}
+
+.search-results li {
+    background-color: rgba(8, 8, 8, 0.75);
+    color: #fff;
+    padding-bottom: 0;
+}
+
+.contact-results li {
+    background-color: rgba(255, 255, 255, 0.85);
+    margin: 2px;
+}
+
+.search-results li .avatar, .contact-results li .avatar {
+    padding: 10px;
+    width: 40px;
+}
+
+.delete {
     background-color: #f00;
     border: 0;
     border-radius: 100px;
@@ -283,10 +322,22 @@ main {
     font-family: Arial, sans-serif;
     font-size: 1.3rem;
     height: 25px;
-    left: 50px;
     position: absolute;
+}
+
+.search-input {
+    margin-bottom: 30px;
+}
+
+.search-results .delete {
+    left: 50px;
     top: 40px;
     width: 25px;
+}
+
+#message-list .delete, .contact-results .delete {
+    bottom: 5px;
+    right: 5px;
 }
 
 #friend-results li {
@@ -321,6 +372,7 @@ main {
     float: left;
     height: 100px;
     margin-bottom: 5px;
+    position: relative;
     width: 100%;
 }
 

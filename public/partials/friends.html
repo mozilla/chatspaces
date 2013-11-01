@@ -1,18 +1,20 @@
-<h2>Search for contacts</h2>
+<div class="friends-view">
+  <h2>Search for contacts</h2>
 
-<input ng-change="searchUsers()" ng-model="user" placeholder="Type in a username">
+  <input ng-change="searchUsers()" ng-model="user" placeholder="Type in a username" class="search-input">
 
-<ul class="search-results">
-  <li ng-repeat="user in users track by $index" ng-click="requestFriend(user)">
-    <img src="{{ user.avatar }}" class="avatar"><span>{{ user.username }}</span>
-  </li>
-<ul>
+  <ul class="search-results">
+    <li ng-repeat="user in users track by $index" ng-click="requestFriend(user)">
+      <img src="{{ user.avatar }}" class="avatar"><span>{{ user.username }}</span>
+    </li>
+  </ul>
 
-<h2>Added contacts</h2>
+  <h2>Added contacts</h2>
 
-<ul class="search-results">
-  <li ng-repeat="(key, value) in friends track by $index">
-    <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
-    <button class="delete" ng-click="deleteFriend(key)">X</button>
-  </li>
-<ul>
+  <ul class="contact-results">
+    <li ng-repeat="(key, value) in friends track by $index">
+      <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
+      <button class="delete" ng-click="deleteFriend(key)">X</button>
+    </li>
+  </ul>
+</div>

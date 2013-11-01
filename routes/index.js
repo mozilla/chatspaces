@@ -145,6 +145,21 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
     });
   });
 
+  app.del('/api/message/:user/:key', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].removeChat(req.params.user, req.params.key, function (err) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not delete chat'
+        });
+      } else {
+        res.json({
+          message: 'deleted chat'
+        })
+      }
+    });
+  });
+
   app.post('/api/search', isLoggedIn, function (req, res) {
     if (!req.body.username) {
       res.status(400);
