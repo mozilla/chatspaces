@@ -130,6 +130,22 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
     });
   });
 
+  app.del('/api/friend/:username', isLoggedIn, function (req, res) {
+    console.log('got here ', req.params)
+    parallax[req.session.userHash].removeUser(req.params.username, function (err) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not delete user'
+        });
+      } else {
+        res.json({
+          message: 'deleted user'
+        });
+      }
+    });
+  });
+
   app.post('/api/search', isLoggedIn, function (req, res) {
     if (!req.body.username) {
       res.status(400);

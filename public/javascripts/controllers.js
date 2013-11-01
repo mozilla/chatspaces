@@ -97,6 +97,23 @@ angular.module('chatspace.controllers', []).
       method: 'GET'
     });
 
+    $scope.deleteFriend = function (user) {
+      console.log(user)
+      var verify = confirm('Are you sure you want to unfriend ' + user + '? :(');
+
+      if (verify) {
+        $http({
+          url: '/api/friend/' + user,
+          method: 'DELETE'
+        }).success(function (data) {
+          delete $rootScope.friends[user];
+          $scope.info = data.message;
+        }).error(function (data) {
+          $scope.errors = data.message;
+        });
+      }
+    };
+
     $scope.requestFriend = function (user) {
       $http({
         url: '/api/friend',
@@ -238,9 +255,11 @@ angular.module('chatspace.controllers', []).
           $scope.info = data.message;
           $scope.message = '';
           $scope.picture = '';
+          body.find('> img').remove();
         }).error(function (data) {
           $scope.info = false;
           $scope.errors = data.message;
+          body.find('> img').remove();
         });
       }, 10, 0.2);
     };

@@ -13,5 +13,6 @@
 <ul class="search-results">
   <li ng-repeat="(key, value) in friends track by $index">
     <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
+    <button class="delete" ng-click="deleteFriend(key)">X</button>
   </li>
 <ul>

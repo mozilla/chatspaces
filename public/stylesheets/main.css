@@ -255,8 +255,29 @@ main {
     width: 140px;
 }
 
+.search-results li {
+    float: left;
+    margin-bottom: 10px;
+    position: relative;
+    width: 170px;
+}
+
+.search-results .delete {
+    background-color: #f00;
+    border: 0;
+    border-radius: 100px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 1.3rem;
+    height: 25px;
+    left: 50px;
+    position: absolute;
+    top: 40px;
+    width: 25px;
+}
+
 #friend-results li {
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
 }
 
 .avatar {
@@ -267,39 +288,42 @@ main {
     width: 70px;
 }
 
-#friend-results li.on {
+#friend-results li.on, #friend-results li:hover {
+    background-color: #f8f8f8;
     border: 2px dashed #ccc;
 }
 
 #message-list {
     display: block;
     float: left;
-    width: 500px;
+    max-width: 770px;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 #message-list li {
-    background-color: #fff;
+    background-color: #f8f8f8;
     clear: both;
     float: left;
-    height: 85px;
+    height: 100px;
     margin-bottom: 5px;
     width: 100%;
 }
 
 #message-list li img {
-    width: 80px;
+    width: 130px;
 }
 
 #message-list li img, #message-list li .no-image {
     display: inline-block;
     float: left;
     margin-right: 10px;
+    width: 130px;
 }
 
 #message-list li .no-image {
     background-color: #fff;
     height: 80px;
-    width: 80px;
 }
 
 #message-list li span {
@@ -332,8 +356,8 @@ input {
 
 @media only screen and (max-width: 993px) {
     .message {
-        height: 300px;
-        margin-top: -340px;
+        height: 400px;
+        margin-top: -440px;
     }
 
     #header, #wrapper {
@@ -342,6 +366,10 @@ input {
 
     #header {
         margin-left: -364px;
+    }
+
+    #message-list {
+        width: 485px;
     }
 
     #wrapper main > section {
@@ -380,6 +408,20 @@ input {
         margin-left: -210px;
     }
 
+    #friend-results {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    #friend-results li {
+        float: left;
+        width: 145px;
+    }
+
+    #message-list {
+        width: 380px;
+    }
+
     #wrapper main > section {
         width: 380px;
     }
@@ -403,12 +445,36 @@ input {
         width: 200px;
     }
 
+    .message {
+        height: 500px;
+        margin-top: -550px;
+    }
+
     #header, #wrapper {
         width: 280px;
     }
 
     #header {
         margin-left: -140px;
+    }
+
+    #friend-results li {
+        width: 195px;
+    }
+
+    #message-list {
+        width: 240px;
+    }
+
+    #message-list li {
+        height: auto;
+    }
+
+    #message-list li span {
+        clear: both;
+        display: block;
+        margin-top: 5px;
+        padding: 10px;
     }
 
     #wrapper main > section {
