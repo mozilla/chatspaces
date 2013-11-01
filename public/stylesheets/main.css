@@ -114,13 +114,12 @@ h3 {
 .add-message {
     background-color: #57dfb4;
     color: #e1fff5;
-    font-size: 2.4rem;
+    float: right;
+    font-size: 2.3rem;
     font-weight: 600;
     height: 50px;
-    position: absolute;
-    right: 10px;
+    line-height: 2.3rem;
     text-shadow: #3c816b 0 0 1px;
-    top: 10px;
     width: 50px;
 }
 
@@ -138,7 +137,7 @@ h3 {
 }
 
 .message.on {
-    margin-top: 0;
+    margin-top: 70px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
@@ -146,6 +145,15 @@ h3 {
 #header, #wrapper {
     margin: 0 auto;
     width: 1024px;
+}
+
+#top-bar {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 10px;
+    position: fixed;
+    top: 40px;
+    width: 1004px;
+    z-index: 2;
 }
 
 #header {
@@ -169,12 +177,18 @@ h3 {
     width: 50px;
 }
 
+.profile .avatar {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 50px;
+}
+
 #wrapper main > section {
     bottom: 10px;
-    padding: 20px;
     position: absolute;
     top: 0;
-    width: 984px;
+    width: 1014px;
 }
 
 #wrapper main > section.settings {
@@ -236,13 +250,12 @@ main {
 
 .profile {
     float: left;
-    margin: 10px 10px 30px 10px;
     width: 100%;
 }
 
 #friend-results {
     float: left;
-    margin-right: 20px;
+    margin: 80px 0 0 10px;
     width: 180px;
 }
 
@@ -295,8 +308,9 @@ main {
 
 #message-list {
     display: block;
-    float: left;
-    max-width: 770px;
+    float: right;
+    margin-top: 80px;
+    max-width: 810px;
     overflow-x: hidden;
     width: 100%;
 }
@@ -368,12 +382,16 @@ input {
         margin-left: -364px;
     }
 
+    #top-bar {
+        width: 708px;
+    }
+
     #message-list {
-        width: 485px;
+        width: 515px;
     }
 
     #wrapper main > section {
-        width: 688px;
+        width: 718px;
     }
 
     #wrapper main > section.settings {
@@ -381,11 +399,11 @@ input {
     }
 
     #wrapper main.off > section.settings {
-        left: -688px;
+        left: -718px;
     }
 
     #wrapper main.on > section.default {
-        left: 688px;
+        left: 718px;
     }
 }
 
@@ -408,6 +426,10 @@ input {
         margin-left: -210px;
     }
 
+    #top-bar {
+        width: 400px;
+    }
+
     #friend-results {
         margin-bottom: 10px;
         width: 100%;
@@ -415,15 +437,25 @@ input {
 
     #friend-results li {
         float: left;
-        width: 145px;
+        height: 30px;
+        line-height: 20px;
+        margin: 3px;
+        width: 150px;
+    }
+
+    #friend-results li img {
+        width: 40px;
     }
 
     #message-list {
-        width: 380px;
+        float: left;
+        margin: 0;
+        padding: 0 10px;
+        width: 400px;
     }
 
     #wrapper main > section {
-        width: 380px;
+        width: 420px;
     }
 
     #wrapper main > section.settings {
@@ -446,8 +478,9 @@ input {
     }
 
     .message {
-        height: 500px;
-        margin-top: -550px;
+        height: 450px;
+        margin-top: -500px;
+        width: 220px;
     }
 
     #header, #wrapper {
@@ -458,12 +491,17 @@ input {
         margin-left: -140px;
     }
 
-    #friend-results li {
-        width: 195px;
+    #top-bar {
+        width: 260px;
     }
 
-    #message-list {
-        width: 240px;
+    #friend-results li {
+        margin: 0 0 5px 0;
+        width: 215px;
+    }
+
+    #message-list, #friend-results {
+        width: 260px;
     }
 
     #message-list li {
