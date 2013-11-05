@@ -207,38 +207,46 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
         recipients: recipients
       };
 
-      recipients.forEach(function (recipient) {
-        parallax[req.session.userHash].addChat(recipient, req.body.message, chat, function (err, c) {
-          if (err) {
-            console.log('error ', err);
-          } else {
-            usernamesDb.get('username!' + recipient, function (err, userHash) {
-              if (err) {
+      if (recipients.length < 1) {
+        res.status(400);
+        res.json({
+          message: 'you need to send to at least 1 friend'
+        });
+      } else {
 
-                res.status(400);
-                res.json({
-                  message: 'could not retrieve recipient userhash'
-                });
-              } else {
+        recipients.forEach(function (recipient) {
+          parallax[req.session.userHash].addChat(recipient, req.body.message, chat, function (err, c) {
+            if (err) {
+              console.log('error ', err);
+            } else {
+              usernamesDb.get('username!' + recipient, function (err, userHash) {
+                if (err) {
 
-                if (!parallax[userHash]) {
-                  parallax[userHash] = new Parallax(userHash, {
-                    db: nconf.get('db') + '/users/' + userHash
+                  res.status(400);
+                  res.json({
+                    message: 'could not retrieve recipient userhash'
+                  });
+                } else {
+
+                  if (!parallax[userHash]) {
+                    parallax[userHash] = new Parallax(userHash, {
+                      db: nconf.get('db') + '/users/' + userHash
+                    });
+                  }
+
+                  io.sockets.in(userHash).emit('message', {
+                    chats: chat
                   });
                 }
-
-                io.sockets.in(userHash).emit('message', {
-                  chats: chat
-                });
-              }
-            });
-          }
+              });
+            }
+          });
         });
-      });
 
-      res.json({
-        message: 'done'
-      });
+        res.json({
+          message: 'done'
+        });
+      }
     }
   });
 
