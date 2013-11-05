@@ -29,16 +29,11 @@
           videoElement.src = window.url.createObjectURL(stream);
         }
 
-        cameraStream = stream;
         videoElement.play();
       }, function (err) {
 
         callback(err);
       });
-    }
-
-    function readyListener(attempts, callback) {
-      findVideoSize(attempts, callback);
     }
 
     function findVideoSize(attempts, callback) {
@@ -68,7 +63,7 @@
       videoElement = document.createElement('video');
       videoElement.autoplay = true;
       videoElement.addEventListener('loadeddata', function () {
-        readyListener(attempts, callback);
+        findVideoSize(attempts, callback);
       });
 
       streamMedia(callback);

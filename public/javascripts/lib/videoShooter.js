@@ -28,8 +28,8 @@ function VideoShooter (videoElement) {
             ag.getBase64GIF(function(image) {
                 var img = document.createElement('img');
                 img.src = image;
-                document.body.appendChild(img);
                 callback(image);
+                image = null;
             });
         }
     }
