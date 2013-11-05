@@ -19,8 +19,6 @@
 
     function streamMedia(callback) {
       navigator.getMedia({ video: true }, function (stream) {
-        callback(null, stream);
-
         if (videoElement.mozSrcObject) {
 
           videoElement.mozSrcObject = stream;
@@ -30,6 +28,7 @@
         }
 
         videoElement.play();
+        callback(null, stream);
       }, function (err) {
 
         callback(err);
