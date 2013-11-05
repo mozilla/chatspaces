@@ -188,7 +188,7 @@ main {
     width: 50px;
 }
 
-.friends-view {
+.friends-view, .profile-view, .landing-view {
     padding: 20px;
 }
 

@@ -1,14 +1,16 @@
-<h2>Your profile</h2>
+<div class="profile-view">
+  <h2>Your profile</h2>
 
-<p><img src="{{ gravatar }}"> Current username: {{ currentUsername }}</p>
+  <p><img src="{{ gravatar }}"> Current username: {{ currentUsername }}</p>
 
-<h3>Update your username</h3>
-<form ng-submit="updateProfile()">
-  <div ng-if="info" class="info">
-    <p>{{ info }}</p>
-  </div>
-  <div ng-if="errors" class="errors">
-    <p>{{ errors }}</p>
-  </div>
-  <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
-</form>
+  <h3>Update your username</h3>
+  <form ng-submit="updateProfile()">
+    <div ng-if="info" class="info">
+      <p>{{ info }}</p>
+    </div>
+    <div ng-if="errors" class="errors">
+      <p>{{ errors }}</p>
+    </div>
+    <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
+  </form>
+</div>

@@ -10,6 +10,13 @@ angular.module('chatspace.controllers', []).
 
     var settingsView = $('main');
 
+    $rootScope.getFriends = function () {
+      $http({
+        url: '/api/friends',
+        method: 'GET'
+      });
+    };
+
     socket.on('connect', function () {
       socket.on('friend', function (data) {
         $scope.$apply(function () {
@@ -80,6 +87,8 @@ angular.module('chatspace.controllers', []).
   }).
   controller('HomeCtrl', function ($scope, $rootScope, $location) {
     if ($rootScope.isAuthenticated) {
+      $rootScope.getFriends();
+
       if (!$rootScope.username) {
         $location.path('/profile');
       } else {
@@ -93,10 +102,7 @@ angular.module('chatspace.controllers', []).
     $scope.users = [];
     $scope.user = '';
 
-    $http({
-      url: '/api/friends',
-      method: 'GET'
-    });
+    $rootScope.getFriends();
 
     $scope.deleteFriend = function (user) {
       var verify = confirm('Are you sure you want to unfriend ' + user + '? :(');
@@ -154,13 +160,11 @@ angular.module('chatspace.controllers', []).
     }
 
     var videoShooter;
+    var gumHelper = new GumHelper({});
     var preview = $('#video-preview');
     $scope.recipients = {};
 
-    $http({
-      url: '/api/friends',
-      method: 'GET'
-    });
+    $rootScope.getFriends();
 
     $scope.showMessage = false;
     $scope.posting = false;
@@ -184,20 +188,22 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-    // lazy "always" prompt for now until we figure out the correct behaviour
-    if ($rootScope.isAuthenticated && navigator.getMedia) {
-      GumHelper.startVideoStreaming(function errorCb(err) {
+   // $scope.promptCamera = function () {
+      if ($rootScope.isAuthenticated && navigator.getMedia) {
+        gumHelper.startVideoStreaming(function (err, data) {
+          if (err) {
+            console.log(err);
+          } else {
 
-        console.log('error ', err)
-      }, function successCallback(stream, videoElement, width, height) {
-
-        videoElement.width = width / 5;
-        videoElement.height = height / 5;
-        preview.append(videoElement);
-        videoElement.play();
-        videoShooter = new VideoShooter(videoElement);
-      });
-    }
+            data.videoElement.width = data.stream.width / 5;
+            data.videoElement.height = data.stream.height / 5;
+            preview.append(data.videoElement);
+            data.videoElement.play();
+            videoShooter = new VideoShooter(data.videoElement);
+          }
+        });
+      }
+ //   };
 
     $scope.deleteMessage = function (key, idx) {
       var verify = confirm('Are you sure you want to delete this message? :(');
@@ -207,9 +213,6 @@ angular.module('chatspace.controllers', []).
           url: '/api/message/' + $rootScope.currentFriend + '/' + key,
           method: 'DELETE'
         }).success(function (data) {
-          console.log($rootScope.messages, key)
-          //delete $rootScope.messages[key];
-          console.log()
           $('#message-list li')[idx].remove();
           $scope.info = data.message;
         }).error(function (data) {
