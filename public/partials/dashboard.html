@@ -29,17 +29,19 @@
   <div ng-if="errors" class="errors">
     <p>{{ errors }}</p>
   </div>
-  <textarea ng-model="message"></textarea>
   <div id="video-preview"></div>
+  <textarea ng-model="message"></textarea>
   <input type="hidden" name="picture" id="picture">
-  <ul class="search-results">
+  <ul class="recipient-results">
     <li ng-repeat="(key, value) in friends track by $index">
-      <a href="javascript:;" ng-click="addRecipient(key)">
+      <a href="javascript:;" ng-click="toggleRecipient(key, $index)">
         <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
       </a>
     </li>
-  <ul>
-  <input name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index">
-  <button type="submit" class="action">Send</button>
-  <button type="button" ng-click="toggleMessage()" class="action">X</a>
+  </ul>
+  <input type="hidden" name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index">
+  <div class="form-actions">
+    <button type="submit" class="action">Send</button>
+    <button type="button" ng-click="toggleMessage()" class="action">X</a>
+  </div>
 </form>

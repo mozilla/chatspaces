@@ -162,6 +162,7 @@ angular.module('chatspace.controllers', []).
     var videoShooter;
     var gumHelper = new GumHelper({});
     var preview = $('#video-preview');
+    var recipientList = $('.recipient-results li');
     $scope.recipients = {};
 
     $rootScope.getFriends();
@@ -239,8 +240,15 @@ angular.module('chatspace.controllers', []).
       });
     };
 
-    $scope.addRecipient = function (user) {
-      $scope.recipients[user] = user;
+    $scope.toggleRecipient = function (user, idx) {
+      console.log(recipientList)
+      if ($scope.recipients[user]) {
+        $('.recipient-results li')[idx].className = '';
+        delete $scope.recipients[user];
+      } else {
+        $('.recipient-results li')[idx].className = 'on';
+        $scope.recipients[user] = user;
+      }
     };
 
     $scope.toggleMessage = function () {

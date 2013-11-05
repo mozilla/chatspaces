@@ -192,6 +192,13 @@ main {
     padding: 20px;
 }
 
+.recipient-results {
+    clear: both;
+    display: block;
+    float: left;
+    width: 100%;
+}
+
 #wrapper main > section {
     bottom: 10px;
     position: absolute;
@@ -273,7 +280,7 @@ main {
     width: 180px;
 }
 
-#friend-results li, .search-results li, .contact-results li {
+#friend-results li, .search-results li, .contact-results li, .recipient-results li {
     border: 2px solid transparent;
     height: 60px;
     line-height: 50px;
@@ -289,13 +296,21 @@ main {
     z-index: 2;
 }
 
-.search-results li, .contact-results li {
+.search-results li, .contact-results li, .recipient-results li {
     float: left;
     line-height: 40px;
     margin-bottom: 10px;
     padding: 10px 10px 0 10px;
     position: relative;
     width: 162px;
+}
+
+.recipient-results li .avatar {
+    width: 40px;
+}
+
+.recipient-results li.on {
+    border: 2px solid #f00;
 }
 
 .search-results li {
@@ -312,6 +327,12 @@ main {
 .search-results li .avatar, .contact-results li .avatar {
     padding: 10px;
     width: 40px;
+}
+
+.form-actions {
+    bottom: 0;
+    position: absolute;
+    right: 0;
 }
 
 .delete {
@@ -418,6 +439,23 @@ input {
 .errors {
     background-color: #ed3047;
     color: #ffdde1;
+}
+
+textarea, #video-preview {
+    display: inline-block;
+    float: left;
+    margin: 10px 0;
+}
+
+#video-preview {
+    height: 160px;
+    margin-bottom: 10px;
+    width: 240px;
+}
+
+video {
+    height: 160px;
+    width: 240px;
 }
 
 @media only screen and (max-width: 993px) {
