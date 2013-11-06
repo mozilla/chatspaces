@@ -93,10 +93,31 @@ h3 {
     padding: 8px 10px;
 }
 
+#notifications {
+    background-color: #f00;
+    border-radius: 100px;
+    color: #fff;
+    display: none;
+    float: left;
+    font-family: Arial, sans-serif;
+    height: 22px;
+    line-height: 20px;
+    margin: 4px;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    width: 22px;
+}
+
+#notifications.on {
+    display: inline-block;
+}
+
 .toggle {
     background-color: #333;
     border: 0;
     color: #eee;
+    float: left;
     font-size: 2.4rem;
     font-weight: 600;
     height: 40px;

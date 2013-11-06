@@ -8,8 +8,10 @@ angular.module('chatspace.controllers', []).
     $rootScope.messages = {};
     $rootScope.blocked = {};
     $rootScope.currentFriend;
+    $rootScope.notifications = [];
 
     var settingsView = $('main');
+    var notifications = $('#notifications');
 
     $rootScope.getFriends = function () {
       $http({
@@ -20,7 +22,7 @@ angular.module('chatspace.controllers', []).
 
     socket.on('connect', function () {
       socket.on('friend', function (data) {
-        $scope.$apply(function () {
+        $rootScope.$apply(function () {
           $rootScope.friends[data.friend.userHash] = {
             username: data.friend.username,
             avatar: data.friend.avatar,
@@ -29,16 +31,16 @@ angular.module('chatspace.controllers', []).
         });
       });
 
-      socket.on('message', function (data) {
-        $scope.$apply(function () {
-          console.log(data)
-          $rootScope.messages[data.chat.value.senderKey] = data.chats;
+      socket.on('notification', function (data) {
+        $rootScope.$apply(function () {
+          $rootScope.notifications.push(data.notification);
+          notifications.addClass('on').text($rootScope.notifications.length);
         });
       });
 
       socket.on('blocked', function (data) {
-        $scope.$apply(function () {
-          $scope.blocked[data.user.userHash] = {
+        $rootScope.$apply(function () {
+          $rootScope.blocked[data.user.userHash] = {
             username: data.user.username,
             avatar: data.user.avatar,
             userHash: data.user.userHash
@@ -46,34 +48,6 @@ angular.module('chatspace.controllers', []).
         });
       });
     });
-
-    $rootScope.isValidUser = function () {
-      if (!($rootScope.isAuthenticated || $rootScope.username)) {
-        $location.path('/');
-      }
-    };
-
-    $rootScope.checkLogin = function () {
-      $rootScope.isValidUser();
-
-      $http({
-        url: '/api/profile',
-        method: 'GET'
-      }).success(function (data) {
-        $rootScope.email = data.email;
-        $rootScope.username = data.username;
-        $rootScope.gravatar = data.gravatar;
-        $rootScope.userHash = data.userHash;
-
-        socket.emit('join', {
-          email: data.email
-        });
-      }).error(function (data) {
-
-        $rootScope.email = data.email;
-        $rootScope.gravatar = data.gravatar;
-      });
-    };
 
     $rootScope.toggleSettings = function () {
       if ($rootScope.settings) {
@@ -91,8 +65,6 @@ angular.module('chatspace.controllers', []).
       $rootScope.isAuthenticated = true;
     }
 
-    $rootScope.checkLogin();
-
     $rootScope.login = function () {
       persona.login();
     };
@@ -102,28 +74,12 @@ angular.module('chatspace.controllers', []).
     }
   }).
   controller('HomeCtrl', function ($scope, $rootScope, $location) {
-    if ($rootScope.isAuthenticated) {
-      $rootScope.getFriends();
 
-      if (!$rootScope.username) {
-        $location.path('/profile');
-      } else {
-        $location.path('/dashboard');
-      }
-    }
   }).
   controller('FriendCtrl', function ($scope, $rootScope, $http, $location) {
-    $rootScope.checkLogin();
-
-    if (!$rootScope.username) {
-      $location.path('/profile');
-    }
-
     $scope.showMessage = false;
     $scope.users = [];
     $scope.user = '';
-
-    $rootScope.getFriends();
 
     $scope.blockUser = function (userHash) {
       $http({
@@ -192,14 +148,6 @@ angular.module('chatspace.controllers', []).
     };
   }).
   controller('BlockedCtrl', function ($scope, $rootScope, $http, $location) {
-    if (!$rootScope.isAuthenticated) {
-      $location.path('/');
-    }
-
-    if (!$rootScope.username) {
-      $location.path('/profile');
-    }
-
     $http({
       url: '/api/blocked',
       method: 'GET'
@@ -222,22 +170,15 @@ angular.module('chatspace.controllers', []).
 
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location) {
-    if (!$rootScope.isAuthenticated) {
-      $location.path('/');
-    }
+    var notifications = $('#notifications');
 
-    if (!$rootScope.username) {
-      $location.path('/profile');
-    }
+    notifications.removeClass('on').empty();
 
     var videoShooter;
     var gumHelper = new GumHelper({});
     var preview = $('#video-preview');
     var recipientList = $('.recipient-results li');
     $scope.recipients = {};
-
-    $rootScope.getFriends();
-
     $scope.showMessage = false;
     $scope.posting = false;
 
@@ -366,12 +307,6 @@ angular.module('chatspace.controllers', []).
     };
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
-    if (!$rootScope.isAuthenticated) {
-      $location.path('/');
-    } else {
-      $rootScope.checkLogin();
-    }
-
     $scope.setUsername = false;
     $scope.currentUsername = $rootScope.username;
 
@@ -389,6 +324,7 @@ angular.module('chatspace.controllers', []).
         $scope.username = $scope.currentUsername = data.username;
         $scope.setUsername = true;
       }).error(function (data) {
+        $scope.setUsername = false;
         $scope.info = false;
         $scope.errors = data.message;
       });

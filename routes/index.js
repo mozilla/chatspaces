@@ -262,6 +262,22 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
   });
 
   app.post('/api/message', isLoggedIn, function (req, res) {
+    var sendToUser = function (sender, receiver, message, chat, callback) {
+      if (!parallax[receiver]) {
+        parallax[receiver] = new Parallax(receiver, {
+          db: nconf.get('db') + '/users/' + receiver
+        });
+      }
+
+      parallax[sender].addChat(receiver, message, chat, function (err, c) {
+        if (err) {
+          console.log(err);
+        } else {
+          callback(null, true);
+        }
+      });
+    };
+
     if (!req.body.message) {
       res.status(400);
       res.json({
@@ -282,23 +298,23 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
       } else {
 
         recipients.forEach(function (recipient) {
-          parallax[req.session.userHash].addChat(recipient, req.body.message, chat, function (err, c) {
+          sendToUser(req.session.userHash, recipient, req.body.message, chat, function (err, s) {
             if (err) {
-              console.log('error ', err);
+              console.log(err);
             } else {
-
-              if (!parallax[recipient]) {
-                parallax[recipient] = new Parallax(recipient, {
-                  db: nconf.get('db') + '/users/' + recipient
-                });
-              }
-
-              parallax[recipient].addChat(req.session.userHash, req.body.message, chat, function (err, c) {
+              sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err, s) {
                 if (err) {
-                  console.log('error ', err);
+                  console.log(err);
                 } else {
-                  io.sockets.in(recipient).emit('message', {
-                    chats: chat
+                  usernamesDb.get('userHash!' + recipient, function (err, u) {
+                    if (!err) {
+                      io.sockets.in(recipient).emit('notification', {
+                        notification: {
+                          username: u,
+                          userHash: recipient
+                        }
+                      });
+                    }
                   });
                 }
               });
@@ -327,7 +343,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
       });
     } else {
 
-      usernamesDb.get('username!' + username, function (err, u) {
+      usernamesDb.get('userHash!' + req.session.userHash, function (err, u) {
         if (err || !u) {
           var opts = [
             {

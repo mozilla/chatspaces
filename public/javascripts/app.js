@@ -8,6 +8,37 @@ angular.module('chatspace', [
   'chatspace.factories',
   'chatspace.controllers'
 ]).
+run(function ($rootScope, $http, $location) {
+  $rootScope.$on('$routeChangeStart', function (event, next, current) {
+    if (!$rootScope.isAuthenticated) {
+      $location.path('/');
+    } else {
+      $http({
+        url: '/api/profile',
+        method: 'GET'
+      }).success(function (data) {
+        $rootScope.email = data.email;
+        $rootScope.username = data.username;
+        $rootScope.gravatar = data.gravatar;
+        $rootScope.userHash = data.userHash;
+
+        socket.emit('join', {
+          email: data.email
+        });
+
+        if (!$rootScope.username) {
+          $location.path('/profile');
+        } else {
+          $rootScope.getFriends();
+        }
+      }).error(function (data) {
+
+        $rootScope.email = data.email;
+        $rootScope.gravatar = data.gravatar;
+      });
+    }
+  });
+}).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider
     .when('/', {
