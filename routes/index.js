@@ -293,8 +293,14 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
                 });
               }
 
-              io.sockets.in(recipient).emit('message', {
-                chats: chat
+              parallax[recipient].addChat(req.session.userHash, req.body.message, chat, function (err, c) {
+                if (err) {
+                  console.log('error ', err);
+                } else {
+                  io.sockets.in(recipient).emit('message', {
+                    chats: chat
+                  });
+                }
               });
             }
           });
