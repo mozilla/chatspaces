@@ -30,7 +30,7 @@
   </ul>
 </div>
 
-<form ng-submit="sendMessage()" class="message">
+<form ng-submit="sendMessage()" class="message" ng-class="{ on: showMessage }">
   <div ng-if="info" class="info">
     <p>{{ info }}</p>
   </div>

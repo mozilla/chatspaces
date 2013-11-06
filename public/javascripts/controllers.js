@@ -212,7 +212,7 @@ angular.module('chatspace.controllers', []).
     $scope.deleteMessage = function (message, idx) {
       var verify = confirm('Are you sure you want to delete this message? :(');
 
-      if (verify && $rootScope.currentFriend) {
+      if (verify) {
         $http({
           url: '/api/message/' + $rootScope.currentFriend + '/' + message.key,
           method: 'DELETE'
@@ -260,10 +260,8 @@ angular.module('chatspace.controllers', []).
         $scope.showMessage = false;
         $scope.message = '';
         $scope.picture = '';
-        newMessageForm.removeClass('on');
       } else {
         $scope.showMessage = true;
-        newMessageForm.addClass('on');
       }
     };
 
