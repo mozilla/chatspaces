@@ -124,7 +124,8 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
                 friend: {
                   username: username,
                   userHash: f.key,
-                  avatar: gravatarUrl(f.key)
+                  avatar: gravatarUrl(f.key),
+                  unread: 0
                 }
               });
             }
@@ -311,7 +312,8 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
                       io.sockets.in(recipient).emit('notification', {
                         notification: {
                           username: u,
-                          userHash: recipient
+                          userHash: recipient,
+                          senderUserHash: req.session.userHash
                         }
                       });
                     }

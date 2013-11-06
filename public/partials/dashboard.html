@@ -7,23 +7,24 @@
 
 <div class="dashboard-content">
   <ul id="friend-results">
-    <li ng-repeat="(key, value) in friends track by $index">
-      <img src="{{ value.avatar }}" ng-click="getMessages(value.userHash, $index)" class="avatar"><span>{{ value.username }}</span>
+    <li ng-repeat="friend in friends track by $index" ng-class="{ on: selectedFriend === friend.userHash }">
+      <span class="unread" ng-if="friend.unread > 0">{{ friend.unread }}</span>
+      <img src="{{ friend.avatar }}" ng-click="getMessages(friend)" class="avatar"><span>{{ friend.username }}</span>
     </li>
   </ul>
 
   <ul id="message-list">
-    <li ng-repeat="(key, value) in messages track by $index">
-      <div class="no-image left" ng-if="!value.value.media"></div>
-      <div class="image left" ng-if="value.value.media">
-        <img src="{{ value.value.media }}" ng-if="value.value.media">
+    <li ng-repeat="message in messages track by $index">
+      <div class="no-image left" ng-if="!message.value.media"></div>
+      <div class="image left" ng-if="message.value.media">
+        <img src="{{ message.value.media }}">
       </div>
       <div class="right">
-        <p class="recipients">
-          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=20" ng-repeat="recipient in value.value.recipients">
-        </p>
-        <p>{{ value.value.message }}</p>
-        <button class="delete" ng-click="deleteMessage(value.value.senderKey, $index)">X</button>
+        <div class="recipients">
+          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=20" ng-repeat="recipient in message.value.recipients">
+        </div>
+        <p>{{ message.value.message }}</p>
+        <button class="delete" ng-click="deleteMessage(message, $index)">X</button>
       </div>
     </li>
   </ul>

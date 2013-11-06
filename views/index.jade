@@ -1,7 +1,7 @@
 extend layout
 
 block content
-  main(role='main', class='off')
+  main(role='main', ng-class='settings ? "on" : "off"')
     section.settings
       h1 Chatspaces
       ul

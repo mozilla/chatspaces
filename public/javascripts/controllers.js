@@ -4,22 +4,50 @@ angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
     $rootScope.isAuthenticated = false;
     $rootScope.settings = false;
+    $rootScope.hasNewNotifications = 0;
     $rootScope.friends = {};
     $rootScope.messages = {};
     $rootScope.blocked = {};
     $rootScope.currentFriend;
     $rootScope.notifications = [];
 
-    var settingsView = $('main');
-    var notifications = $('#notifications');
+    socket.on('connect', function () {
+      socket.on('friend', function (data) {
+        $rootScope.$apply(function () {
+          $rootScope.friends[data.friend.userHash] = {
+            username: data.friend.username,
+            avatar: data.friend.avatar,
+            userHash: data.friend.userHash,
+            senderUserHash: data.friend.senderUserHash,
+            unread: data.friend.unread
+          };
+        });
+      });
+
+      socket.on('notification', function (data) {
+        $rootScope.$apply(function () {
+          $rootScope.notifications.push(data.notification);
+          $rootScope.hasNewNotifications ++;
+          $rootScope.friends[data.notification.senderUserHash].unread ++;
+        });
+      });
+
+      socket.on('blocked', function (data) {
+        $rootScope.$apply(function () {
+          $rootScope.blocked[data.user.userHash] = {
+            username: data.user.username,
+            avatar: data.user.avatar,
+            userHash: data.user.userHash
+          };
+        });
+      });
+    });
 
     $rootScope.toggleSettings = function () {
       if ($rootScope.settings) {
         $rootScope.settings = false;
-        settingsView.removeClass('on').addClass('off');
       } else {
         $rootScope.settings = true;
-        settingsView.removeClass('off').addClass('on');
       }
     };
 
@@ -113,15 +141,8 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('BlockedCtrl', function ($scope, $rootScope, $http, $location) {
-    $http({
-      url: '/api/blocked',
-      method: 'GET'
-    }).success(function (data) {
-
-    }).error(function (data) {
-      $scope.errors = data.message;
-    });
+  controller('BlockedCtrl', function ($scope, $rootScope, $http, $location, api) {
+    api.call();
 
     $scope.unblockUser = function (userHash, idx) {
       $http({
@@ -136,9 +157,8 @@ angular.module('chatspace.controllers', []).
 
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
-    var notifications = $('#notifications');
-
-    notifications.removeClass('on').empty();
+    $rootScope.notifications = [];
+    $rootScope.hasNewNotifications = 0;
 
     api.call();
 
@@ -149,8 +169,7 @@ angular.module('chatspace.controllers', []).
     $scope.recipients = {};
     $scope.showMessage = false;
     $scope.posting = false;
-
-    var newMessageForm = $('.message');
+    $scope.selectedFriend = false;
 
     var escapeHtml = function (text) {
       if (text) {
@@ -167,6 +186,10 @@ angular.module('chatspace.controllers', []).
       } else {
         callback('');
       }
+    };
+
+    $scope.selectedFriend = function (friend) {
+      return $scope.selectedFriend === friend.userHash;
     };
 
     $scope.promptCamera = function () {
@@ -186,15 +209,15 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-    $scope.deleteMessage = function (key, idx) {
+    $scope.deleteMessage = function (message, idx) {
       var verify = confirm('Are you sure you want to delete this message? :(');
 
       if (verify && $rootScope.currentFriend) {
         $http({
-          url: '/api/message/' + $rootScope.currentFriend + '/' + key,
+          url: '/api/message/' + $rootScope.currentFriend + '/' + message.key,
           method: 'DELETE'
         }).success(function (data) {
-          $('#message-list li')[idx].remove();
+          $rootScope.messages.splice(idx, 1);
           $scope.info = data.message;
         }).error(function (data) {
           $scope.errors = data.message;
@@ -202,17 +225,16 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-    $scope.getMessages = function (userHash, idx) {
-      $rootScope.messages = {};
-      $rootScope.currentFriend = userHash;
-      $('#friend-results li').removeClass('on');
-      $('#friend-results li')[idx].className = 'on';
+    $scope.getMessages = function (friend) {
+      $rootScope.messages = [];
+      $scope.selectedFriend = friend.userHash;
 
       $http({
-        url: '/api/messages/' + userHash,
+        url: '/api/messages/' + friend.userHash,
         method: 'GET'
       }).success(function (data) {
         $rootScope.messages = data.chats;
+        $rootScope.friends[friend.userHash].unread = 0;
         $scope.errors = false;
       }).error(function (data) {
         $scope.info = false;

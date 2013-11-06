@@ -70,6 +70,11 @@ body, textarea, input {
     font-family: 'FiraSans-Light', Arial, sans-serif;
 }
 
+.default {
+    margin-bottom: 30px;
+    overflow-y: auto;
+}
+
 textarea {
     height: 70px;
     padding: 10px;
@@ -93,7 +98,7 @@ h3 {
     padding: 8px 10px;
 }
 
-#notifications {
+#notifications, .unread {
     background-color: #f00;
     border-radius: 100px;
     color: #fff;
@@ -109,8 +114,17 @@ h3 {
     width: 22px;
 }
 
-#notifications.on {
+#notifications.on, .unread {
     display: inline-block;
+}
+
+.unread {
+    height: 20px;
+    left: 48px;
+    padding: 3px;
+    position: absolute;
+    top: 10px;
+    width: 20px;
 }
 
 .toggle {
@@ -189,7 +203,7 @@ h3 {
 #wrapper, main {
     background-color: #f0f0f0;
     height: 100%;
-    overflow-x: hidden;
+    overflow: hidden;
     position: relative;
 }
 
@@ -296,9 +310,10 @@ main {
 }
 
 #friend-results {
-    float: left;
     margin: 80px 0 0 10px;
+    position: fixed;
     width: 180px;
+    z-index: 3;
 }
 
 #friend-results li, .search-results li, .contact-results li, .recipient-results li {
@@ -307,6 +322,7 @@ main {
     line-height: 50px;
     padding: 5px;
     margin-bottom: 5px;
+    position: relative;
     width: 140px;
 }
 
@@ -401,6 +417,9 @@ main {
 }
 
 #message-list .recipients {
+    clear: both;
+    float: left;
+    margin-bottom: 10px;
     width: 100%;
 }
 
@@ -549,6 +568,11 @@ video {
     textarea {
         height: 80px;
         width: 340px;
+    }
+
+    #friend-results {
+        float: left;
+        position: relative;
     }
 
     .message {

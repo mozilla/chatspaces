@@ -41,33 +41,9 @@ service('api', function ($http, $rootScope, $location) {
         method: 'GET'
       });
 
-      socket.on('connect', function () {
-        socket.on('friend', function (data) {
-          $rootScope.$apply(function () {
-            $rootScope.friends[data.friend.userHash] = {
-              username: data.friend.username,
-              avatar: data.friend.avatar,
-              userHash: data.friend.userHash
-            };
-          });
-        });
-
-        socket.on('notification', function (data) {
-          $rootScope.$apply(function () {
-            $rootScope.notifications.push(data.notification);
-            notifications.addClass('on').text($rootScope.notifications.length);
-          });
-        });
-
-        socket.on('blocked', function (data) {
-          $rootScope.$apply(function () {
-            $rootScope.blocked[data.user.userHash] = {
-              username: data.user.username,
-              avatar: data.user.avatar,
-              userHash: data.user.userHash
-            };
-          });
-        });
+      $http({
+        url: '/api/blocked',
+        method: 'GET'
       });
 
       if (!$rootScope.username) {

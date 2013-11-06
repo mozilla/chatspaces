@@ -11,7 +11,8 @@ html(ng-app='chatspace')
   body(ng-controller='AppCtrl')
     #header
       button(class='toggle', ng-click='toggleSettings()') ≡
-      a(id='notifications', href='/dashboard')
+      a(id='notifications', href='/dashboard', ng-class='{ on: hasNewNotifications }', ng-bind='hasNewNotifications')
+
     #wrapper
       block content
 
