@@ -345,8 +345,17 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
       });
     } else {
 
-      usernamesDb.get('userHash!' + req.session.userHash, function (err, u) {
-        if (err || !u) {
+      if (username === req.session.username) {
+        res.json({
+          username: username,
+          message: 'no change'
+        });
+        return;
+      }
+
+      usernamesDb.get('username!' + username, function (err, userHash) {
+        if (err || !userHash) {
+
           var opts = [
             {
               type: 'del',
@@ -386,17 +395,10 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
             }
           });
         } else {
-          if (username === req.session.username) {
-            res.json({
-              username: username
-            });
-            return;
-          } else {
-            res.status(400);
-            res.json({
-              message: 'username taken'
-            });
-          }
+          res.status(400);
+          res.json({
+            message: 'username taken'
+          });
         }
       });
     }
