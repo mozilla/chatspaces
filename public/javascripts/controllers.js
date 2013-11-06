@@ -169,7 +169,9 @@ angular.module('chatspace.controllers', []).
     $scope.recipients = {};
     $scope.showMessage = false;
     $scope.posting = false;
+    $scope.picture = '';
     $scope.selectedFriend = false;
+    $scope.recipientArr = [];
 
     var escapeHtml = function (text) {
       if (text) {
@@ -186,6 +188,18 @@ angular.module('chatspace.controllers', []).
       } else {
         callback('');
       }
+    };
+
+    var resetForm = function () {
+      $scope.recipients = {};
+      $('.recipient-results li').removeClass('on'); // TODO fix
+      $scope.recipientArr = [];
+      $scope.errors = false;
+      $scope.info = false;
+      $scope.message = '';
+      $scope.picture = '';
+      preview.empty();
+      videoShooter = null;
     };
 
     $scope.selectedFriend = function (friend) {
@@ -228,6 +242,8 @@ angular.module('chatspace.controllers', []).
     $scope.getMessages = function (friend) {
       $rootScope.messages = [];
       $scope.selectedFriend = friend.userHash;
+      $rootScope.hasNewNotifications = 0;
+      $rootScope.notifications = [];
 
       $http({
         url: '/api/messages/' + friend.userHash,
@@ -253,40 +269,33 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.toggleMessage = function () {
-      $scope.errors = false;
-      $scope.info = false;
+      resetForm();
 
       if ($scope.showMessage) {
         $scope.showMessage = false;
-        $scope.message = '';
-        $scope.picture = '';
       } else {
         $scope.showMessage = true;
       }
     };
 
     $scope.sendMessage = function () {
-      var recipientArr = [];
-
       for (var r in $scope.recipients) {
-        recipientArr.push(r);
+        $scope.recipientArr.push(r);
       }
 
       getScreenshot(function (pictureData) {
+        $scope.picture = pictureData;
+
         $http({
           url: '/api/message',
           data: {
             message: escapeHtml($scope.message),
-            picture: escapeHtml(pictureData),
-            recipients: recipientArr
+            picture: escapeHtml($scope.picture),
+            recipients: $scope.recipientArr
           },
           method: 'POST'
         }).success(function (data) {
-          $scope.recipients = {};
-          $scope.errors = false;
           $scope.info = data.message;
-          $scope.message = '';
-          $scope.picture = '';
         }).error(function (data) {
           $scope.info = false;
           $scope.errors = data.message;
