@@ -6,6 +6,7 @@ angular.module('chatspace.controllers', []).
     $rootScope.settings = false;
     $rootScope.friends = {};
     $rootScope.messages = {};
+    $rootScope.blocked = {};
     $rootScope.currentFriend;
 
     var settingsView = $('main');
@@ -32,6 +33,16 @@ angular.module('chatspace.controllers', []).
         $scope.$apply(function () {
           console.log(data)
           $rootScope.messages[data.chat.value.senderKey] = data.chats;
+        });
+      });
+
+      socket.on('blocked', function (data) {
+        $scope.$apply(function () {
+          $scope.blocked[data.user.userHash] = {
+            username: data.user.username,
+            avatar: data.user.avatar,
+            userHash: data.user.userHash
+          };
         });
       });
     });
@@ -189,20 +200,6 @@ angular.module('chatspace.controllers', []).
       $location.path('/profile');
     }
 
-    $scope.blocked = {};
-
-    socket.on('connect', function () {
-      socket.on('blocked', function (data) {
-        $scope.$apply(function () {
-          $scope.blocked[data.user.userHash] = {
-            username: data.user.username,
-            avatar: data.user.avatar,
-            userHash: data.user.userHash
-          };
-        });
-      });
-    });
-
     $http({
       url: '/api/blocked',
       method: 'GET'
@@ -217,7 +214,7 @@ angular.module('chatspace.controllers', []).
         url: '/api/block/' + userHash,
         method: 'DELETE'
       }).success(function (data) {
-        delete $scope.blocked[userHash];
+        delete $rootScope.blocked[userHash];
       }).error(function (data) {
         $scope.errors = data.message;
       });
