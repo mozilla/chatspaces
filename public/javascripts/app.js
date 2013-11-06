@@ -25,12 +25,6 @@ run(function ($rootScope, $http, $location) {
         socket.emit('join', {
           email: data.email
         });
-
-        if (!$rootScope.username) {
-          $location.path('/profile');
-        } else {
-          $rootScope.getFriends();
-        }
       }).error(function (data) {
 
         $rootScope.email = data.email;
@@ -38,6 +32,49 @@ run(function ($rootScope, $http, $location) {
       });
     }
   });
+}).
+service('api', function ($http, $rootScope, $location) {
+  return {
+    call: function () {
+      $http({
+        url: '/api/friends',
+        method: 'GET'
+      });
+
+      socket.on('connect', function () {
+        socket.on('friend', function (data) {
+          $rootScope.$apply(function () {
+            $rootScope.friends[data.friend.userHash] = {
+              username: data.friend.username,
+              avatar: data.friend.avatar,
+              userHash: data.friend.userHash
+            };
+          });
+        });
+
+        socket.on('notification', function (data) {
+          $rootScope.$apply(function () {
+            $rootScope.notifications.push(data.notification);
+            notifications.addClass('on').text($rootScope.notifications.length);
+          });
+        });
+
+        socket.on('blocked', function (data) {
+          $rootScope.$apply(function () {
+            $rootScope.blocked[data.user.userHash] = {
+              username: data.user.username,
+              avatar: data.user.avatar,
+              userHash: data.user.userHash
+            };
+          });
+        });
+      });
+
+      if (!$rootScope.username) {
+        $location.path('/profile');
+      }
+    }
+  };
 }).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider

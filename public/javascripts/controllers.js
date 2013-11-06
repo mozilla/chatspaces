@@ -13,42 +13,6 @@ angular.module('chatspace.controllers', []).
     var settingsView = $('main');
     var notifications = $('#notifications');
 
-    $rootScope.getFriends = function () {
-      $http({
-        url: '/api/friends',
-        method: 'GET'
-      });
-    };
-
-    socket.on('connect', function () {
-      socket.on('friend', function (data) {
-        $rootScope.$apply(function () {
-          $rootScope.friends[data.friend.userHash] = {
-            username: data.friend.username,
-            avatar: data.friend.avatar,
-            userHash: data.friend.userHash
-          };
-        });
-      });
-
-      socket.on('notification', function (data) {
-        $rootScope.$apply(function () {
-          $rootScope.notifications.push(data.notification);
-          notifications.addClass('on').text($rootScope.notifications.length);
-        });
-      });
-
-      socket.on('blocked', function (data) {
-        $rootScope.$apply(function () {
-          $rootScope.blocked[data.user.userHash] = {
-            username: data.user.username,
-            avatar: data.user.avatar,
-            userHash: data.user.userHash
-          };
-        });
-      });
-    });
-
     $rootScope.toggleSettings = function () {
       if ($rootScope.settings) {
         $rootScope.settings = false;
@@ -76,10 +40,12 @@ angular.module('chatspace.controllers', []).
   controller('HomeCtrl', function ($scope, $rootScope, $location) {
 
   }).
-  controller('FriendCtrl', function ($scope, $rootScope, $http, $location) {
+  controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
     $scope.showMessage = false;
     $scope.users = [];
     $scope.user = '';
+
+    api.call();
 
     $scope.blockUser = function (userHash) {
       $http({
@@ -169,10 +135,12 @@ angular.module('chatspace.controllers', []).
     };
 
   }).
-  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location) {
+  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
     var notifications = $('#notifications');
 
     notifications.removeClass('on').empty();
+
+    api.call();
 
     var videoShooter;
     var gumHelper = new GumHelper({});
