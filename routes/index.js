@@ -309,6 +309,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
                 } else {
                   usernamesDb.get('userHash!' + recipient, function (err, u) {
                     if (!err) {
+                      console.log(recipient)
                       io.sockets.in(recipient).emit('notification', {
                         notification: {
                           username: u,

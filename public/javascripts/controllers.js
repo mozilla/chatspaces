@@ -92,7 +92,7 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.deleteFriend = function (user) {
-      var verify = confirm('Are you sure you want to unfriend ' + user + '? :(');
+      var verify = confirm('Are you sure you want to unfriend ' + $rootScope.friends[user].username + '? :(');
 
       if (verify) {
         $http({
@@ -157,7 +157,6 @@ angular.module('chatspace.controllers', []).
 
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
-    $rootScope.notifications = [];
     $rootScope.hasNewNotifications = 0;
 
     api.call();
@@ -172,6 +171,9 @@ angular.module('chatspace.controllers', []).
     $scope.picture = '';
     $scope.selectedFriend = false;
     $scope.recipientArr = [];
+
+    $rootScope.hasNewNotifications = 0;
+    $rootScope.notifications = [];
 
     var escapeHtml = function (text) {
       if (text) {
@@ -244,13 +246,13 @@ angular.module('chatspace.controllers', []).
       $scope.selectedFriend = friend.userHash;
       $rootScope.hasNewNotifications = 0;
       $rootScope.notifications = [];
+      $rootScope.friends[friend.userHash].unread = 0;
 
       $http({
         url: '/api/messages/' + friend.userHash,
         method: 'GET'
       }).success(function (data) {
         $rootScope.messages = data.chats;
-        $rootScope.friends[friend.userHash].unread = 0;
         $scope.errors = false;
       }).error(function (data) {
         $scope.info = false;
@@ -296,6 +298,7 @@ angular.module('chatspace.controllers', []).
           method: 'POST'
         }).success(function (data) {
           $scope.info = data.message;
+          $scope.recipients = {};
         }).error(function (data) {
           $scope.info = false;
           $scope.errors = data.message;
