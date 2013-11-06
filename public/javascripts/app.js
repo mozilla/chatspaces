@@ -22,6 +22,10 @@ config(function ($routeProvider, $locationProvider) {
       controller: 'DashboardCtrl',
       templateUrl: 'partials/dashboard.html'
     })
+    .when('/blocked', {
+      controller: 'BlockedCtrl',
+      templateUrl: 'partials/blocked.html'
+    })
     .when('/friends', {
       controller: 'FriendCtrl',
       templateUrl: 'partials/friends.html'

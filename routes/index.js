@@ -31,8 +31,69 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
     });
   });
 
-  app.get('/api/friend/:username', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].getOrAddFriend(req.params.username, function (err, user) {
+  app.get('/api/blocked', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].getBlockedUsers(function (err, users) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not get blocked users'
+        });
+      } else {
+        users.blocked.forEach(function (user) {
+          usernamesDb.get('userHash!' + user.key, function (err, username) {
+            if (err) {
+              console.log(err);
+            } else {
+              io.sockets.in(req.session.userHash).emit('blocked', {
+                user: {
+                  username: username,
+                  userHash: user.key,
+                  avatar: gravatarUrl(user.key)
+                }
+              });
+            }
+          });
+        });
+
+        res.json({
+          message: 'loading blocked users'
+        });
+      }
+    });
+  });
+
+  app.post('/api/block', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].blockUser(req.body.userHash, function (err, user) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not block user'
+        });
+      } else {
+        res.json({
+          message: 'blocked user'
+        });
+      }
+    });
+  });
+
+  app.del('/api/block/:userHash', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].unblockUser(req.params.userHash, function (err, user) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: 'could not unblock user'
+        });
+      } else {
+        res.json({
+          message: 'unblocked user'
+        });
+      }
+    });
+  });
+
+  app.get('/api/friend/:userHash', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].getOrAddFriend(req.params.userHash, function (err, user) {
       if (err) {
         res.status(400);
         res.json({
@@ -57,12 +118,13 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
         var friends = [];
 
         users.friends.forEach(function (f) {
-          usernamesDb.get('username!' + f.key, function (err, userHash) {
+          usernamesDb.get('userHash!' + f.key, function (err, username) {
             if (!err) {
               io.sockets.in(req.session.userHash).emit('friend', {
                 friend: {
-                  username: f.key,
-                  avatar: gravatarUrl(userHash)
+                  username: username,
+                  userHash: f.key,
+                  avatar: gravatarUrl(f.key)
                 }
               });
             }
@@ -72,8 +134,8 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
     });
   });
 
-  app.get('/api/messages/:username', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].getChats(req.params.username, req.params.username, true, function (err, chats) {
+  app.get('/api/messages/:userHash', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].getChats(req.params.userHash, false, true, function (err, chats) {
       if (err) {
         res.status(400);
         res.json({
@@ -88,33 +150,37 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
   });
 
   app.post('/api/friend', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].getOrAddFriend(req.body.username, function (err, user) {
+    parallax[req.session.userHash].getOrAddFriend(req.body.userHash, function (err, user) {
       if (err) {
+
         res.status(400);
         res.json({
           message: 'could not send friend request'
         });
       } else {
-        usernamesDb.get('username!' + user.user, function (err, userHash) {
+
+        usernamesDb.get('userHash!' + user.user, function (err, username) {
           if (!err) {
-            if (!parallax[userHash]) {
-              parallax[userHash] = new Parallax(userHash, {
-                db: nconf.get('db') + '/users/' + userHash
+            if (!parallax[user.user]) {
+              parallax[user.user] = new Parallax(user.user, {
+                db: nconf.get('db') + '/users/' + user.user
               });
             }
 
-            parallax[userHash].getOrAddFriend(req.session.username, function (err, sender) {
+            parallax[user.user].getOrAddFriend(req.session.userHash, function (err, sender) {
               if (!err) {
                 io.sockets.in(req.session.userHash).emit('friend', {
                   friend: {
-                    username: user.user,
-                    avatar: gravatarUrl(userHash)
+                    username: username,
+                    userHash: user.user,
+                    avatar: gravatarUrl(user.user)
                   }
                 });
 
-                io.sockets.in(userHash).emit('friend', {
+                io.sockets.in(user.user).emit('friend', {
                   friend: {
-                    username: sender.user,
+                    username: req.session.username,
+                    userHash: req.session.userHash,
                     avatar: gravatarUrl(req.session.userHash)
                   }
                 });
@@ -130,8 +196,8 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
     });
   });
 
-  app.del('/api/friend/:username', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].removeUser(req.params.username, function (err) {
+  app.del('/api/friend/:userHash', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].removeUser(req.params.userHash, function (err) {
       if (err) {
         res.status(400);
         res.json({
@@ -145,8 +211,8 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
     });
   });
 
-  app.del('/api/message/:user/:key', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].removeChat(req.params.user, req.params.key, function (err) {
+  app.del('/api/message/:userHash/:key', isLoggedIn, function (req, res) {
+    parallax[req.session.userHash].removeChat(req.params.userHash, req.params.key, function (err) {
       if (err) {
         res.status(400);
         res.json({
@@ -177,7 +243,8 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
 
         users.push({
           username: data.key.split('!')[1],
-          avatar: gravatarUrl(data.value)
+          avatar: gravatarUrl(data.value),
+          userHash: data.value
         });
       }).on('error', function (err) {
 
@@ -219,25 +286,15 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
             if (err) {
               console.log('error ', err);
             } else {
-              usernamesDb.get('username!' + recipient, function (err, userHash) {
-                if (err) {
 
-                  res.status(400);
-                  res.json({
-                    message: 'could not retrieve recipient userhash'
-                  });
-                } else {
+              if (!parallax[recipient]) {
+                parallax[recipient] = new Parallax(recipient, {
+                  db: nconf.get('db') + '/users/' + recipient
+                });
+              }
 
-                  if (!parallax[userHash]) {
-                    parallax[userHash] = new Parallax(userHash, {
-                      db: nconf.get('db') + '/users/' + userHash
-                    });
-                  }
-
-                  io.sockets.in(userHash).emit('message', {
-                    chats: chat
-                  });
-                }
+              io.sockets.in(recipient).emit('message', {
+                chats: chat
               });
             }
           });
@@ -274,6 +331,11 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
             {
               type: 'put',
               key: 'email!' + req.session.email,
+              value: username
+            },
+            {
+              type: 'put',
+              key: 'userHash!' + req.session.userHash,
               value: username
             },
             {

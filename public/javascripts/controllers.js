@@ -20,13 +20,18 @@ angular.module('chatspace.controllers', []).
     socket.on('connect', function () {
       socket.on('friend', function (data) {
         $scope.$apply(function () {
-          $rootScope.friends[data.friend.username] = data.friend.avatar;
+          $rootScope.friends[data.friend.userHash] = {
+            username: data.friend.username,
+            avatar: data.friend.avatar,
+            userHash: data.friend.userHash
+          };
         });
       });
 
       socket.on('message', function (data) {
         $scope.$apply(function () {
-          $rootScope.messages[data.chat.value.senderKey] = data.chat.value;
+          console.log(data)
+          $rootScope.messages[data.chat.value.senderKey] = data.chats;
         });
       });
     });
@@ -96,13 +101,34 @@ angular.module('chatspace.controllers', []).
       }
     }
   }).
-  controller('FriendCtrl', function ($scope, $rootScope, $http) {
+  controller('FriendCtrl', function ($scope, $rootScope, $http, $location) {
     $rootScope.checkLogin();
+
+    if (!$rootScope.username) {
+      $location.path('/profile');
+    }
+
     $scope.showMessage = false;
     $scope.users = [];
     $scope.user = '';
 
     $rootScope.getFriends();
+
+    $scope.blockUser = function (userHash) {
+      $http({
+        url: '/api/block',
+        data: {
+          userHash: userHash
+        },
+        method: 'POST'
+      }).success(function (data) {
+        $scope.info = data.message;
+        delete $rootScope.friends[userHash];
+      }).error(function (data) {
+        $scope.info = false;
+        $scope.errors = data.message;
+      });
+    };
 
     $scope.deleteFriend = function (user) {
       var verify = confirm('Are you sure you want to unfriend ' + user + '? :(');
@@ -124,7 +150,7 @@ angular.module('chatspace.controllers', []).
       $http({
         url: '/api/friend',
         data: {
-          username: user.username
+          userHash: user.userHash
         },
         method: 'POST'
       }).success(function (data) {
@@ -154,9 +180,57 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('DashboardCtrl', function ($scope, $rootScope, $http) {
+  controller('BlockedCtrl', function ($scope, $rootScope, $http, $location) {
     if (!$rootScope.isAuthenticated) {
       $location.path('/');
+    }
+
+    if (!$rootScope.username) {
+      $location.path('/profile');
+    }
+
+    $scope.blocked = {};
+
+    socket.on('connect', function () {
+      socket.on('blocked', function (data) {
+        $scope.$apply(function () {
+          $scope.blocked[data.user.userHash] = {
+            username: data.user.username,
+            avatar: data.user.avatar,
+            userHash: data.user.userHash
+          };
+        });
+      });
+    });
+
+    $http({
+      url: '/api/blocked',
+      method: 'GET'
+    }).success(function (data) {
+
+    }).error(function (data) {
+      $scope.errors = data.message;
+    });
+
+    $scope.unblockUser = function (userHash, idx) {
+      $http({
+        url: '/api/block/' + userHash,
+        method: 'DELETE'
+      }).success(function (data) {
+        delete $scope.blocked[userHash];
+      }).error(function (data) {
+        $scope.errors = data.message;
+      });
+    };
+
+  }).
+  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location) {
+    if (!$rootScope.isAuthenticated) {
+      $location.path('/');
+    }
+
+    if (!$rootScope.username) {
+      $location.path('/profile');
     }
 
     var videoShooter;
@@ -189,7 +263,7 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-   // $scope.promptCamera = function () {
+    $scope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
         gumHelper.startVideoStreaming(function (err, data) {
           if (err) {
@@ -204,7 +278,7 @@ angular.module('chatspace.controllers', []).
           }
         });
       }
- //   };
+    };
 
     $scope.deleteMessage = function (key, idx) {
       var verify = confirm('Are you sure you want to delete this message? :(');
@@ -222,14 +296,14 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-    $scope.getMessages = function (username, idx) {
+    $scope.getMessages = function (userHash, idx) {
       $rootScope.messages = {};
-      $rootScope.currentFriend = username;
+      $rootScope.currentFriend = userHash;
       $('#friend-results li').removeClass('on');
       $('#friend-results li')[idx].className = 'on';
 
       $http({
-        url: '/api/messages/' + username,
+        url: '/api/messages/' + userHash,
         method: 'GET'
       }).success(function (data) {
         $rootScope.messages = data.chats;
@@ -240,14 +314,13 @@ angular.module('chatspace.controllers', []).
       });
     };
 
-    $scope.toggleRecipient = function (user, idx) {
-      console.log(recipientList)
-      if ($scope.recipients[user]) {
+    $scope.toggleRecipient = function (userHash, idx) {
+      if ($scope.recipients[userHash]) {
         $('.recipient-results li')[idx].className = '';
-        delete $scope.recipients[user];
+        delete $scope.recipients[userHash];
       } else {
         $('.recipient-results li')[idx].className = 'on';
-        $scope.recipients[user] = user;
+        $scope.recipients[userHash] = userHash;
       }
     };
 
@@ -288,23 +361,22 @@ angular.module('chatspace.controllers', []).
           $scope.info = data.message;
           $scope.message = '';
           $scope.picture = '';
-          body.find('> img').remove();
         }).error(function (data) {
           $scope.info = false;
           $scope.errors = data.message;
-          body.find('> img').remove();
         });
       }, 10, 0.2);
     };
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
-    $scope.currentUsername = $rootScope.username;
-
     if (!$rootScope.isAuthenticated) {
       $location.path('/');
     } else {
       $rootScope.checkLogin();
     }
+
+    $scope.setUsername = false;
+    $scope.currentUsername = $rootScope.username;
 
     $scope.updateProfile = function () {
       $http({
@@ -318,6 +390,7 @@ angular.module('chatspace.controllers', []).
         $scope.info = data.message;
         $rootScope.username = data.username;
         $scope.username = $scope.currentUsername = data.username;
+        $scope.setUsername = true;
       }).error(function (data) {
         $scope.info = false;
         $scope.errors = data.message;

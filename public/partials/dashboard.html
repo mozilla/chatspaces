@@ -8,16 +8,23 @@
 <div class="dashboard-content">
   <ul id="friend-results">
     <li ng-repeat="(key, value) in friends track by $index">
-      <img src="{{ value }}" ng-click="getMessages(key, $index)" class="avatar"><span>{{ key }}</span>
+      <img src="{{ value.avatar }}" ng-click="getMessages(value.userHash, $index)" class="avatar"><span>{{ value.username }}</span>
     </li>
   </ul>
 
   <ul id="message-list">
     <li ng-repeat="(key, value) in messages track by $index">
-      <div class="no-image" ng-if="!value.value.media"></div>
-      <img src="{{ value.value.media }}" ng-if="value.value.media">
-      <span>sent to: {{ value.value.recipients }}<br>{{ value.value.message }}</span>
-      <button class="delete" ng-click="deleteMessage(value.value.senderKey, $index)">X</button>
+      <div class="no-image left" ng-if="!value.value.media"></div>
+      <div class="image left" ng-if="value.value.media">
+        <img src="{{ value.value.media }}" ng-if="value.value.media">
+      </div>
+      <div class="right">
+        <p class="recipients">
+          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=20" ng-repeat="recipient in value.value.recipients">
+        </p>
+        <p>{{ value.value.message }}</p>
+        <button class="delete" ng-click="deleteMessage(value.value.senderKey, $index)">X</button>
+      </div>
     </li>
   </ul>
 </div>
@@ -29,17 +36,18 @@
   <div ng-if="errors" class="errors">
     <p>{{ errors }}</p>
   </div>
+  <button type="button" ng-click="promptCamera()">GIFCam!</button>
   <div id="video-preview"></div>
   <textarea ng-model="message"></textarea>
   <input type="hidden" name="picture" id="picture">
   <ul class="recipient-results">
     <li ng-repeat="(key, value) in friends track by $index">
-      <a href="javascript:;" ng-click="toggleRecipient(key, $index)">
-        <img src="{{ value }}" class="avatar"><span>{{ key }}</span>
+      <a href="javascript:;" ng-click="toggleRecipient(value.userHash, $index)">
+        <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
       </a>
     </li>
   </ul>
-  <input type="hidden" name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index">
+  <input type="hidden" name="recipient[{{ value.userHash }}]" value="{{ value.userHash }}" ng-repeat="(key, value) in recipients track by $index">
   <div class="form-actions">
     <button type="submit" class="action">Send</button>
     <button type="button" ng-click="toggleMessage()" class="action">X</a>

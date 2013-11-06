@@ -341,7 +341,7 @@ main {
     border-radius: 100px;
     color: #fff;
     font-family: Arial, sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     height: 25px;
     position: absolute;
 }
@@ -361,8 +361,31 @@ main {
     right: 5px;
 }
 
+#message-list .left, #message-list .right {
+    float: left;
+}
+
+#message-list .left, .no-image {
+    margin-right: 5px;
+    min-width: 75px;
+    width: 18%;
+}
+
+#message-list .right {
+    width: 80%;
+}
+
 #friend-results li {
     padding: 20px 20px 10px 20px;
+}
+
+#message-list .recipients {
+    width: 100%;
+}
+
+#message-list .recipients img {
+    height: 20px;
+    width: 20px;
 }
 
 .avatar {
@@ -406,6 +429,10 @@ main {
     float: left;
     margin-right: 10px;
     width: 130px;
+}
+
+#message-list li .no-image {
+    margin-right: 20px;
 }
 
 #message-list li .no-image {
