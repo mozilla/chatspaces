@@ -8,6 +8,8 @@ var Parallax = require('meatspace-parallax');
 var parallax = {};
 var level = require('level');
 var crypto = require('crypto');
+var redis = require('redis');
+var redisClient = redis.createClient();
 
 var io = require('socket.io').listen(server);
 
@@ -60,6 +62,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, io, nconf, parallax, usernamesDb, crypto, Parallax, isLoggedIn);
+require('./routes')(app, io, nconf, parallax, usernamesDb, crypto, Parallax, redisClient, isLoggedIn);
 
 server.listen(process.env.PORT || nconf.get('port'));

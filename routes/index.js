@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Parallax, isLoggedIn) {
+module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Parallax, redisClient, isLoggedIn) {
   var gravatarUrl = function (userHash) {
     return 'http://www.gravatar.com/avatar/' + userHash + '?s=80';
   }

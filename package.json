@@ -19,6 +19,8 @@
     "meatspace-parallax": "0.1.8",
     "level": "0.10.0",
     "socket.io": ">= 0.9.16",
-    "crypto": "0.0.3"
+    "crypto": "0.0.3",
+    "redis": ">= 0.9.0",
+    "hiredis": ">= 0.1.15"
   }
 }

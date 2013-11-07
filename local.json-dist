@@ -5,5 +5,8 @@
     "authUrl": "https://login.persona.org",
     "session_secret": "secret",
     "session_cookie": "session",
-    "db": "./db"
+    "db": "./db",
+    "redis_dev": 0,
+    "redis_test": 1,
+    "redis_prod": 2
 }

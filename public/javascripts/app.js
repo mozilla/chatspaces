@@ -26,7 +26,6 @@ run(function ($rootScope, $http, $location) {
           email: data.email
         });
       }).error(function (data) {
-
         $rootScope.email = data.email;
         $rootScope.gravatar = data.gravatar;
       });

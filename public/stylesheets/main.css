@@ -316,9 +316,9 @@ main {
 }
 
 #friend-results {
+    float: left;
     margin: 80px 0 0 10px;
     width: 180px;
-    z-index: 3;
 }
 
 #friend-results li, .search-results li, .contact-results li, .recipient-results li {
