@@ -14,9 +14,8 @@ var redisClient = redis.createClient();
 var io = require('socket.io').listen(server);
 
 io.configure(function () {
-  io.set('transports', ['xhr-polling']);
+  io.set('transports', ['websocket']);
   io.set('log level', 1);
-  io.set('polling duration', 10);
 });
 
 io.sockets.on('connection', function (socket) {

@@ -1,9 +1,11 @@
 'use strict';
 
-module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Parallax, redisClient, isLoggedIn) {
+module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parallax, redisClient, isLoggedIn) {
   var gravatarUrl = function (userHash) {
     return 'http://www.gravatar.com/avatar/' + userHash + '?s=80';
-  }
+  };
+
+  var TTL_LIMIT = 86400; // 1 day
 
   app.get('/', function (req, res) {
     res.render('index');
@@ -63,7 +65,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
   });
 
   app.post('/api/block', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].blockUser(req.body.userHash, function (err, user) {
+    parallax[req.session.userHash].blockUser(req.body.userHash, function (err) {
       if (err) {
         res.status(400);
         res.json({
@@ -78,7 +80,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
   });
 
   app.del('/api/block/:userHash', isLoggedIn, function (req, res) {
-    parallax[req.session.userHash].unblockUser(req.params.userHash, function (err, user) {
+    parallax[req.session.userHash].unblockUser(req.params.userHash, function (err) {
       if (err) {
         res.status(400);
         res.json({
@@ -115,8 +117,6 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
           message: 'could not send friend request'
         });
       } else {
-        var friends = [];
-
         users.friends.forEach(function (f) {
           usernamesDb.get('userHash!' + f.key, function (err, username) {
             if (!err) {
@@ -143,6 +143,10 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
           message: 'could not retrieve messages'
         });
       } else {
+        var notificationKey = 'notification:' + req.session.userHash + ':' + req.params.userHash;
+        redisClient.del(notificationKey);
+        redisClient.lrem('notifications:' + req.session.userHash, 0, notificationKey);
+
         res.json({
           chats: chats.chats
         });
@@ -168,7 +172,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
               });
             }
 
-            parallax[user.user].getOrAddFriend(req.session.userHash, function (err, sender) {
+            parallax[user.user].getOrAddFriend(req.session.userHash, function (err) {
               if (err) {
                 res.status(400);
                 res.json({
@@ -227,7 +231,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
       } else {
         res.json({
           message: 'deleted chat'
-        })
+        });
       }
     });
   });
@@ -240,7 +244,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
       });
     } else {
       var users = [];
-
+      console.log(req.body.username)
       usernamesDb.createReadStream({
 
         start: 'username!' + req.body.username,
@@ -275,7 +279,7 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
         });
       }
 
-      parallax[sender].addChat(receiver, message, chat, function (err, c) {
+      parallax[sender].addChat(receiver, message, chat, function (err) {
         if (err) {
           console.log(err);
         } else {
@@ -304,17 +308,27 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
       } else {
 
         recipients.forEach(function (recipient) {
-          sendToUser(req.session.userHash, recipient, req.body.message, chat, function (err, s) {
+          sendToUser(req.session.userHash, recipient, req.body.message, chat, function (err) {
             if (err) {
               console.log(err);
             } else {
-              sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err, s) {
+              sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
                 if (err) {
                   console.log(err);
                 } else {
                   usernamesDb.get('userHash!' + recipient, function (err, u) {
                     if (!err) {
-                      console.log(recipient)
+                      var notificationKey = 'notification:' + recipient + ':' + req.session.userHash;
+                      redisClient.hmset(notificationKey, {
+                        username: req.session.username,
+                        userHash: req.session.userHash
+                      });
+                      redisClient.expire(notificationKey, TTL_LIMIT);
+
+                      var notificationListKey = 'notifications:' + recipient;
+                      redisClient.lpush(notificationListKey, notificationKey);
+                      redisClient.expire(notificationListKey, TTL_LIMIT);
+
                       io.sockets.in(recipient).emit('notification', {
                         notification: {
                           username: u,
@@ -335,6 +349,34 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
         });
       }
     }
+  });
+
+  // Right now this only loads the notification state if the user is on the page and logged in.
+  // What we want to do eventually is call this from the client-side if the device is allowed to
+  // receive notifications, without having the app stay open.
+  app.get('/api/notifications', isLoggedIn, function (req, res) {
+    redisClient.lrange('notifications:' + req.session.userHash, 0, -1, function (err, notifications) {
+      if (!err && notifications) {
+        notifications.forEach(function (n) {
+          redisClient.hgetall(n, function (err, notification) {
+            if (!err && notification) {
+              console.log('sending notification ', notification)
+              io.sockets.in(req.session.userHash).emit('notification', {
+                notification: {
+                  username: notification.username,
+                  userHash: notification.userHash,
+                  senderUserHash: notification.userHash
+                }
+              });
+            }
+          });
+        });
+
+        res.json({
+          message: 'notifications sent'
+        });
+      }
+    });
   });
 
   app.put('/api/profile', isLoggedIn, function (req, res) {

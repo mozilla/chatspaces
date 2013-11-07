@@ -10,6 +10,7 @@ angular.module('chatspace.factories', []).
       localStorage.removeItem('personaEmail');
       $rootScope.email = false;
       $rootScope.isAuthenticated = false;
+      $rootScope.hasNewNotifications = 0;
     };
 
     var login = function () {

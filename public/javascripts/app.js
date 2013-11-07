@@ -35,18 +35,23 @@ run(function ($rootScope, $http, $location) {
 service('api', function ($http, $rootScope, $location) {
   return {
     call: function () {
-      $http({
-        url: '/api/friends',
-        method: 'GET'
-      });
-
-      $http({
-        url: '/api/blocked',
-        method: 'GET'
-      });
-
       if (!$rootScope.username) {
         $location.path('/profile');
+      } else {
+        $http({
+          url: '/api/friends',
+          method: 'GET'
+        });
+
+        $http({
+          url: '/api/blocked',
+          method: 'GET'
+        });
+
+        $http({
+          url: '/api/notifications',
+          method: 'GET'
+        });
       }
     }
   };

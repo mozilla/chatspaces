@@ -26,9 +26,12 @@ angular.module('chatspace.controllers', []).
 
       socket.on('notification', function (data) {
         $rootScope.$apply(function () {
-          $rootScope.notifications.push(data.notification);
-          $rootScope.hasNewNotifications ++;
-          $rootScope.friends[data.notification.senderUserHash].unread ++;
+          if ($rootScope.friends) {
+            $rootScope.notifications.push(data.notification);
+            $rootScope.hasNewNotifications ++;
+
+            $rootScope.friends[data.notification.senderUserHash].unread ++;
+          }
         });
       });
 
@@ -164,7 +167,6 @@ angular.module('chatspace.controllers', []).
     var videoShooter;
     var gumHelper = new GumHelper({});
     var preview = $('#video-preview');
-    var recipientList = $('.recipient-results li');
     $scope.recipients = {};
     $scope.showMessage = false;
     $scope.posting = false;
@@ -194,10 +196,8 @@ angular.module('chatspace.controllers', []).
 
     var resetForm = function () {
       $scope.recipients = {};
-      $('.recipient-results li').removeClass('on'); // TODO fix
       $scope.recipientArr = [];
       $scope.errors = false;
-      $scope.info = false;
       $scope.message = '';
       $scope.picture = '';
       preview.empty();
@@ -260,12 +260,10 @@ angular.module('chatspace.controllers', []).
       });
     };
 
-    $scope.toggleRecipient = function (userHash, idx) {
+    $scope.toggleRecipient = function (userHash) {
       if ($scope.recipients[userHash]) {
-        $('.recipient-results li')[idx].className = '';
         delete $scope.recipients[userHash];
       } else {
-        $('.recipient-results li')[idx].className = 'on';
         $scope.recipients[userHash] = userHash;
       }
     };
@@ -298,7 +296,7 @@ angular.module('chatspace.controllers', []).
           method: 'POST'
         }).success(function (data) {
           $scope.info = data.message;
-          $scope.recipients = {};
+          resetForm();
         }).error(function (data) {
           $scope.info = false;
           $scope.errors = data.message;
