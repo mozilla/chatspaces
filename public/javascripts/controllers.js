@@ -230,7 +230,7 @@ angular.module('chatspace.controllers', []).
 
       if (verify) {
         $http({
-          url: '/api/message/' + $rootScope.currentFriend + '/' + message.key,
+          url: '/api/message/' + $scope.selectedFriend + '/' + message.key,
           method: 'DELETE'
         }).success(function (data) {
           $rootScope.messages.splice(idx, 1);
