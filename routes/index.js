@@ -169,7 +169,12 @@ module.exports = function(app, io, nconf, parallax, usernamesDb, crypto, Paralla
             }
 
             parallax[user.user].getOrAddFriend(req.session.userHash, function (err, sender) {
-              if (!err) {
+              if (err) {
+                res.status(400);
+                res.json({
+                  message: 'error adding friend'
+                });
+              } else {
                 io.sockets.in(req.session.userHash).emit('friend', {
                   friend: {
                     username: username,
