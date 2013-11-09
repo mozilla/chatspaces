@@ -217,14 +217,8 @@ main {
     z-index: 3;
 }
 
-.avatar {
-    margin: -10px -10px 0;
-    width: 50px;
-}
-
 .profile .avatar {
     float: left;
-    margin: 0;
     padding: 0;
     width: 50px;
 }
@@ -323,12 +317,12 @@ main {
 
 #friend-results li, .search-results li, .contact-results li, .recipient-results li {
     border: 2px solid transparent;
-    height: 60px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     padding: 5px;
     margin-bottom: 5px;
     position: relative;
-    width: 140px;
+    width: 170px;
 }
 
 .search-results {
@@ -342,9 +336,8 @@ main {
     float: left;
     line-height: 40px;
     margin-bottom: 10px;
-    padding: 10px 10px 0 10px;
     position: relative;
-    width: 162px;
+    width: 208px;
 }
 
 .recipient-results li .avatar {
@@ -366,9 +359,8 @@ main {
     margin: 2px;
 }
 
-.search-results li .avatar, .contact-results li .avatar {
-    padding: 10px;
-    width: 40px;
+.search-results li .avatar {
+    width: 35px;
 }
 
 .form-actions {
@@ -418,7 +410,7 @@ main {
 }
 
 #friend-results li {
-    padding: 20px 20px 10px 20px;
+    padding: 5px;
 }
 
 #message-list .recipients {
@@ -438,7 +430,7 @@ main {
     display: inline-block;
     float: left;
     margin-right: 10px;
-    width: 70px;
+    width: 40px;
 }
 
 #friend-results li.on, #friend-results li:hover {
@@ -598,16 +590,12 @@ video {
     }
 
     #friend-results {
-        margin-bottom: 10px;
         width: 100%;
     }
 
     #friend-results li {
         float: left;
-        height: 30px;
-        line-height: 20px;
-        margin: 3px;
-        width: 150px;
+        width: 185px;
     }
 
     #friend-results li img {
@@ -664,7 +652,7 @@ video {
 
     #friend-results li {
         margin: 0 0 5px 0;
-        width: 215px;
+        width: 245px;
     }
 
     #message-list, #friend-results {

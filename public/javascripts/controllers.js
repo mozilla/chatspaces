@@ -11,38 +11,36 @@ angular.module('chatspace.controllers', []).
     $rootScope.currentFriend;
     $rootScope.notifications = [];
 
-    socket.on('connect', function () {
-      socket.on('friend', function (data) {
-        $rootScope.$apply(function () {
-          $rootScope.friends[data.friend.userHash] = {
-            username: data.friend.username,
-            avatar: data.friend.avatar,
-            userHash: data.friend.userHash,
-            senderUserHash: data.friend.senderUserHash,
-            unread: data.friend.unread
-          };
-        });
+    socket.on('friend', function (data) {
+      $rootScope.$apply(function () {
+        $rootScope.friends[data.friend.userHash] = {
+          username: data.friend.username,
+          avatar: data.friend.avatar,
+          userHash: data.friend.userHash,
+          senderUserHash: data.friend.senderUserHash,
+          unread: data.friend.unread
+        };
       });
+    });
 
-      socket.on('notification', function (data) {
-        $rootScope.$apply(function () {
-          if ($rootScope.friends) {
-            $rootScope.notifications.push(data.notification);
-            $rootScope.hasNewNotifications ++;
+    socket.on('notification', function (data) {
+      $rootScope.$apply(function () {
+        if ($rootScope.friends) {
+          $rootScope.notifications.push(data.notification);
+          $rootScope.hasNewNotifications ++;
 
-            $rootScope.friends[data.notification.senderUserHash].unread ++;
-          }
-        });
+          $rootScope.friends[data.notification.senderUserHash].unread ++;
+        }
       });
+    });
 
-      socket.on('blocked', function (data) {
-        $rootScope.$apply(function () {
-          $rootScope.blocked[data.user.userHash] = {
-            username: data.user.username,
-            avatar: data.user.avatar,
-            userHash: data.user.userHash
-          };
-        });
+    socket.on('blocked', function (data) {
+      $rootScope.$apply(function () {
+        $rootScope.blocked[data.user.userHash] = {
+          username: data.user.username,
+          avatar: data.user.avatar,
+          userHash: data.user.userHash
+        };
       });
     });
 
