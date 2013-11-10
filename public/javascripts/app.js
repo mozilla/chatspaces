@@ -21,6 +21,7 @@ run(function ($rootScope, $http, $location) {
         $rootScope.username = data.username;
         $rootScope.gravatar = data.gravatar;
         $rootScope.userHash = data.userHash;
+        $rootScope.isAuthenticated = true;
 
         socket.emit('join', {
           email: data.email
@@ -32,12 +33,12 @@ run(function ($rootScope, $http, $location) {
     }
   });
 }).
-service('api', function ($http, $rootScope, $location) {
+service('api', function ($http) {
   return {
     call: function () {
-      if (!$rootScope.username) {
-        $location.path('/profile');
-      } else {
+      if
+      setTimeout(function () {
+        console.log('calling services')
         $http({
           url: '/api/friends',
           method: 'GET'
@@ -52,7 +53,7 @@ service('api', function ($http, $rootScope, $location) {
           url: '/api/notifications',
           method: 'GET'
         });
-      }
+      }, 2);
     }
   };
 }).
