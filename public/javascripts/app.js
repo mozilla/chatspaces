@@ -36,7 +36,6 @@ run(function ($rootScope, $http, $location) {
 service('api', function ($http) {
   return {
     call: function () {
-      if
       setTimeout(function () {
         console.log('calling services')
         $http({
