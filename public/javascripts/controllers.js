@@ -168,6 +168,7 @@ angular.module('chatspace.controllers', []).
     $scope.picture = '';
     $scope.selectedFriend = false;
     $scope.recipientArr = [];
+    $scope.isLoading = false;
 
     $rootScope.hasNewNotifications = 0;
     $rootScope.notifications = [];
@@ -197,6 +198,10 @@ angular.module('chatspace.controllers', []).
       $scope.picture = '';
       preview.empty();
       videoShooter = null;
+    };
+
+    $scope.getDate = function (timestamp) {
+      return moment.unix(Math.round(timestamp / 1000)).fromNow();
     };
 
     $scope.selectedFriend = function (friend) {
@@ -233,6 +238,7 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.getMessages = function (friend) {
+      $scope.isLoading = true;
       $rootScope.messages = [];
       $scope.selectedFriend = friend.userHash;
       $rootScope.hasNewNotifications = 0;
@@ -244,6 +250,7 @@ angular.module('chatspace.controllers', []).
         method: 'GET'
       }).success(function (data) {
         $rootScope.messages = data.chats;
+        $scope.isLoading = false;
         $scope.errors = false;
       }).error(function (data) {
         $scope.info = false;

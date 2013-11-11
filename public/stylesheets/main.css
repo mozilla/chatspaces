@@ -391,6 +391,11 @@ main {
     width: 25px;
 }
 
+.loader {
+    font-size: 2rem;
+    padding: 20px;
+}
+
 #message-list .delete, .contact-results .delete {
     bottom: 5px;
     right: 5px;
