@@ -321,6 +321,7 @@ main {
     line-height: 40px;
     padding: 5px;
     margin-bottom: 5px;
+    overflow: hidden;
     position: relative;
     width: 170px;
 }
@@ -375,8 +376,8 @@ main {
     border-radius: 100px;
     color: #fff;
     font-family: Arial, sans-serif;
-    font-size: 1.2rem;
-    height: 25px;
+    font-size: 0.9rem;
+    height: 20px;
     position: absolute;
 }
 
@@ -512,14 +513,14 @@ textarea, #video-preview {
 }
 
 #video-preview {
-    height: 160px;
+    height: 90px;
     margin-bottom: 10px;
-    width: 240px;
+    width: 120px;
 }
 
 video {
-    height: 160px;
-    width: 240px;
+    height: 90px;
+    width: 120px;
 }
 
 @media only screen and (max-width: 993px) {

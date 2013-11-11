@@ -160,7 +160,7 @@ angular.module('chatspace.controllers', []).
     api.call();
 
     var videoShooter;
-    var gumHelper = new GumHelper({});
+    var gumHelper = new GumHelper({ width: 120, height: 90 });
     var preview = $('#video-preview');
     $scope.recipients = {};
     $scope.showMessage = false;
@@ -210,8 +210,8 @@ angular.module('chatspace.controllers', []).
             console.log(err);
           } else {
 
-            data.videoElement.width = data.stream.width / 5;
-            data.videoElement.height = data.stream.height / 5;
+            data.videoElement.width = data.stream.width;
+            data.videoElement.height = data.stream.height;
             preview.append(data.videoElement);
             data.videoElement.play();
             videoShooter = new VideoShooter(data.videoElement);
@@ -221,19 +221,15 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.deleteMessage = function (message, idx) {
-      var verify = confirm('Are you sure you want to delete this message? :(');
+      $rootScope.messages.splice(idx, 1);
+      $http({
+        url: '/api/message/' + $scope.selectedFriend + '/' + message.key,
+        method: 'DELETE'
+      }).success(function (data) {
 
-      if (verify) {
-        $http({
-          url: '/api/message/' + $scope.selectedFriend + '/' + message.key,
-          method: 'DELETE'
-        }).success(function (data) {
-          $rootScope.messages.splice(idx, 1);
-          $scope.info = data.message;
-        }).error(function (data) {
-          $scope.errors = data.message;
-        });
-      }
+      }).error(function (data) {
+        $scope.errors = data.message;
+      });
     };
 
     $scope.getMessages = function (friend) {
