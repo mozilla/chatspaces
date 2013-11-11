@@ -1,6 +1,10 @@
 {
   "name": "chatspaces",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozilla/chatspaces.git"
+  },
   "private": true,
   "engines": {
     "node": ">= 0.10.x",
@@ -22,5 +26,9 @@
     "crypto": "0.0.3",
     "redis": ">= 0.9.0",
     "hiredis": ">= 0.1.15"
+  },
+  "devDependencies": {
+    "nodemon": "*",
+    "bower": ">= 1.2.7"
   }
 }
