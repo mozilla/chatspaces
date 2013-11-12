@@ -1,16 +1,8 @@
 'use strict';
 
 angular.module('chatspace.controllers', []).
-  controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location) {
-    $rootScope.isAuthenticated = false;
-    $rootScope.settings = false;
-    $rootScope.hasNewNotifications = 0;
-    $rootScope.friends = {};
-    $rootScope.messages = [];
-    $rootScope.blocked = {};
-    $rootScope.currentFriend;
-    $rootScope.notifications = [];
-    $rootScope.selectedFriend = false;
+  controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location, user) {
+    user.call();
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {

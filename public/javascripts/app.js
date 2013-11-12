@@ -34,6 +34,21 @@ run(function ($rootScope, $http, $location, persona) {
     }, 2);
   });
 }).
+service('user', function ($rootScope) {
+  return {
+    call: function () {
+      $rootScope.isAuthenticated = false;
+      $rootScope.settings = false;
+      $rootScope.hasNewNotifications = 0;
+      $rootScope.friends = {};
+      $rootScope.messages = [];
+      $rootScope.blocked = {};
+      $rootScope.currentFriend;
+      $rootScope.notifications = [];
+      $rootScope.selectedFriend = false;
+    }
+  }
+}).
 service('api', function ($http) {
   return {
     call: function () {

@@ -1,22 +1,14 @@
 'use strict';
 
 angular.module('chatspace.factories', []).
-  factory('persona', function ($rootScope, $http, $location) {
+  factory('persona', function ($rootScope, $http, $location, user) {
     var resetUser = function () {
       socket.emit('disconnect', {
         email: $rootScope.email
       });
 
       localStorage.removeItem('personaEmail');
-      $rootScope.isAuthenticated = false;
-      $rootScope.settings = false;
-      $rootScope.hasNewNotifications = 0;
-      $rootScope.friends = {};
-      $rootScope.messages = [];
-      $rootScope.blocked = {};
-      $rootScope.currentFriend;
-      $rootScope.notifications = [];
-      $rootScope.selectedFriend = false;
+      user.call();
     };
 
     var login = function () {
