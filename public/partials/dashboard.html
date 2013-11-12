@@ -21,7 +21,7 @@
       </div>
       <div class="right">
         <div class="recipients">
-          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=20" ng-repeat="recipient in message.value.recipients track by $idx">
+          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=20" ng-repeat="recipient in messages[$index].value.recipients">
         </div>
         <p>{{ message.value.message }}</p>
         <p>posted: {{ getDate(message.value.created) }}</p>
