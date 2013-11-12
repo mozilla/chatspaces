@@ -10,27 +10,29 @@ angular.module('chatspace', [
 ]).
 run(function ($rootScope, $http, $location) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    if (!$rootScope.isAuthenticated) {
-      $location.path('/');
-    } else {
-      $http({
-        url: '/api/profile',
-        method: 'GET'
-      }).success(function (data) {
-        $rootScope.email = data.email;
-        $rootScope.username = data.username;
-        $rootScope.gravatar = data.gravatar;
-        $rootScope.userHash = data.userHash;
-        $rootScope.isAuthenticated = true;
+    setTimeout(function () {
+      if (!$rootScope.isAuthenticated) {
+        $location.path('/');
+      } else {
+        $http({
+          url: '/api/profile',
+          method: 'GET'
+        }).success(function (data) {
+          $rootScope.email = data.email;
+          $rootScope.username = data.username;
+          $rootScope.gravatar = data.gravatar;
+          $rootScope.userHash = data.userHash;
+          $rootScope.isAuthenticated = true;
 
-        socket.emit('join', {
-          email: data.email
+          socket.emit('join', {
+            email: data.email
+          });
+        }).error(function (data) {
+          $rootScope.email = data.email;
+          $rootScope.gravatar = data.gravatar;
         });
-      }).error(function (data) {
-        $rootScope.email = data.email;
-        $rootScope.gravatar = data.gravatar;
-      });
-    }
+      }
+    }, 2);
   });
 }).
 service('api', function ($http) {
