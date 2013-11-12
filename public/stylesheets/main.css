@@ -405,7 +405,7 @@ main {
     float: left;
 }
 
-#message-list .left, .no-image {
+#message-list .left {
     margin-right: 5px;
     min-width: 75px;
     width: 18%;
@@ -467,20 +467,11 @@ main {
     width: 130px;
 }
 
-#message-list li img, #message-list li .no-image {
+#message-list li img {
     display: inline-block;
     float: left;
     margin-right: 10px;
     width: 130px;
-}
-
-#message-list li .no-image {
-    margin-right: 20px;
-}
-
-#message-list li .no-image {
-    background-color: #fff;
-    height: 80px;
 }
 
 #message-list li span {

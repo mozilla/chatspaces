@@ -298,7 +298,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
     } else {
       var recipients = req.body.recipients;
       var chat = {
-        media: req.body.picture,
+        media: req.body.picture || '/images/no-image.png',
         recipients: recipients
       };
 
