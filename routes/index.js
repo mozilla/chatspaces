@@ -244,7 +244,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
       });
     } else {
       var users = [];
-      console.log(req.body.username)
+
       usernamesDb.createReadStream({
 
         start: 'username!' + req.body.username,
@@ -272,6 +272,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
   });
 
   app.post('/api/message', isLoggedIn, function (req, res) {
+    var newChat;
     var sendToUser = function (sender, receiver, message, chat, callback) {
       if (!parallax[receiver]) {
         parallax[receiver] = new Parallax(receiver, {
@@ -279,10 +280,11 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
         });
       }
 
-      parallax[sender].addChat(receiver, message, chat, function (err) {
+      parallax[sender].addChat(receiver, message, chat, function (err, n) {
         if (err) {
           console.log(err);
         } else {
+          newChat = n;
           callback(null, true);
         }
       });
@@ -307,6 +309,40 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
         });
       } else {
 
+        var sendNotifications = function (recipient) {
+          parallax[recipient].hasFriend(req.session.userHash, function (err) {
+            if (!err) {
+              usernamesDb.get('userHash!' + recipient, function (err, u) {
+                if (!err) {
+                  var notificationKey = 'notification:' + recipient + ':' + req.session.userHash;
+                  redisClient.hmset(notificationKey, {
+                    username: req.session.username,
+                    userHash: req.session.userHash
+                  });
+                  redisClient.expire(notificationKey, TTL_LIMIT);
+
+                  var notificationListKey = 'notifications:' + recipient;
+                  redisClient.lpush(notificationListKey, notificationKey);
+                  redisClient.expire(notificationListKey, TTL_LIMIT);
+
+                  io.sockets.in(recipient).emit('notification', {
+                    notification: {
+                      username: u,
+                      userHash: recipient,
+                      senderUserHash: req.session.userHash
+                    }
+                  });
+
+                  io.sockets.in(recipient).emit('message', {
+                    key: newChat.senderKey,
+                    value: newChat
+                  });
+                }
+              });
+            }
+          });
+        };
+
         recipients.forEach(function (recipient) {
           sendToUser(req.session.userHash, recipient, req.body.message, chat, function (err) {
             if (err) {
@@ -316,28 +352,8 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
                 if (err) {
                   console.log(err);
                 } else {
-                  usernamesDb.get('userHash!' + recipient, function (err, u) {
-                    if (!err) {
-                      var notificationKey = 'notification:' + recipient + ':' + req.session.userHash;
-                      redisClient.hmset(notificationKey, {
-                        username: req.session.username,
-                        userHash: req.session.userHash
-                      });
-                      redisClient.expire(notificationKey, TTL_LIMIT);
 
-                      var notificationListKey = 'notifications:' + recipient;
-                      redisClient.lpush(notificationListKey, notificationKey);
-                      redisClient.expire(notificationListKey, TTL_LIMIT);
-
-                      io.sockets.in(recipient).emit('notification', {
-                        notification: {
-                          username: u,
-                          userHash: recipient,
-                          senderUserHash: req.session.userHash
-                        }
-                      });
-                    }
-                  });
+                  sendNotifications(recipient);
                 }
               });
             }

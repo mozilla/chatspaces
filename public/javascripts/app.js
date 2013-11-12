@@ -37,7 +37,7 @@ service('api', function ($http) {
   return {
     call: function () {
       setTimeout(function () {
-        console.log('calling services')
+        console.log('calling services');
         $http({
           url: '/api/friends',
           method: 'GET'
@@ -52,7 +52,7 @@ service('api', function ($http) {
           url: '/api/notifications',
           method: 'GET'
         });
-      }, 2);
+      }, 100);
     }
   };
 }).

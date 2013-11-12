@@ -6,10 +6,11 @@ angular.module('chatspace.controllers', []).
     $rootScope.settings = false;
     $rootScope.hasNewNotifications = 0;
     $rootScope.friends = {};
-    $rootScope.messages = {};
+    $rootScope.messages = [];
     $rootScope.blocked = {};
     $rootScope.currentFriend;
     $rootScope.notifications = [];
+    $rootScope.selectedFriend = false;
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -24,11 +25,25 @@ angular.module('chatspace.controllers', []).
     });
 
     socket.on('notification', function (data) {
-      $rootScope.$apply(function () {
-        $rootScope.notifications.push(data.notification);
-        $rootScope.hasNewNotifications ++;
-        $rootScope.friends[data.notification.senderUserHash].unread ++;
-      });
+      setTimeout(function () {
+        $rootScope.$apply(function () {
+          $rootScope.notifications.push(data.notification);
+          $rootScope.hasNewNotifications ++;
+          if ($rootScope.selectedFriend !== data.notification.senderUserHash) {
+            $rootScope.friends[data.notification.senderUserHash].unread ++;
+          }
+        });
+      }, 500);
+    });
+
+    socket.on('message', function (data) {
+      setTimeout(function () {
+        $rootScope.$apply(function () {
+          if ($rootScope.selectedFriend === data.key.split('!')[1]) {
+            $rootScope.messages.unshift(data);
+          }
+        });
+      }, 500);
     });
 
     socket.on('blocked', function (data) {
@@ -40,6 +55,11 @@ angular.module('chatspace.controllers', []).
         };
       });
     });
+
+    $rootScope.goToDashboard = function () {
+      $rootScope.hasNewNotifications = 0;
+      $location.path('/dashboard');
+    };
 
     $rootScope.toggleSettings = function () {
       if ($rootScope.settings) {
@@ -155,8 +175,6 @@ angular.module('chatspace.controllers', []).
 
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
-    $rootScope.hasNewNotifications = 0;
-
     api.call();
 
     var videoShooter;
@@ -166,7 +184,6 @@ angular.module('chatspace.controllers', []).
     $scope.showMessage = false;
     $scope.posting = false;
     $scope.picture = '';
-    $scope.selectedFriend = false;
     $scope.recipientArr = [];
     $scope.isLoading = false;
 
@@ -204,10 +221,6 @@ angular.module('chatspace.controllers', []).
       return moment.unix(Math.round(timestamp / 1000)).fromNow();
     };
 
-    $scope.selectedFriend = function (friend) {
-      return $scope.selectedFriend === friend.userHash;
-    };
-
     $scope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
         gumHelper.startVideoStreaming(function (err, data) {
@@ -240,7 +253,7 @@ angular.module('chatspace.controllers', []).
     $scope.getMessages = function (friend) {
       $scope.isLoading = true;
       $rootScope.messages = [];
-      $scope.selectedFriend = friend.userHash;
+      $rootScope.selectedFriend = friend.userHash;
       $rootScope.hasNewNotifications = 0;
       $rootScope.notifications = [];
       $rootScope.friends[friend.userHash].unread = 0;

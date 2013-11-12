@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "jquery": "2.0.0",
-    "animated-gif": "sole/Animated_GIF#f951066bd13c8af0e40877efeb1b27bfb7156699",
+    "animated-gif": "ednapiranha/Animated_GIF#b4f4503546286ed7b7e037408b02dd9fd0c94e6b",
     "angular": "1.2.0",
     "angular-route": "1.2.0",
     "moment": "2.4.0"
