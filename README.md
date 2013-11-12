@@ -8,6 +8,8 @@ Clone the repository
 
 Install node by using brew or through the website http://nodejs.org/#download
 
+Install redis via brew and make sure the server is running
+
     > npm -g install nodemon bower
     > npm install
     > bower install
