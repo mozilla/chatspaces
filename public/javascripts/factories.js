@@ -8,9 +8,15 @@ angular.module('chatspace.factories', []).
       });
 
       localStorage.removeItem('personaEmail');
-      $rootScope.email = false;
       $rootScope.isAuthenticated = false;
+      $rootScope.settings = false;
       $rootScope.hasNewNotifications = 0;
+      $rootScope.friends = {};
+      $rootScope.messages = [];
+      $rootScope.blocked = {};
+      $rootScope.currentFriend;
+      $rootScope.notifications = [];
+      $rootScope.selectedFriend = false;
     };
 
     var login = function () {
