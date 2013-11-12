@@ -8,29 +8,13 @@ angular.module('chatspace', [
   'chatspace.factories',
   'chatspace.controllers'
 ]).
-run(function ($rootScope, $http, $location) {
+run(function ($rootScope, $http, $location, persona) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
     setTimeout(function () {
       if (!$rootScope.isAuthenticated) {
         $location.path('/');
       } else {
-        $http({
-          url: '/api/profile',
-          method: 'GET'
-        }).success(function (data) {
-          $rootScope.email = data.email;
-          $rootScope.username = data.username;
-          $rootScope.gravatar = data.gravatar;
-          $rootScope.userHash = data.userHash;
-          $rootScope.isAuthenticated = true;
-
-          socket.emit('join', {
-            email: data.email
-          });
-        }).error(function (data) {
-          $rootScope.email = data.email;
-          $rootScope.gravatar = data.gravatar;
-        });
+        persona.login();
       }
     }, 2);
   });
