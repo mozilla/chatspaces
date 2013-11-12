@@ -14,7 +14,22 @@ run(function ($rootScope, $http, $location, persona) {
       if (!$rootScope.isAuthenticated) {
         $location.path('/');
       } else {
-        persona.login();
+        $http({
+          url: '/api/profile',
+          method: 'GET'
+        }).success(function (data) {
+          $rootScope.email = data.email;
+          $rootScope.username = data.username;
+          $rootScope.gravatar = data.gravatar;
+          $rootScope.userHash = data.userHash;
+          $rootScope.isAuthenticated = true;
+
+          socket.emit('join', {
+            email: data.email
+          });
+        }).error(function (data) {
+          persona.login();
+        });
       }
     }, 2);
   });
