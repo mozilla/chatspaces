@@ -9,7 +9,7 @@ html(ng-app='chatspace')
     link(rel='stylesheet', href='/stylesheets/main.css')
 
   body(ng-controller='AppCtrl')
-    #header
+    #header(ng-if='isAuthenticated')
       button(class='toggle', ng-click='toggleSettings()') ≡
       a(id='notifications', href='javascript:;', ng-click='goToDashboard()', ng-class='{ on: hasNewNotifications }', ng-bind='hasNewNotifications')
 

@@ -75,6 +75,16 @@ body, textarea, input {
     overflow-x: auto;
 }
 
+.persona {
+    background-color: #bbb;
+    color: #eee;
+    display: inline-block;
+    font-size: 2rem;
+    margin-top: 20px;
+    padding: 10px;
+    text-decoration: none;
+}
+
 textarea {
     height: 70px;
     padding: 10px;

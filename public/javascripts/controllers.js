@@ -71,9 +71,10 @@ angular.module('chatspace.controllers', []).
       persona.logout();
     }
   }).
-  controller('HomeCtrl', function ($scope, $location, persona) {
+  controller('HomeCtrl', function ($scope, $rootScope, $location, persona) {
     $scope.login = function () {
       persona.login();
+      $rootScope.toggleSettings();
     };
   }).
   controller('DraftsCtrl', function ($scope, $rootScope, $location, api) {
