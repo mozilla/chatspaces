@@ -27,6 +27,8 @@ run(function ($rootScope, $http, $location, persona) {
           socket.emit('join', {
             email: data.email
           });
+
+          $location.path('/dashboard');
         }).error(function (data) {
           persona.login();
         });
