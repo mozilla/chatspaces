@@ -351,6 +351,11 @@ main {
     width: 180px;
 }
 
+.contact-results {
+    clear: both;
+    float: left;
+}
+
 #friend-results li, .search-results li, .contact-results li, .recipient-results li {
     border: 2px solid transparent;
     height: 40px;

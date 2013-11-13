@@ -28,7 +28,9 @@ run(function ($rootScope, $http, $location, persona) {
             email: data.email
           });
 
-          $location.path('/dashboard');
+          if ($location.path() === '/') {
+            $location.path('/dashboard');
+          }
         }).error(function (data) {
           persona.login();
         });
