@@ -77,11 +77,93 @@ angular.module('chatspace.controllers', []).
       $rootScope.toggleSettings();
     };
   }).
-  controller('DraftsCtrl', function ($scope, $rootScope, $location, api) {
+  controller('MessageCtrl', function ($scope, $rootScope, $http, gumhelper, api) {
+    $scope.recipients = {};
+    $scope.posting = false;
+    $scope.picture = '';
+    $scope.recipientArr = [];
+    $scope.isLoading = false;
+
     api.call();
+
+    var escapeHtml = function (text) {
+      if (text) {
+        return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+    };
+
+    var resetForm = function () {
+      $scope.recipients = {};
+      $scope.recipientArr = [];
+      $scope.errors = false;
+      $scope.message = '';
+      $scope.picture = '';
+      $scope.preview = '';
+      $scope.posting = false;
+      $('#video-preview').empty();
+      gumhelper.resetStream();
+    };
+
+    $scope.getDate = function (timestamp) {
+      return moment.unix(Math.round(timestamp / 1000)).fromNow();
+    };
+
+    $scope.promptCamera = function () {
+      if ($rootScope.isAuthenticated && navigator.getMedia) {
+        gumhelper.startStream();
+      }
+    };
+
+    $scope.toggleRecipient = function (userHash) {
+      if ($scope.recipients[userHash]) {
+        delete $scope.recipients[userHash];
+      } else {
+        $scope.recipients[userHash] = userHash;
+      }
+    };
+
+    $scope.sendMessage = function () {
+      if (!$scope.posting) {
+        $scope.posting = true;
+
+        for (var r in $scope.recipients) {
+          $scope.recipientArr.push(r);
+        }
+
+        var submitForm = function (pictureData) {
+          $scope.picture = pictureData;
+
+          $http({
+            url: '/api/message',
+            data: {
+              message: escapeHtml($scope.message),
+              picture: escapeHtml($scope.picture),
+              recipients: $scope.recipientArr
+            },
+            method: 'POST'
+          }).success(function (data) {
+            $scope.info = data.message;
+            resetForm();
+          }).error(function (data) {
+            $scope.info = false;
+            $scope.errors = data.message;
+            $scope.posting = false;
+          });
+        };
+
+        gumhelper.startScreenshot(function (pictureData) {
+          submitForm(pictureData);
+        });
+      }
+    };
+  }).
+  controller('DraftsCtrl', function ($scope, $rootScope, $location) {
+
   }).
   controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
-    $scope.showMessage = false;
     $scope.users = [];
     $scope.user = '';
 
@@ -171,71 +253,13 @@ angular.module('chatspace.controllers', []).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
     api.call();
 
-    var videoShooter;
-    var gumHelper = new GumHelper({ width: 120, height: 90 });
-    var preview = $('#video-preview');
-    $scope.recipients = {};
-    $scope.showMessage = false;
-    $scope.posting = false;
-    $scope.picture = '';
-    $scope.recipientArr = [];
-    $scope.isLoading = false;
-
     $rootScope.hasNewNotifications = 0;
     $rootScope.notifications = [];
-
-    var escapeHtml = function (text) {
-      if (text) {
-        return text
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
-      }
-    };
-
-    var getScreenshot = function (callback, numFrames, interval) {
-      if (videoShooter) {
-        videoShooter.getShot(callback, numFrames, interval);
-      } else {
-        callback('');
-      }
-    };
-
-    var resetForm = function () {
-      $scope.recipients = {};
-      $scope.recipientArr = [];
-      $scope.errors = false;
-      $scope.message = '';
-      $scope.picture = '';
-      preview.empty();
-      videoShooter = null;
-    };
-
-    $scope.getDate = function (timestamp) {
-      return moment.unix(Math.round(timestamp / 1000)).fromNow();
-    };
-
-    $scope.promptCamera = function () {
-      if ($rootScope.isAuthenticated && navigator.getMedia) {
-        gumHelper.startVideoStreaming(function (err, data) {
-          if (err) {
-            console.log(err);
-          } else {
-
-            data.videoElement.width = data.stream.width;
-            data.videoElement.height = data.stream.height;
-            preview.append(data.videoElement);
-            data.videoElement.play();
-            videoShooter = new VideoShooter(data.videoElement);
-          }
-        });
-      }
-    };
 
     $scope.deleteMessage = function (message, idx) {
       $rootScope.messages.splice(idx, 1);
       $http({
-        url: '/api/message/' + $scope.selectedFriend + '/' + message.key,
+        url: '/api/message/' + $rootScope.selectedFriend + '/' + message.key,
         method: 'DELETE'
       }).success(function (data) {
 
@@ -263,50 +287,6 @@ angular.module('chatspace.controllers', []).
         $scope.info = false;
         $scope.errors = data.message;
       });
-    };
-
-    $scope.toggleRecipient = function (userHash) {
-      if ($scope.recipients[userHash]) {
-        delete $scope.recipients[userHash];
-      } else {
-        $scope.recipients[userHash] = userHash;
-      }
-    };
-
-    $scope.toggleMessage = function () {
-      resetForm();
-
-      if ($scope.showMessage) {
-        $scope.showMessage = false;
-      } else {
-        $scope.showMessage = true;
-      }
-    };
-
-    $scope.sendMessage = function () {
-      for (var r in $scope.recipients) {
-        $scope.recipientArr.push(r);
-      }
-
-      getScreenshot(function (pictureData) {
-        $scope.picture = pictureData;
-
-        $http({
-          url: '/api/message',
-          data: {
-            message: escapeHtml($scope.message),
-            picture: escapeHtml($scope.picture),
-            recipients: $scope.recipientArr
-          },
-          method: 'POST'
-        }).success(function (data) {
-          $scope.info = data.message;
-          resetForm();
-        }).error(function (data) {
-          $scope.info = false;
-          $scope.errors = data.message;
-        });
-      }, 10, 0.2);
     };
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {

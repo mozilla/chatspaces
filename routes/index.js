@@ -297,6 +297,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
       });
     } else {
       var recipients = req.body.recipients;
+
       var chat = {
         media: req.body.picture || '/images/no-image.png',
         recipients: recipients
@@ -348,14 +349,16 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
             if (err) {
               console.log(err);
             } else {
-              sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
-                if (err) {
-                  console.log(err);
-                } else {
+              if (recipient !== req.session.userHash) {
+                sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
+                  if (err) {
+                    console.log(err);
+                  } else {
 
-                  sendNotifications(recipient);
-                }
-              });
+                    sendNotifications(recipient);
+                  }
+                });
+              }
             }
           });
         });

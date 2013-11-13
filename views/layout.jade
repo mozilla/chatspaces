@@ -13,6 +13,11 @@ html(ng-app='chatspace')
       button(class='toggle', ng-click='toggleSettings()') ≡
       a(id='notifications', href='javascript:;', ng-click='goToDashboard()', ng-class='{ on: hasNewNotifications }', ng-bind='hasNewNotifications')
 
+      #top-bar
+        .profile
+          img.avatar(src='{{ gravatar }}')
+          a.action.add-message(href='/message', title='new message') +
+
     #wrapper
       block content
 

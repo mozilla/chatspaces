@@ -93,7 +93,10 @@ textarea {
 }
 
 h1, h2, h3 {
+    clear: both;
     color: #bbb;
+    float: left;
+    display: block;
     font-size: 1.8rem;
     line-height: 2rem;
     margin-bottom: 10px;
@@ -122,6 +125,10 @@ h3 {
     text-align: center;
     text-decoration: none;
     width: 22px;
+}
+
+.content-wrapper {
+    padding: 20px;
 }
 
 #notifications.on, .unread {
@@ -160,37 +167,58 @@ h3 {
     background-color: #57dfb4;
     color: #e1fff5;
     float: right;
-    font-size: 2.3rem;
+    font-size: 2.8rem;
     font-weight: 600;
-    height: 50px;
-    line-height: 2.3rem;
+    height: 40px;
+    line-height: 2.8rem;
+    text-decoration: none;
     text-shadow: #3c816b 0 0 1px;
-    width: 50px;
+    width: 40px;
 }
 
 .message {
-    background-color: rgba(255, 255, 255, 0.8);
     height: 450px;
-    left: 10px;
-    margin-top: -490px;
     padding: 20px;
+}
+
+.message section {
+    clear: both;
+    float: left;
+    margin: 10px 0 0;
+}
+
+.message section button {
+    background-color: #bbb;
+    border: 0;
+    clear: both;
+    color: #eee;
+    display: inline-block;
+    float: left;
+    font-size: 1.2rem;
+    padding: 5px;
+}
+
+.message section button:hover {
+    background-color: #fff;
+    color: #888;
+}
+
+.message .errors, .message .info {
+    clear: both;
+    float: left;
+}
+
+.posting {
+    background-color: rgba(1, 1, 1, 0.7);
+    bottom: 0;
+    color: #eee;
+    font-size: 2rem;
+    left: 0;
+    line-height: 4rem;
     position: absolute;
-    right: 10px;
+    right: 0;
+    text-align: center;
     top: 0;
-    -moz-transition: 0.3s ease-out;
-    transition: 0.3s ease-out;
-    z-index: 4;
-}
-
-.message.on {
-    margin-top: 70px;
-    -moz-transition: 0.3s ease-out;
-    overflow-y: auto;
-    transition: 0.3s ease-out;
-}
-
-.message.on .recipient-results {
-    display: block;
 }
 
 #header, #wrapper {
@@ -199,11 +227,9 @@ h3 {
 }
 
 #top-bar {
-    background-color: rgba(255, 255, 255, 0.85);
-    padding: 10px;
-    position: fixed;
-    top: 40px;
-    width: 1004px;
+    position: absolute;
+    right: 0;
+    top: 0;
     z-index: 2;
 }
 
@@ -229,8 +255,8 @@ main {
 
 .profile .avatar {
     float: left;
-    padding: 0;
-    width: 50px;
+    padding: 3px;
+    width: 35px;
 }
 
 .friends-view, .profile-view, .landing-view {
@@ -239,7 +265,7 @@ main {
 
 .recipient-results {
     clear: both;
-    display: none;
+    display: block;
     float: left;
     width: 100%;
 }
@@ -321,7 +347,7 @@ main {
 
 #friend-results {
     float: left;
-    margin: 80px 0 0 10px;
+    margin: 10px 0 0 10px;
     width: 180px;
 }
 
@@ -372,12 +398,6 @@ main {
 
 .search-results li .avatar {
     width: 35px;
-}
-
-.form-actions {
-    bottom: 0;
-    position: absolute;
-    right: 0;
 }
 
 .delete {
@@ -457,7 +477,7 @@ main {
 #message-list {
     display: block;
     float: right;
-    margin-top: 80px;
+    margin-top: 10px;
     max-width: 810px;
     overflow-x: hidden;
     width: 100%;

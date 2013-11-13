@@ -77,11 +77,54 @@ angular.module('chatspace.factories', []).
       }).error(function (data) {
 
         console.log('error logging out: ', data);
-      })
+      });
     };
 
     return {
       login: login,
       logout: logout
+    };
+  }).
+  factory('gumhelper', function ($rootScope, $http) {
+    var videoShooter;
+    var gum = new GumHelper({ width: 120, height: 90 });
+
+    var getScreenshot = function (callback, numFrames, interval) {
+      if (videoShooter) {
+        videoShooter.getShot(callback, numFrames, interval);
+      } else {
+        callback('');
+      }
+    };
+
+    var startStream = function () {
+      gum.startVideoStreaming(function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+
+          data.videoElement.width = data.stream.width;
+          data.videoElement.height = data.stream.height;
+          $('#video-preview').append(data.videoElement);
+          data.videoElement.play();
+          videoShooter = new VideoShooter(data.videoElement);
+        }
+      });
+    };
+
+    var startScreenshot = function (callback) {
+      getScreenshot(function (pictureData) {
+        callback(pictureData);
+      }, 10, 0.2);
+    };
+
+    var resetStream = function () {
+      videoShooter = null;
+    };
+
+    return {
+      startScreenshot: startScreenshot,
+      startStream: startStream,
+      resetStream: resetStream
     };
   });

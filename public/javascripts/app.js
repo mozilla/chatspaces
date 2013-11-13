@@ -94,6 +94,10 @@ config(function ($routeProvider, $locationProvider) {
       controller: 'FriendCtrl',
       templateUrl: 'partials/friends.html'
     })
+    .when('/message', {
+      controller: 'MessageCtrl',
+      templateUrl: 'partials/message.html'
+    })
     .when('/drafts', {
       controller: 'DraftsCtrl',
       templateUrl: 'partials/drafts.html'
