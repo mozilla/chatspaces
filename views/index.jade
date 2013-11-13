@@ -3,7 +3,6 @@ extend layout
 block content
   main(role='main', ng-class='settings ? "on" : "off"')
     section.settings
-      h1 Chatspaces
       ul
         li(ng-if='isAuthenticated')
           a(href='/dashboard', ng-click='toggleSettings()') Messages

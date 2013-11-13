@@ -1,0 +1,31 @@
+<div class="content-wrapper">
+  <h1>Send a new message</h1>
+  <form ng-submit="sendMessage()" class="message">
+    <section>
+      <h2>Choose recipients</h2>
+      <ul class="recipient-results">
+        <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }">
+          <a href="javascript:;" ng-click="toggleRecipient(value.userHash, $index)">
+            <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <h2>Write a message</h2>
+      <div ng-if="info" class="info">
+        <p>{{ info }}</p>
+      </div>
+      <div ng-if="errors" class="errors">
+        <p>{{ errors }}</p>
+      </div>
+      <button type="button" ng-click="promptCamera()">GIFCam!</button>
+      <div id="video-preview"></div>
+      <textarea ng-model="message" required></textarea>
+      <input type="hidden" name="picture" ng-model="picture">
+      <input type="hidden" name="recipient[{{ value.userHash }}]" value="{{ value.userHash }}" ng-repeat="(key, value) in recipients track by $index">
+      <button type="submit" class="action">Send</button>
+    </section>
+  </form>
+  <div class="posting" ng-if="posting">Posting, please wait!</div>
+</div>

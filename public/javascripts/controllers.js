@@ -107,10 +107,6 @@ angular.module('chatspace.controllers', []).
       gumhelper.resetStream();
     };
 
-    $scope.getDate = function (timestamp) {
-      return moment.unix(Math.round(timestamp / 1000)).fromNow();
-    };
-
     $scope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
         gumhelper.startStream();
@@ -255,6 +251,10 @@ angular.module('chatspace.controllers', []).
 
     $rootScope.hasNewNotifications = 0;
     $rootScope.notifications = [];
+
+    $scope.getDate = function (timestamp) {
+      return moment.unix(Math.round(timestamp / 1000)).fromNow();
+    };
 
     $scope.deleteMessage = function (message, idx) {
       $rootScope.messages.splice(idx, 1);
