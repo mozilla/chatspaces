@@ -12,6 +12,8 @@ block content
         li(ng-if='isAuthenticated')
           a(href='/profile', ng-click='toggleSettings()') Profile
         li(ng-if='isAuthenticated')
+          a(href='/drafts', ng-click='toggleSettings()') Drafts
+        li(ng-if='isAuthenticated')
           a(href='javascript:;', ng-click='logout()') Logout
         li(ng-if='!isAuthenticated')
           a(href='javascript:;', ng-click='login()') Sign in

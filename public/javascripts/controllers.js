@@ -67,16 +67,17 @@ angular.module('chatspace.controllers', []).
       $rootScope.isAuthenticated = true;
     }
 
-    $rootScope.login = function () {
-      persona.login();
-    };
-
     $rootScope.logout = function () {
       persona.logout();
     }
   }).
-  controller('HomeCtrl', function ($scope, $rootScope, $location) {
-
+  controller('HomeCtrl', function ($scope, $location, persona) {
+    $scope.login = function () {
+      persona.login();
+    };
+  }).
+  controller('DraftsCtrl', function ($scope, $rootScope, $location, api) {
+    api.call();
   }).
   controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
     $scope.showMessage = false;
