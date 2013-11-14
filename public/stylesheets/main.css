@@ -441,9 +441,7 @@ main {
 }
 
 #message-list .left {
-    margin-right: 5px;
-    min-width: 75px;
-    width: 18%;
+    width: 145px;
 }
 
 #message-list .right {
@@ -492,8 +490,8 @@ main {
     background-color: #f8f8f8;
     clear: both;
     float: left;
-    height: 100px;
     margin-bottom: 5px;
+    min-height: 100px;
     position: relative;
     width: 100%;
 }
@@ -568,12 +566,12 @@ video {
         margin-left: -364px;
     }
 
-    #top-bar {
-        width: 708px;
-    }
-
     #message-list {
         width: 515px;
+    }
+
+    #message-list .right {
+        width: 70%;
     }
 
     #wrapper main > section {
@@ -617,10 +615,6 @@ video {
         margin-left: -210px;
     }
 
-    #top-bar {
-        width: 400px;
-    }
-
     #friend-results {
         width: 100%;
     }
@@ -639,6 +633,17 @@ video {
         margin: 0;
         padding: 0 10px;
         width: 400px;
+    }
+
+    #message-list li img {
+        width: 80px;
+    }
+
+    #message-list .right {
+        clear: both;
+        float: left;
+        padding: 10px;
+        width: 100%;
     }
 
     #wrapper main > section {
@@ -676,10 +681,6 @@ video {
 
     #header {
         margin-left: -140px;
-    }
-
-    #top-bar {
-        width: 260px;
     }
 
     #friend-results li {
