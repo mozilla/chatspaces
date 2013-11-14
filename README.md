@@ -41,7 +41,7 @@ Chatspaces is a private chat app for sending messages to your contacts. It curre
 
 ### Via email
 
-Email me at jfong@mozilla.com
+Email me at [mailto:jfong@mozilla.com](jfong@mozilla.com)
 
 Thanks!
 
@@ -56,9 +56,9 @@ Install node by using brew or through the website http://nodejs.org/#download
 Install redis via brew and make sure the server is running
 
     > npm -g install nodemon bower
+    > cd chatspaces
     > npm install
     > bower install
-    > cd chatspaces
     > cp local.json-dist local.json
     > npm start
 
