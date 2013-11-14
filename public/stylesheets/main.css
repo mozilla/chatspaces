@@ -100,6 +100,7 @@ h1, h2, h3 {
     font-size: 1.8rem;
     line-height: 2rem;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 h3 {
