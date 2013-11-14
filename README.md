@@ -39,6 +39,10 @@ Chatspaces is a private chat app for sending messages to your contacts. It curre
 * For UX/UI/design questions talk to mhanratty or tsmuse
 * For anything else, talk to ednapiranha or wenzel
 
+### Via email
+
+Email me at jfong@mozilla.com
+
 Thanks!
 
 ## Installation instructions
@@ -57,3 +61,5 @@ Install redis via brew and make sure the server is running
     > cd chatspaces
     > cp local.json-dist local.json
     > npm start
+
+Open your browser at the following URL http://localhost:3000
