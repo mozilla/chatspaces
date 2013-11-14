@@ -28,11 +28,13 @@ run(function ($rootScope, $http, $location, persona) {
             email: data.email
           });
 
-          if ($location.path() === '/') {
+          if (!$rootScope.username) {
+            $location.path('/profile');
+          } else if ($location.path() === '/') {
             $location.path('/dashboard');
           }
         }).error(function (data) {
-          persona.login();
+          persona.logout();
         });
       }
     }, 2);
