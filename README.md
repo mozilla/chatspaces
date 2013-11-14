@@ -41,7 +41,7 @@ Chatspaces is a private chat app for sending messages to your contacts. It curre
 
 ### Via email
 
-Email me at [mailto:jfong@mozilla.com](jfong@mozilla.com)
+Email me at [jfong@mozilla.com](mailto:jfong@mozilla.com)
 
 Thanks!
 
@@ -62,4 +62,4 @@ Install redis via brew and make sure the server is running
     > cp local.json-dist local.json
     > npm start
 
-Open your browser at the following URL http://localhost:3000
+Open your browser at the following URL [http://localhost:3000](http://localhost:3000)
