@@ -45,6 +45,11 @@ Email me at [jfong@mozilla.com](mailto:jfong@mozilla.com)
 
 Thanks!
 
+## Supported browsers
+
+* Firefox
+* Chrome
+
 ## Installation instructions
 
 Clone the repository
