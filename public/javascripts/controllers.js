@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chatspace.controllers', []).
-  controller('AppCtrl', function ($scope, persona, $rootScope, $http, $location, user) {
+  controller('AppCtrl', function ($scope, authenticate, $rootScope, $http, $location, user) {
     user.call();
 
     socket.on('friend', function (data) {
@@ -68,12 +68,12 @@ angular.module('chatspace.controllers', []).
     }
 
     $rootScope.logout = function () {
-      persona.logout();
+      authenticate.logout();
     }
   }).
-  controller('HomeCtrl', function ($scope, $rootScope, $location, persona) {
+  controller('HomeCtrl', function ($scope, $rootScope, $location, authenticate) {
     $scope.login = function () {
-      persona.login();
+      authenticate.login();
       $rootScope.toggleSettings();
     };
   }).

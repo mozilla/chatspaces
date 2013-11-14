@@ -471,6 +471,14 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
     }
   });
 
+  app.get('/api/logout', function (req, res) {
+    req.session.reset();
+
+    res.json({
+      message: 'logged out'
+    });
+  });
+
   app.get('/*', function (req, res) {
     res.render('index');
   });

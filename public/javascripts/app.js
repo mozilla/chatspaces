@@ -8,7 +8,7 @@ angular.module('chatspace', [
   'chatspace.factories',
   'chatspace.controllers'
 ]).
-run(function ($rootScope, $http, $location, persona) {
+run(function ($rootScope, $http, $location, authenticate) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
     setTimeout(function () {
       if (!$rootScope.isAuthenticated) {
@@ -34,7 +34,7 @@ run(function ($rootScope, $http, $location, persona) {
             $location.path('/dashboard');
           }
         }).error(function (data) {
-          persona.logout();
+          authenticate.logout();
         });
       }
     }, 2);

@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('chatspace.factories', []).
-  factory('persona', function ($rootScope, $http, $location, user) {
+  factory('authenticate', function ($rootScope, $http, $location, user) {
     var resetUser = function () {
       socket.emit('disconnect', {
         email: $rootScope.email
       });
 
+      $rootScope.username = null;
       localStorage.removeItem('personaEmail');
       user.call();
     };
@@ -22,7 +23,8 @@ angular.module('chatspace.factories', []).
           url: '/persona/verify',
           method: 'POST',
           data: { assertion: assertion }
-        }).success(function (data) {
+        }).
+        success(function (data) {
 
           if (data.status === 'okay') {
             $rootScope.isAuthenticated = true;
@@ -52,7 +54,8 @@ angular.module('chatspace.factories', []).
             resetUser();
             console.log('Login failed');
           }
-        }).error(function (data) {
+        }).
+        error(function (data) {
 
           resetUser();
           console.log('Login failed');
@@ -64,17 +67,24 @@ angular.module('chatspace.factories', []).
       $http({
         url: '/persona/logout',
         method: 'POST'
-      }).success(function (data) {
-
+      }).
+      success(function (data) {
         if (data.status === 'okay') {
-          $rootScope.toggleSettings();
-          $location.path('/');
-          resetUser();
+
+          $http({
+            url: '/api/logout',
+            method: 'GET'
+          }).success(function (data) {
+
+            resetUser();
+            $location.path('/');
+          });
         } else {
 
           console.log('Logout failed because ' + data.reason);
         }
-      }).error(function (data) {
+      }).
+      error(function (data) {
 
         console.log('error logging out: ', data);
       });
@@ -105,7 +115,7 @@ angular.module('chatspace.factories', []).
 
           data.videoElement.width = data.stream.width;
           data.videoElement.height = data.stream.height;
-          $('#video-preview').append(data.videoElement);
+          $('#video-preview').append(data.videoElement); // TODO: switch to directive
           data.videoElement.play();
           videoShooter = new VideoShooter(data.videoElement);
         }
