@@ -8,7 +8,7 @@ Chatspaces is a private chat app for sending messages to your contacts. It curre
 
 ### Current development stage
 
-* Adding in v.1 features and design/interface iterations
+* Adding in v.1 features and design/interface iterations for MWC (Mobile World Congress)
 
 ### Features for v.1 (No new features will be added/discussed until post-MWC)
 
