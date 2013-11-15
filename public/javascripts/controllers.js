@@ -21,9 +21,9 @@ angular.module('chatspace.controllers', []).
         $rootScope.$apply(function () {
           $rootScope.notifications.push(data.notification);
           $rootScope.hasNewNotifications ++;
-          if ($rootScope.selectedFriend !== data.notification.senderUserHash) {
+        //  if ($rootScope.selectedFriend !== data.notification.senderUserHash) {
             $rootScope.friends[data.notification.senderUserHash].unread ++;
-          }
+        //  }
         });
       }, 500);
     });
