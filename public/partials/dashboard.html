@@ -1,6 +1,6 @@
 <div class="dashboard-content">
   <ul id="friend-results">
-    <li ng-repeat="friend in friends track by $index" ng-class="{ on: selectedFriend === friend.userHash }">
+    <li ng-repeat="friend in friends | orderObjectBy:friendPredicate:true" ng-class="{ on: selectedFriend === friend.userHash }">
       <span class="unread" ng-if="friend.unread > 0">{{ friend.unread }}</span>
       <img src="{{ friend.avatar }}" ng-click="getMessages(friend)" class="avatar"><span>{{ friend.username }}</span>
     </li>

@@ -3,6 +3,7 @@
 angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, authenticate, $rootScope, $http, $location, user) {
     user.call();
+    $rootScope.friendPredicate = '-username';
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -13,6 +14,8 @@ angular.module('chatspace.controllers', []).
           senderUserHash: data.friend.senderUserHash,
           unread: data.friend.unread
         };
+
+        $rootScope.friends = $rootScope.friends
       });
     });
 
