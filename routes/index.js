@@ -41,21 +41,25 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
           message: 'could not get blocked users'
         });
       } else {
-        users.blocked.forEach(function (user) {
-          usernamesDb.get('userHash!' + user.key, function (err, username) {
-            if (err) {
-              console.log(err);
-            } else {
-              io.sockets.in(req.session.userHash).emit('blocked', {
-                user: {
-                  username: username,
-                  userHash: user.key,
-                  avatar: gravatarUrl(user.key)
-                }
-              });
-            }
+        try {
+          users.blocked.forEach(function (user) {
+            usernamesDb.get('userHash!' + user.key, function (err, username) {
+              if (err) {
+                console.log(err);
+              } else {
+                io.sockets.in(req.session.userHash).emit('blocked', {
+                  user: {
+                    username: username,
+                    userHash: user.key,
+                    avatar: gravatarUrl(user.key)
+                  }
+                });
+              }
+            });
           });
-        });
+        } catch (e) {
+          console.err(e);
+        }
 
         res.json({
           message: 'loading blocked users'
@@ -117,20 +121,24 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
           message: 'could not send friend request'
         });
       } else {
-        users.friends.forEach(function (f) {
-          usernamesDb.get('userHash!' + f.key, function (err, username) {
-            if (!err) {
-              io.sockets.in(req.session.userHash).emit('friend', {
-                friend: {
-                  username: username,
-                  userHash: f.key,
-                  avatar: gravatarUrl(f.key),
-                  unread: 0
-                }
-              });
-            }
+        try {
+          users.friends.forEach(function (f) {
+            usernamesDb.get('userHash!' + f.key, function (err, username) {
+              if (!err) {
+                io.sockets.in(req.session.userHash).emit('friend', {
+                  friend: {
+                    username: username,
+                    userHash: f.key,
+                    avatar: gravatarUrl(f.key),
+                    unread: 0
+                  }
+                });
+              }
+            });
           });
-        });
+        } catch (e) {
+          console.err(e);
+        }
       }
     });
   });
