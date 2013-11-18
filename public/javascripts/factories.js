@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chatspace.factories', []).
-  factory('authenticate', function ($rootScope, $http, $location, user) {
+  factory('authenticate', function ($rootScope, $http, $location, $window, user, api) {
     var resetUser = function () {
       socket.emit('disconnect', {
         email: $rootScope.email
@@ -40,7 +40,7 @@ angular.module('chatspace.factories', []).
               $rootScope.gravatar = data.gravatar;
 
               if (data.username) {
-                $location.path('/dashboard');
+                $window.location.href = '/dashboard';
               } else {
                 $location.path('/profile');
               }

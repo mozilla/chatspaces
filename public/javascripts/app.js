@@ -74,7 +74,7 @@ service('api', function ($http) {
           url: '/api/notifications',
           method: 'GET'
         });
-      }, 100);
+      }, 500);
     }
   };
 }).

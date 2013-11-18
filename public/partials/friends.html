@@ -14,7 +14,7 @@
   <ul class="contact-results">
     <li ng-repeat="(key, value) in friends | orderObjectBy:friendPredicate:true">
       <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
-      <button class="delete" ng-click="deleteFriend(key, value.userHash)">X</button>
+      <button class="delete" ng-click="deleteFriend(value.userHash)">X</button>
       <a href="javascript:;" ng-click="blockUser(value.userHash)">Block</a>
     </li>
   </ul>
