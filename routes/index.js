@@ -45,7 +45,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
           users.blocked.forEach(function (user) {
             usernamesDb.get('userHash!' + user.key, function (err, username) {
               if (err) {
-                console.log(err);
+                console.error(err);
               } else {
                 io.sockets.in(req.session.userHash).emit('blocked', {
                   user: {
@@ -58,7 +58,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
             });
           });
         } catch (e) {
-          //console.err(e);
+          console.error(e);
         }
 
         res.json({
@@ -137,7 +137,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
             });
           });
         } catch (e) {
-          //console.err(e);
+          console.error(e);
         }
       }
     });
