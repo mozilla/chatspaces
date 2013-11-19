@@ -58,7 +58,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
             });
           });
         } catch (e) {
-          console.err(e);
+          //console.err(e);
         }
 
         res.json({
@@ -137,7 +137,7 @@ module.exports = function (app, io, nconf, parallax, usernamesDb, crypto, Parall
             });
           });
         } catch (e) {
-          console.err(e);
+          //console.err(e);
         }
       }
     });

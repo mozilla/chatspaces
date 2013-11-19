@@ -64,6 +64,10 @@ angular.module('chatspace.controllers', []).
       }
     };
 
+    $rootScope.newMessage = function () {
+        $rootScope.settings = false;
+    };
+
     var email = localStorage.getItem('personaEmail');
 
     if (email) {

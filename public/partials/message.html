@@ -24,7 +24,8 @@
       <textarea ng-model="message" required></textarea>
       <input type="hidden" name="picture" ng-model="picture">
       <input type="hidden" name="recipient[{{ value.userHash }}]" value="{{ value.userHash }}" ng-repeat="(key, value) in recipients track by $index">
-      <button type="submit" class="action">Send</button>
+      <button type="button" ng-click="goToDashboard()">Cancel</button>
+      <button type="submit" class="action">Next</button>
     </section>
   </form>
   <div class="posting" ng-if="posting">Posting, please wait!</div>
