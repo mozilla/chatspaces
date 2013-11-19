@@ -58,7 +58,7 @@ Clone the repository
 
 Install node by using brew or through the website http://nodejs.org/#download
 
-Install redis via brew and make sure the server is running
+Install redis via brew and make sure the server is running: ```redis-server &```
 
     > npm -g install nodemon bower
     > cd chatspaces
