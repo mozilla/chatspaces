@@ -1,4 +1,5 @@
 .DS_Store
 node_modules
+db
 local.json
 public/javascripts/vendor

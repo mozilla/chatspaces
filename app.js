@@ -4,12 +4,10 @@ var app = express();
 var server = require('http').createServer(app);
 var nconf = require('nconf');
 var settings = require('./settings')(app, configurations, express);
-var Parallax = require('meatspace-parallax');
-var parallax = {};
-var level = require('level');
-var crypto = require('crypto');
 var redis = require('redis');
 var redisClient = redis.createClient();
+
+var user = require('./lib/user');
 
 var io = require('socket.io').listen(server);
 
@@ -20,36 +18,26 @@ io.configure(function () {
 
 io.sockets.on('connection', function (socket) {
   socket.on('join', function (data) {
-    console.log('socket join by ', crypto.createHash('md5').update(data.email).digest('hex'))
-    socket.join(crypto.createHash('md5').update(data.email).digest('hex'));
+    var userHash = user.setUserHash(data.email);
+    console.log('socket join by ', userHash);
+    socket.join(userHash);
   });
 });
 
 nconf.argv().env().file({ file: 'local.json' });
 
-var usernamesDb = level(nconf.get('db') + '/usernames', {
-  createIfMissing: true,
-  valueEncoding: 'json'
-});
-
 // Filters for routes
 var isLoggedIn = function(req, res, next) {
   if (req.session.email) {
-    req.session.userHash = crypto.createHash('md5').update(req.session.email).digest('hex');
+    req.session.userHash = user.setUserHash(req.session.email);
 
-    if (!parallax[req.session.userHash]) {
-      parallax[req.session.userHash] = new Parallax(req.session.userHash, {
-        db: nconf.get('db') + '/users/' + req.session.userHash
-      });
-    }
-
-    usernamesDb.get('email!' + req.session.email, function (err, username) {
+    user.getUsername(req, function (err, username) {
       if (!err) {
         req.session.username = username;
       }
-    });
 
-    next();
+      next();
+    });
   } else {
     res.status(400);
     next(new Error('Not logged in'));
@@ -61,6 +49,6 @@ require('express-persona')(app, {
 });
 
 // routes
-require('./routes')(app, io, nconf, parallax, usernamesDb, crypto, Parallax, redisClient, isLoggedIn);
+require('./routes')(app, io, nconf, user, redisClient, isLoggedIn);
 
 server.listen(process.env.PORT || nconf.get('port'));

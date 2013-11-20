@@ -61,7 +61,7 @@ service('api', function ($http) {
       setTimeout(function () {
         console.log('calling services');
         $http({
-          url: '/api/friends',
+          url: '/api/following',
           method: 'GET'
         });
 

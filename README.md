@@ -68,3 +68,8 @@ Install redis via brew and make sure the server is running: ```redis-server &```
     > npm start
 
 Open your browser at the following URL [http://localhost:3000](http://localhost:3000)
+
+## Resetting your database
+
+    > ./bin/resetDb.js
+

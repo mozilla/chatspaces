@@ -193,7 +193,7 @@ angular.module('chatspace.controllers', []).
 
       if (verify) {
         $http({
-          url: '/api/friend/' + user,
+          url: '/api/unfollow/' + user,
           method: 'DELETE'
         }).success(function (data) {
           delete $rootScope.friends[user];
@@ -206,7 +206,7 @@ angular.module('chatspace.controllers', []).
 
     $scope.requestFriend = function (user) {
       $http({
-        url: '/api/friend',
+        url: '/api/follow',
         data: {
           userHash: user.userHash
         },
@@ -256,45 +256,26 @@ angular.module('chatspace.controllers', []).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
     api.call();
 
-    $rootScope.hasNewNotifications = 0;
-    $rootScope.notifications = [];
-
     $scope.getDate = function (timestamp) {
       return moment.unix(Math.round(timestamp / 1000)).fromNow();
     };
 
-    $scope.deleteMessage = function (message, idx) {
-      $rootScope.messages.splice(idx, 1);
-      $http({
-        url: '/api/message/' + $rootScope.selectedFriend + '/' + message.key,
-        method: 'DELETE'
-      }).success(function (data) {
+    $scope.isLoading = true;
+    $rootScope.messages = [];
+    $rootScope.hasNewNotifications = 0;
+    $rootScope.notifications = [];
 
-      }).error(function (data) {
-        $scope.errors = data.message;
-      });
-    };
-
-    $scope.getMessages = function (friend) {
-      $scope.isLoading = true;
-      $rootScope.messages = [];
-      $rootScope.selectedFriend = friend.userHash;
-      $rootScope.hasNewNotifications = 0;
-      $rootScope.notifications = [];
-      $rootScope.friends[friend.userHash].unread = 0;
-
-      $http({
-        url: '/api/messages/' + friend.userHash,
-        method: 'GET'
-      }).success(function (data) {
-        $rootScope.messages = data.chats;
-        $scope.isLoading = false;
-        $scope.errors = false;
-      }).error(function (data) {
-        $scope.info = false;
-        $scope.errors = data.message;
-      });
-    };
+    $http({
+      url: '/api/feed',
+      method: 'GET'
+    }).success(function (data) {
+      $rootScope.messages = data.chats;
+      $scope.isLoading = false;
+      $scope.errors = false;
+    }).error(function (data) {
+      $scope.info = false;
+      $scope.errors = data.message;
+    });
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
     $scope.setUsername = false;

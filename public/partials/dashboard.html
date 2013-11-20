@@ -1,11 +1,4 @@
 <div class="dashboard-content">
-  <ul id="friend-results">
-    <li ng-repeat="friend in friends | orderObjectBy:friendPredicate:true" ng-class="{ on: selectedFriend === friend.userHash }">
-      <span class="unread" ng-if="friend.unread > 0">{{ friend.unread }}</span>
-      <img src="{{ friend.avatar }}" ng-click="getMessages(friend)" class="avatar"><span>{{ friend.username }}</span>
-    </li>
-  </ul>
-
   <ul id="message-list">
     <li ng-show="isLoading" class="loader">Loading ...</li>
     <li ng-repeat="message in messages track by $index">
@@ -18,7 +11,6 @@
         </div>
         <p>{{ message.value.message }}</p>
         <p>posted: {{ getDate(message.value.created) }}</p>
-        <button class="delete" ng-click="deleteMessage(message, $index)">X</button>
       </div>
     </li>
   </ul>
