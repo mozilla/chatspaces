@@ -88,7 +88,7 @@ angular.module('chatspace.controllers', []).
       $rootScope.toggleSettings();
     };
   }).
-  controller('MessageCtrl', function ($scope, $rootScope, $http, gumhelper, api) {
+  controller('MessageCtrl', function ($scope, $rootScope, $http, $location, gumhelper, api) {
     $scope.recipients = {};
     $scope.posting = false;
     $scope.picture = '';
