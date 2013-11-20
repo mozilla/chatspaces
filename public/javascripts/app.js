@@ -55,6 +55,18 @@ service('user', function ($rootScope) {
     }
   }
 }).
+service('messageThread', function ($rootScope, $window) {
+  return {
+    call: function (recipients) {
+      if (!$rootScope.isAuthenticated ||
+          ($rootScope.isAuthenticated && recipients.indexOf($rootScope.userHash) === -1)) {
+        $window.location.href = '/';
+      } else {
+        console.log('ok')
+      }
+    }
+  }
+}).
 service('api', function ($http) {
   return {
     call: function () {
@@ -107,6 +119,10 @@ config(function ($routeProvider, $locationProvider) {
     .when('/drafts', {
       controller: 'DraftsCtrl',
       templateUrl: 'partials/drafts.html'
+    })
+    .when('/thread/:senderKey', {
+      controller: 'ThreadCtrl',
+      templateUrl: 'partials/thread.html'
     })
     .otherwise({
       redirectTo: '/'

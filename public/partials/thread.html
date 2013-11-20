@@ -1,7 +1,7 @@
 <div class="dashboard-content">
   <ul id="message-list">
     <li ng-show="isLoading" class="loader">Loading ...</li>
-    <li ng-repeat="message in messages track by $index" ng-click="getThread(message)">
+    <li ng-repeat="message in messages track by $index">
       <div class="image left">
         <img src="{{ message.value.media }}">
       </div>

@@ -51,6 +51,10 @@ angular.module('chatspace.controllers', []).
       });
     });
 
+    $rootScope.getDate = function (timestamp) {
+      return moment.unix(Math.round(timestamp / 1000)).fromNow();
+    };
+
     $rootScope.goToDashboard = function () {
       $rootScope.hasNewNotifications = 0;
       $location.path('/dashboard');
@@ -150,6 +154,8 @@ angular.module('chatspace.controllers', []).
           }).success(function (data) {
             $scope.info = data.message;
             resetForm();
+            $location.path('/thread/' + data.key);
+
           }).error(function (data) {
             $scope.info = false;
             $scope.errors = data.message;
@@ -253,20 +259,49 @@ angular.module('chatspace.controllers', []).
     };
 
   }).
-  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
+  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api, messageThread) {
     api.call();
-
-    $scope.getDate = function (timestamp) {
-      return moment.unix(Math.round(timestamp / 1000)).fromNow();
-    };
 
     $scope.isLoading = true;
     $rootScope.messages = [];
     $rootScope.hasNewNotifications = 0;
     $rootScope.notifications = [];
 
+    // TODO: switch to websockets
     $http({
       url: '/api/feed',
+      method: 'GET'
+    }).success(function (data) {
+      $rootScope.messages = data.chats;
+      $scope.isLoading = false;
+      $scope.errors = false;
+    }).error(function (data) {
+      $scope.info = false;
+      $scope.errors = data.message;
+    });
+
+    $scope.getThread = function (message) {
+      message.value.recipients.push(message.key.split('!')[1])
+      var recipients = message.value.recipients;
+
+      messageThread.call(recipients);
+
+      if (message.value.reply) {
+        $location.path('/thread/' + message.value.reply);
+      } else {
+        $location.path('/thread/' + message.key);
+      }
+    };
+  }).
+  controller('ThreadCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
+    api.call();
+
+    $scope.isLoading = true;
+    $rootScope.messages = [];
+
+    // TODO: switch to websockets
+    $http({
+      url: '/api/thread/' + $routeParams.senderKey,
       method: 'GET'
     }).success(function (data) {
       $rootScope.messages = data.chats;

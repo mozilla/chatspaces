@@ -112,6 +112,23 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
     });
   });
 
+  app.get('/api/thread/:senderKey', isLoggedIn, function (req, res) {
+    user.getThread(req, function (err, chats) {
+      if (err) {
+        res.status(400);
+        res.json({
+          message: err.toString()
+        });
+      } else {
+
+        res.json({
+          chats: chats.chats
+        });
+      }
+    });
+  });
+
+
   app.post('/api/search', isLoggedIn, function (req, res) {
     if (!req.body.username) {
       res.status(400);
@@ -135,14 +152,12 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
   });
 
   app.post('/api/message', isLoggedIn, function (req, res) {
-    var newChat;
     var sendToUser = function (sender, receiver, message, chat, callback) {
       user.sendMessage(sender, receiver, message, chat, function (err, n) {
         if (err) {
           console.log(err);
         } else {
-          newChat = n;
-          callback(null, true);
+          callback(null, n);
         }
       });
     };
@@ -167,7 +182,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
         });
       } else {
 
-        var sendNotifications = function (recipient) {
+        var sendNotifications = function (recipient, newChat) {
           user.sendNotification(req, recipient, io, newChat, function (err, notification) {
             var notificationKey = 'notification:' + recipient + ':' + req.session.userHash;
             redisClient.hmset(notificationKey, {
@@ -186,10 +201,14 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
           });
         };
 
-        sendToUser(req.session.userHash, req.session.userHash, req.body.message, chat, function (err) {
+        sendToUser(req.session.userHash, req.session.userHash, req.body.message, chat, function (err, newChat) {
           if (err) {
             console.log(err);
           } else {
+            res.json({
+              key: newChat.reply || newChat.senderKey
+            });
+
             recipients.forEach(function (recipient) {
               if (recipient !== req.session.userHash) {
                 sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
@@ -197,16 +216,12 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
                     console.log(err);
                   } else {
 
-                    sendNotifications(recipient);
+                    sendNotifications(recipient, newChat);
                   }
                 });
               }
             });
           }
-        });
-
-        res.json({
-          message: 'done'
         });
       }
     }
