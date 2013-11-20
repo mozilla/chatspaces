@@ -260,7 +260,7 @@ main {
     width: 35px;
 }
 
-.friends-view, .profile-view, .landing-view {
+.profile-view, .landing-view {
     padding: 20px;
 }
 
@@ -346,18 +346,12 @@ main {
     width: 100%;
 }
 
-#friend-results {
-    float: left;
-    margin: 10px 0 0 10px;
-    width: 180px;
-}
-
 .contact-results {
     clear: both;
     float: left;
 }
 
-#friend-results li, .search-results li, .contact-results li, .recipient-results li {
+.search-results li, .contact-results li, .recipient-results li {
     border: 2px solid transparent;
     height: 40px;
     line-height: 40px;
@@ -449,10 +443,6 @@ main {
     width: 80%;
 }
 
-#friend-results li {
-    padding: 5px;
-}
-
 #message-list .recipients {
     clear: both;
     float: left;
@@ -473,16 +463,10 @@ main {
     width: 40px;
 }
 
-#friend-results li.on, #friend-results li:hover {
-    background-color: #f8f8f8;
-    border: 2px dashed #ccc;
-}
-
 #message-list {
     display: block;
     float: right;
     margin-top: 10px;
-    max-width: 810px;
     overflow-x: hidden;
     width: 100%;
 }
@@ -567,10 +551,6 @@ video {
         margin-left: -364px;
     }
 
-    #message-list {
-        width: 515px;
-    }
-
     #message-list .right {
         width: 70%;
     }
@@ -598,11 +578,6 @@ video {
         width: 340px;
     }
 
-    #friend-results {
-        float: left;
-        position: relative;
-    }
-
     .message {
         height: 400px;
         margin-top: -440px;
@@ -616,24 +591,10 @@ video {
         margin-left: -210px;
     }
 
-    #friend-results {
-        width: 100%;
-    }
-
-    #friend-results li {
-        float: left;
-        width: 185px;
-    }
-
-    #friend-results li img {
-        width: 40px;
-    }
-
     #message-list {
         float: left;
         margin: 0;
         padding: 0 10px;
-        width: 400px;
     }
 
     #message-list li img {
@@ -682,15 +643,6 @@ video {
 
     #header {
         margin-left: -140px;
-    }
-
-    #friend-results li {
-        margin: 0 0 5px 0;
-        width: 245px;
-    }
-
-    #message-list, #friend-results {
-        width: 260px;
     }
 
     #message-list li {
