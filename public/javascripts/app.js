@@ -45,25 +45,10 @@ service('user', function ($rootScope) {
     call: function () {
       $rootScope.isAuthenticated = false;
       $rootScope.settings = false;
-      $rootScope.hasNewNotifications = 0;
       $rootScope.friends = {};
       $rootScope.messages = [];
       $rootScope.blocked = {};
-      $rootScope.currentFriend;
       $rootScope.notifications = [];
-      $rootScope.selectedFriend = false;
-    }
-  }
-}).
-service('messageThread', function ($rootScope, $window) {
-  return {
-    call: function (recipients) {
-      if (!$rootScope.isAuthenticated ||
-          ($rootScope.isAuthenticated && recipients.indexOf($rootScope.userHash) === -1)) {
-        $window.location.href = '/';
-      } else {
-        console.log('ok')
-      }
     }
   }
 }).

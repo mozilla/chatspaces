@@ -101,10 +101,6 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
           message: err.toString()
         });
       } else {
-        var notificationKey = 'notification:' + req.session.userHash + ':' + req.params.userHash;
-        redisClient.del(notificationKey);
-        redisClient.lrem('notifications:' + req.session.userHash, 0, notificationKey);
-
         res.json({
           chats: chats.chats
         });
@@ -120,6 +116,8 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
           message: err.toString()
         });
       } else {
+        redisClient.lrem('notifications:' + req.session.userHash, 0, 'notification:' + req.params.senderKey);
+        redisClient.del(req.params.senderKey);
 
         res.json({
           chats: chats.chats
@@ -155,7 +153,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
     var sendToUser = function (sender, receiver, message, chat, callback) {
       user.sendMessage(sender, receiver, message, chat, function (err, n) {
         if (err) {
-          console.log(err);
+          callback(err);
         } else {
           callback(null, n);
         }
@@ -182,41 +180,45 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
         });
       } else {
 
-        var sendNotifications = function (recipient, newChat) {
+        var sendNotifications = function (recipient, newChat, mainKey) {
           user.sendNotification(req, recipient, io, newChat, function (err, notification) {
-            var notificationKey = 'notification:' + recipient + ':' + req.session.userHash;
-            redisClient.hmset(notificationKey, {
-              username: req.session.username,
-              userHash: req.session.userHash
-            });
+            var notificationKey = 'notification:' + mainKey;
+            redisClient.set(notificationKey, mainKey);
             redisClient.expire(notificationKey, TTL_LIMIT);
 
             var notificationListKey = 'notifications:' + recipient;
-            redisClient.lpush(notificationListKey, notificationKey);
+            redisClient.lpush(notificationListKey, 'notification:' + mainKey);
             redisClient.expire(notificationListKey, TTL_LIMIT);
 
-            io.sockets.in(recipient).emit('notification', {
-              notification: notification
-            });
+            io.sockets.in(recipient).emit('notification', mainKey);
           });
         };
 
         sendToUser(req.session.userHash, req.session.userHash, req.body.message, chat, function (err, newChat) {
           if (err) {
-            console.log(err);
-          } else {
+            res.status(400);
             res.json({
-              key: newChat.reply || newChat.senderKey
+              message: err.toString()
+            });
+          } else {
+            var mainKey = newChat.reply || newChat.senderKey;
+
+            res.json({
+              key: mainKey
             });
 
             recipients.forEach(function (recipient) {
               if (recipient !== req.session.userHash) {
+                console.log('sending to recipient ', recipient)
+                chat.created = newChat.created;
+                chat.senderKey = newChat.senderKey;
+
                 sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
                   if (err) {
                     console.log(err);
                   } else {
 
-                    sendNotifications(recipient, newChat);
+                    sendNotifications(recipient, newChat, mainKey);
                   }
                 });
               }
@@ -234,16 +236,10 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
     redisClient.lrange('notifications:' + req.session.userHash, 0, -1, function (err, notifications) {
       if (!err && notifications) {
         notifications.forEach(function (n) {
-          redisClient.hgetall(n, function (err, notification) {
+          redisClient.get(n, function (err, notification) {
             if (!err && notification) {
               console.log('sending notification ', notification)
-              io.sockets.in(req.session.userHash).emit('notification', {
-                notification: {
-                  username: notification.username,
-                  userHash: notification.userHash,
-                  senderUserHash: notification.userHash
-                }
-              });
+              io.sockets.in(req.session.userHash).emit('notification', notification);
             }
           });
         });

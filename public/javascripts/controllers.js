@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chatspace.controllers', []).
-  controller('AppCtrl', function ($scope, authenticate, $rootScope, $http, $location, user) {
+  controller('AppCtrl', function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user) {
     user.call();
     $rootScope.friendPredicate = '-username';
 
@@ -11,34 +11,25 @@ angular.module('chatspace.controllers', []).
           username: data.friend.username,
           avatar: data.friend.avatar,
           userHash: data.friend.userHash,
-          senderUserHash: data.friend.senderUserHash,
-          unread: data.friend.unread
+          senderUserHash: data.friend.senderUserHash
         };
-
-        $rootScope.friends = $rootScope.friends
       });
     });
 
     socket.on('notification', function (data) {
-      setTimeout(function () {
-        $rootScope.$apply(function () {
-          $rootScope.notifications.push(data.notification);
-          $rootScope.hasNewNotifications ++;
-        //  if ($rootScope.selectedFriend !== data.notification.senderUserHash) {
-            $rootScope.friends[data.notification.senderUserHash].unread ++;
-        //  }
-        });
-      }, 500);
+      $rootScope.$apply(function () {
+        if (data && $rootScope.notifications.indexOf(data) === -1) {
+          $rootScope.notifications.push(data);
+        }
+      });
     });
 
     socket.on('message', function (data) {
-      setTimeout(function () {
-        $rootScope.$apply(function () {
-          if ($rootScope.selectedFriend === data.key.split('!')[1]) {
-            $rootScope.messages.unshift(data);
-          }
-        });
-      }, 500);
+      $rootScope.$apply(function () {
+        if ($location.path() === '/dashboard' || $routeParams.senderKey === data.key.split('!')[1]) {
+          $rootScope.messages.unshift(data);
+        }
+      });
     });
 
     socket.on('blocked', function (data) {
@@ -56,7 +47,6 @@ angular.module('chatspace.controllers', []).
     };
 
     $rootScope.goToDashboard = function () {
-      $rootScope.hasNewNotifications = 0;
       $location.path('/dashboard');
     };
 
@@ -259,13 +249,11 @@ angular.module('chatspace.controllers', []).
     };
 
   }).
-  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api, messageThread) {
+  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
     api.call();
 
     $scope.isLoading = true;
     $rootScope.messages = [];
-    $rootScope.hasNewNotifications = 0;
-    $rootScope.notifications = [];
 
     // TODO: switch to websockets
     $http({
@@ -280,11 +268,14 @@ angular.module('chatspace.controllers', []).
       $scope.errors = data.message;
     });
 
+    $scope.isUnread = function (message) {
+      return !!(($rootScope.notifications.indexOf(message.value.reply) > -1) ||
+               ($rootScope.notifications.indexOf(message.value.senderKey) > -1));
+    };
+
     $scope.getThread = function (message) {
       message.value.recipients.push(message.key.split('!')[1])
       var recipients = message.value.recipients;
-
-      messageThread.call(recipients);
 
       if (message.value.reply) {
         $location.path('/thread/' + message.value.reply);
@@ -298,6 +289,11 @@ angular.module('chatspace.controllers', []).
 
     $scope.isLoading = true;
     $rootScope.messages = [];
+    $rootScope.notifications.splice($rootScope.notifications.indexOf($routeParams.senderKey), 1);
+
+    if ($rootScope.hasNewNotifications < 0) {
+      $rootScope.hasNewNotifications = 0;
+    }
 
     // TODO: switch to websockets
     $http({

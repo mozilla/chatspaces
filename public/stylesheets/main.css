@@ -136,6 +136,10 @@ h3 {
     display: inline-block;
 }
 
+#message-list li.new {
+    background-color: #fff;
+}
+
 .unread {
     height: 20px;
     left: 48px;
