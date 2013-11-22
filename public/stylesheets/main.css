@@ -340,7 +340,13 @@ main {
     float: left;
     width: 100%;
 }
-
+.form-content {
+    height: 200px;
+    background-color: #000;
+    clear: both;
+    float: left;
+    width: 100%;
+}
 .profile {
     float: left;
     width: 100%;
