@@ -26,7 +26,9 @@ angular.module('chatspace.controllers', []).
 
     socket.on('message', function (data) {
       $rootScope.$apply(function () {
-        if ($location.path() === '/dashboard' || $routeParams.senderKey === data.key.split('!')[1]) {
+        var senderKey = data.value.reply || data.value.senderKey;
+
+        if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           $rootScope.messages.unshift(data);
         }
       });
@@ -260,7 +262,6 @@ angular.module('chatspace.controllers', []).
       url: '/api/feed',
       method: 'GET'
     }).success(function (data) {
-      $rootScope.messages = data.chats;
       $scope.isLoading = false;
       $scope.errors = false;
     }).error(function (data) {
@@ -300,7 +301,6 @@ angular.module('chatspace.controllers', []).
       url: '/api/thread/' + $routeParams.senderKey,
       method: 'GET'
     }).success(function (data) {
-      $rootScope.messages = data.chats;
       $scope.isLoading = false;
       $scope.errors = false;
     }).error(function (data) {

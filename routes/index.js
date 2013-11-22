@@ -94,35 +94,20 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
   });
 
   app.get('/api/feed', isLoggedIn, function (req, res) {
-    user.recent(req, function (err, chats) {
-      if (err) {
-        res.status(400);
-        res.json({
-          message: err.toString()
-        });
-      } else {
-        res.json({
-          chats: chats.chats
-        });
-      }
+    user.recent(req, io);
+
+    res.json({
+      message: 'received feed'
     });
   });
 
   app.get('/api/thread/:senderKey', isLoggedIn, function (req, res) {
-    user.getThread(req, function (err, chats) {
-      if (err) {
-        res.status(400);
-        res.json({
-          message: err.toString()
-        });
-      } else {
-        redisClient.lrem('notifications:' + req.session.userHash, 0, 'notification:' + req.params.senderKey);
-        redisClient.del(req.params.senderKey);
+    user.getThread(req, io);
+    redisClient.lrem('notifications:' + req.session.userHash, 0, 'notification:' + req.params.senderKey);
+    redisClient.del(req.params.senderKey);
 
-        res.json({
-          chats: chats.chats
-        });
-      }
+    res.json({
+      message: 'received thread'
     });
   });
 
@@ -214,7 +199,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
                 chat.senderKey = newChat.senderKey;
 
                 sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
-                  if (err) {
+                  if (!err) {
                     console.log(err);
                   } else {
 

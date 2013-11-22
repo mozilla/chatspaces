@@ -128,7 +128,7 @@ h3 {
     width: 22px;
 }
 
-.content-wrapper {
+.content-wrapper, .friends-view {
     padding: 20px;
 }
 
@@ -264,7 +264,7 @@ main {
     width: 35px;
 }
 
-.profile-view, .landing-view {
+.profile-view, .landing-view, .message-view {
     padding: 20px;
 }
 
