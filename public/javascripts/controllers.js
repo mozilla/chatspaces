@@ -285,7 +285,7 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('ThreadCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
+  controller('ThreadCtrl', function ($scope, $rootScope, $http, $location, $routeParams, gumhelper, api) {
     api.call();
 
     $scope.isLoading = true;
@@ -307,6 +307,11 @@ angular.module('chatspace.controllers', []).
       $scope.info = false;
       $scope.errors = data.message;
     });
+    $scope.promptCamera = function () {
+      if ($rootScope.isAuthenticated && navigator.getMedia) {
+        gumhelper.startStream();
+      }
+    };
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
     $scope.setUsername = false;
