@@ -301,6 +301,8 @@ angular.module('chatspace.controllers', []).
       url: '/api/thread/' + $routeParams.senderKey,
       method: 'GET'
     }).success(function (data) {
+      $rootScope.messages = data.chats;
+      $rootScope.recipients = data.chats[0].value.recipients;
       $scope.isLoading = false;
       $scope.errors = false;
     }).error(function (data) {
