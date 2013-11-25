@@ -136,13 +136,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
 
   app.post('/api/message', isLoggedIn, function (req, res) {
     var sendToUser = function (sender, receiver, message, chat, callback) {
-      user.sendMessage(sender, receiver, message, chat, function (err, n) {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, n);
-        }
-      });
+      user.sendMessage(sender, receiver, message, chat, io, callback);
     };
 
     if (!req.body.message) {
@@ -155,7 +149,8 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
 
       var chat = {
         media: req.body.picture,
-        recipients: recipients
+        recipients: recipients,
+        reply: req.body.reply || ''
       };
 
       if (recipients.length < 1) {
@@ -188,10 +183,6 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
           } else {
             var mainKey = newChat.reply || newChat.senderKey;
 
-            res.json({
-              key: mainKey
-            });
-
             recipients.forEach(function (recipient) {
               if (recipient !== req.session.userHash) {
                 console.log('sending to recipient ', recipient)
@@ -207,6 +198,10 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
                   }
                 });
               }
+            });
+
+            res.json({
+              key: mainKey
             });
           }
         });

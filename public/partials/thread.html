@@ -16,7 +16,7 @@
                <div id="video-preview"></div>
                <button class="message-button" type="button" ng-click="promptCamera()">GIFCam!</button>
                <input type="hidden" name="picture" ng-model="picture">
-               <input type="hidden" name="{{ recipients }}" value="{{ recipients }}">
+               <input type="hidden" name="recipient[{{ recipient }}]" value="{{ recipient }}" ng-repeat="recipient in recipients track by $index">
             </div>
             <div class="text-box">
               <textarea ng-model="message" required></textarea>

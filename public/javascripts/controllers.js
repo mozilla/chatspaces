@@ -4,6 +4,7 @@ angular.module('chatspace.controllers', []).
   controller('AppCtrl', function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user) {
     user.call();
     $rootScope.friendPredicate = '-username';
+    $rootScope.recipients = {};
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -30,6 +31,15 @@ angular.module('chatspace.controllers', []).
 
         if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           $rootScope.messages.unshift(data);
+          $rootScope.recipients = {};
+
+          if ($routeParams.senderKey === senderKey) {
+            data.value.recipients.forEach(function (userHash) {
+              $rootScope.recipients[userHash] = userHash;
+            });
+
+            $rootScope.reply = senderKey;
+          }
         }
       });
     });
@@ -80,14 +90,22 @@ angular.module('chatspace.controllers', []).
       $rootScope.toggleSettings();
     };
   }).
-  controller('MessageCtrl', function ($scope, $rootScope, $http, $location, gumhelper, api) {
-    $scope.recipients = {};
-    $scope.posting = false;
-    $scope.picture = '';
-    $scope.recipientArr = [];
-    $scope.isLoading = false;
-
+  controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, gumhelper, api) {
     api.call();
+
+    var resetForm = function () {
+      if (!$routeParams.senderKey) {
+        $rootScope.recipients = {};
+      }
+      $scope.recipientArr = [];
+      $scope.errors = false;
+      $scope.message = '';
+      $scope.picture = '';
+      $scope.preview = '';
+      $scope.posting = false;
+      $('#video-preview').empty();
+      gumhelper.resetStream();
+    };
 
     var escapeHtml = function (text) {
       if (text) {
@@ -98,17 +116,26 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-    var resetForm = function () {
-      $scope.recipients = {};
-      $scope.recipientArr = [];
-      $scope.errors = false;
-      $scope.message = '';
-      $scope.picture = '';
-      $scope.preview = '';
-      $scope.posting = false;
-      $('#video-preview').empty();
-      gumhelper.resetStream();
-    };
+    resetForm();
+
+    $rootScope.notifications.splice($rootScope.notifications.indexOf($routeParams.senderKey), 1);
+
+    if ($rootScope.hasNewNotifications < 0) {
+      $rootScope.hasNewNotifications = 0;
+    }
+
+    if ($routeParams.senderKey) {
+      $http({
+        url: '/api/thread/' + $routeParams.senderKey,
+        method: 'GET'
+      }).success(function (data) {
+        $scope.isLoading = false;
+        $scope.errors = false;
+      }).error(function (data) {
+        $scope.info = false;
+        $scope.errors = data.message;
+      });
+    }
 
     $scope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
@@ -128,35 +155,38 @@ angular.module('chatspace.controllers', []).
       if (!$scope.posting) {
         $scope.posting = true;
 
-        for (var r in $scope.recipients) {
+        for (var r in $rootScope.recipients) {
           $scope.recipientArr.push(r);
         }
 
-        var submitForm = function (pictureData) {
+        gumhelper.startScreenshot(function (pictureData) {
           $scope.picture = pictureData;
 
+          var formData = {
+            message: escapeHtml($scope.message),
+            picture: escapeHtml($scope.picture),
+            recipients: $scope.recipientArr
+          };
+
+          if ($rootScope.reply) {
+            formData.reply = $rootScope.reply;
+          }
+          console.log(formData)
           $http({
             url: '/api/message',
-            data: {
-              message: escapeHtml($scope.message),
-              picture: escapeHtml($scope.picture),
-              recipients: $scope.recipientArr
-            },
+            data: formData,
             method: 'POST'
           }).success(function (data) {
-            $scope.info = data.message;
             resetForm();
-            $location.path('/thread/' + data.key);
-
+            console.log('got here1')
+            if (!$routeParams.senderKey) {
+              $location.path('/thread/' + data.key);
+            }
           }).error(function (data) {
             $scope.info = false;
             $scope.errors = data.message;
             $scope.posting = false;
           });
-        };
-
-        gumhelper.startScreenshot(function (pictureData) {
-          submitForm(pictureData);
         });
       }
     };
@@ -257,7 +287,6 @@ angular.module('chatspace.controllers', []).
     $scope.isLoading = true;
     $rootScope.messages = [];
 
-    // TODO: switch to websockets
     $http({
       url: '/api/feed',
       method: 'GET'
@@ -275,9 +304,6 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.getThread = function (message) {
-      message.value.recipients.push(message.key.split('!')[1])
-      var recipients = message.value.recipients;
-
       if (message.value.reply) {
         $location.path('/thread/' + message.value.reply);
       } else {
@@ -285,38 +311,7 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('ThreadCtrl', function ($scope, $rootScope, $http, $location, $routeParams, gumhelper, api) {
-    api.call();
-
-    $scope.isLoading = true;
-    $rootScope.messages = [];
-    $rootScope.notifications.splice($rootScope.notifications.indexOf($routeParams.senderKey), 1);
-
-    if ($rootScope.hasNewNotifications < 0) {
-      $rootScope.hasNewNotifications = 0;
-    }
-
-    // TODO: switch to websockets
-    $http({
-      url: '/api/thread/' + $routeParams.senderKey,
-      method: 'GET'
-    }).success(function (data) {
-      $rootScope.messages = data.chats;
-      $rootScope.recipients = data.chats[0].value.recipients;
-      $scope.isLoading = false;
-      $scope.errors = false;
-    }).error(function (data) {
-      $scope.info = false;
-      $scope.errors = data.message;
-    });
-    $scope.promptCamera = function () {
-      if ($rootScope.isAuthenticated && navigator.getMedia) {
-        gumhelper.startStream();
-      }
-    };
-  }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
-    $scope.setUsername = false;
     $scope.currentUsername = $rootScope.username;
 
     $scope.updateProfile = function () {
@@ -329,11 +324,8 @@ angular.module('chatspace.controllers', []).
       }).success(function (data) {
         $scope.errors = false;
         $scope.info = data.message;
-        $rootScope.username = data.username;
-        $scope.username = $scope.currentUsername = data.username;
-        $scope.setUsername = true;
+        $rootScope.username = $scope.username = $scope.currentUsername = data.username;
       }).error(function (data) {
-        $scope.setUsername = false;
         $scope.info = false;
         $scope.errors = data.message;
       });

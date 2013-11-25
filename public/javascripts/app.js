@@ -106,7 +106,7 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/drafts.html'
     })
     .when('/thread/:senderKey', {
-      controller: 'ThreadCtrl',
+      controller: 'MessageCtrl',
       templateUrl: 'partials/thread.html'
     })
     .otherwise({
