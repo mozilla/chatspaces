@@ -93,9 +93,12 @@ angular.module('chatspace.controllers', []).
   controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, gumhelper, api) {
     api.call();
 
+    $rootScope.messages = [];
+
     var resetForm = function () {
       if (!$routeParams.senderKey) {
         $rootScope.recipients = {};
+        $rootScope.reply = false;
       }
       $scope.recipientArr = [];
       $scope.errors = false;
@@ -171,7 +174,7 @@ angular.module('chatspace.controllers', []).
           if ($rootScope.reply) {
             formData.reply = $rootScope.reply;
           }
-          console.log(formData)
+
           $http({
             url: '/api/message',
             data: formData,
@@ -179,6 +182,7 @@ angular.module('chatspace.controllers', []).
           }).success(function (data) {
             resetForm();
             console.log('got here1')
+
             if (!$routeParams.senderKey) {
               $location.path('/thread/' + data.key);
             }
