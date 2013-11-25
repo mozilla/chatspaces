@@ -12,7 +12,7 @@ function VideoShooter (videoElement) {
     interval = interval !== undefined ? interval : 0.1; // In seconds
 
     var pendingFrames = numFrames;
-    var ag = new Animated_GIF({ workerPath: 'javascripts/vendor/animated-gif/src/quantizer.js' });
+    var ag = new Animated_GIF({ workerPath: 'javascripts/vendor/animated-gif/dist/Animated_GIF.worker.min.js' });
     ag.setSize(canvas.width, canvas.height);
     ag.setDelay(interval);
 
@@ -35,4 +35,4 @@ function VideoShooter (videoElement) {
     }
 
   };
-};
+}
