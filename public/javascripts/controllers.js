@@ -181,7 +181,6 @@ angular.module('chatspace.controllers', []).
             method: 'POST'
           }).success(function (data) {
             resetForm();
-            console.log('got here1')
 
             if (!$routeParams.senderKey) {
               $location.path('/thread/' + data.key);
