@@ -95,9 +95,8 @@ angular.module('chatspace.factories', []).
       logout: logout
     };
   }).
-  factory('gumhelper', function ($rootScope, $http) {
+  factory('cameraHelper', function ($rootScope, $http) { 
     var videoShooter;
-    var gum = new GumHelper({ width: 120, height: 90 });
 
     var getScreenshot = function (callback, numFrames, interval) {
       if (videoShooter) {
@@ -108,16 +107,18 @@ angular.module('chatspace.factories', []).
     };
 
     var startStream = function () {
-      gum.startVideoStreaming(function (err, data) {
+      GumHelper.startVideoStreaming(function (err, stream, videoElement, width, height) {
         if (err) {
           console.log(err);
         } else {
 
-          data.videoElement.width = data.stream.width;
-          data.videoElement.height = data.stream.height;
-          $('#video-preview').append(data.videoElement); // TODO: switch to directive
-          data.videoElement.play();
-          videoShooter = new VideoShooter(data.videoElement);
+          // TODO: use the provided width and height to determine
+          // smaller dimensions with proper aspect ratio
+          videoElement.width = 120;
+          videoElement.height = 90;
+          $('#video-preview').append(videoElement); // TODO: switch to directive
+          videoElement.play();
+          videoShooter = new VideoShooter(videoElement);
         }
       });
     };
@@ -130,6 +131,7 @@ angular.module('chatspace.factories', []).
 
     var resetStream = function () {
       videoShooter = null;
+      GumHelper.stopVideoStreaming();
     };
 
     return {

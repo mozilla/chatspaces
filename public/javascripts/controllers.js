@@ -90,7 +90,7 @@ angular.module('chatspace.controllers', []).
       $rootScope.toggleSettings();
     };
   }).
-  controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, gumhelper, api) {
+  controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, cameraHelper, api) {
     api.call();
 
     $rootScope.messages = [];
@@ -107,7 +107,7 @@ angular.module('chatspace.controllers', []).
       $scope.preview = '';
       $scope.posting = false;
       $('#video-preview').empty();
-      gumhelper.resetStream();
+      cameraHelper.resetStream();
     };
 
     var escapeHtml = function (text) {
@@ -142,7 +142,7 @@ angular.module('chatspace.controllers', []).
 
     $scope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
-        gumhelper.startStream();
+        cameraHelper.startStream();
       }
     };
 
@@ -162,7 +162,7 @@ angular.module('chatspace.controllers', []).
           $scope.recipientArr.push(r);
         }
 
-        gumhelper.startScreenshot(function (pictureData) {
+        cameraHelper.startScreenshot(function (pictureData) {
           $scope.picture = pictureData;
 
           var formData = {
@@ -181,6 +181,7 @@ angular.module('chatspace.controllers', []).
             method: 'POST'
           }).success(function (data) {
             resetForm();
+            console.log('got here1')
 
             if (!$routeParams.senderKey) {
               $location.path('/thread/' + data.key);
