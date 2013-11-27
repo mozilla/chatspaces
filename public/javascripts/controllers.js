@@ -19,6 +19,7 @@ angular.module('chatspace.controllers', []).
 
     socket.on('notification', function (data) {
       $rootScope.$apply(function () {
+        console.log(data)
         if (data && $rootScope.notifications.indexOf(data) === -1) {
           $rootScope.notifications.push(data);
         }
@@ -181,7 +182,6 @@ angular.module('chatspace.controllers', []).
             method: 'POST'
           }).success(function (data) {
             resetForm();
-            console.log('got here1')
 
             if (!$routeParams.senderKey) {
               $location.path('/thread/' + data.key);
@@ -285,21 +285,19 @@ angular.module('chatspace.controllers', []).
     };
 
   }).
-  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, api) {
+  controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
     api.call();
 
     $scope.isLoading = true;
     $rootScope.messages = [];
 
+    var since = '?since=' + $routeParams.since || '';
+
     $http({
-      url: '/api/feed',
+      url: '/api/feed' + since,
       method: 'GET'
     }).success(function (data) {
       $scope.isLoading = false;
-      $scope.errors = false;
-    }).error(function (data) {
-      $scope.info = false;
-      $scope.errors = data.message;
     });
 
     $scope.isUnread = function (message) {

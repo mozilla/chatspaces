@@ -111,7 +111,6 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
     });
   });
 
-
   app.post('/api/search', isLoggedIn, function (req, res) {
     if (!req.body.username) {
       res.status(400);
