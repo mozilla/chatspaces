@@ -6,6 +6,7 @@
     "animated-gif": "sole/Animated_GIF#1cfb9afc999bdcfc51526fcaa0cd60fdc5d58f4c",
     "angular": "1.2.0",
     "angular-route": "1.2.0",
+    "gumhelper": "sole/gumhelper#8f344dc27605fb9ee063c911f8bd5fc47b9300b4",
     "moment": "2.4.0"
   }
 }
