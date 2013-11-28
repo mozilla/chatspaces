@@ -24,7 +24,6 @@ angular.module('chatspace.controllers', []).
 
     socket.on('notification', function (data) {
       $rootScope.$apply(function () {
-        console.log(data)
         if (data && $rootScope.notifications.indexOf(data) === -1) {
           $rootScope.notifications.push(data);
           $rootScope.latestMessage = data;
@@ -38,7 +37,7 @@ angular.module('chatspace.controllers', []).
 
         if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           $rootScope.messages.unshift(data);
-          console.log(data)
+
           // also save message to local cache
           localForage.setItem('messages', $rootScope.messages);
           localForage.setItem('latestMessageKey', data.key); // last one at the top is the latest
@@ -105,8 +104,6 @@ angular.module('chatspace.controllers', []).
   }).
   controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, cameraHelper, api) {
     api.call();
-
-    $rootScope.messages = [];
 
     var resetForm = function () {
       if (!$routeParams.senderKey) {
