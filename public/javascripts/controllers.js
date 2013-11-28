@@ -5,6 +5,11 @@ angular.module('chatspace.controllers', []).
     user.call();
     $rootScope.friendPredicate = '-username';
     $rootScope.recipients = {};
+    $rootScope.latestMessage;
+
+    localForage.getItem('latestMessageKey', function (key) {
+      $rootScope.latestMessage = key;
+    });
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -22,6 +27,7 @@ angular.module('chatspace.controllers', []).
         console.log(data)
         if (data && $rootScope.notifications.indexOf(data) === -1) {
           $rootScope.notifications.push(data);
+          $rootScope.latestMessage = data;
         }
       });
     });
@@ -32,6 +38,12 @@ angular.module('chatspace.controllers', []).
 
         if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           $rootScope.messages.unshift(data);
+          console.log(data)
+          // also save message to local cache
+          localForage.setItem('messages', $rootScope.messages);
+          localForage.setItem('latestMessageKey', data.key); // last one at the top is the latest
+          $rootScope.latestMessage = data.key;
+
           $rootScope.recipients = {};
 
           if ($routeParams.senderKey === senderKey) {
@@ -291,12 +303,24 @@ angular.module('chatspace.controllers', []).
     $scope.isLoading = true;
     $rootScope.messages = [];
 
-    var since = '?since=' + $routeParams.since || '';
+    var since = '';
 
-    $http({
-      url: '/api/feed' + since,
-      method: 'GET'
-    }).success(function (data) {
+    if ($rootScope.latestMessage) {
+      since = '?since=' + $rootScope.latestMessage;
+    }
+
+    if ($rootScope.latestMessage) {
+      $http({
+        url: '/api/feed' + since,
+        method: 'GET'
+      }).success(function (data) {
+        $scope.isLoading = false;
+      });
+    }
+
+    // load all the messages from the local cache
+    localForage.getItem('messages', function (data) {
+      $rootScope.messages = data;
       $scope.isLoading = false;
     });
 

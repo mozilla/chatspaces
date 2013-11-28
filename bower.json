@@ -7,6 +7,7 @@
     "angular": "1.2.0",
     "angular-route": "1.2.0",
     "gumhelper": "sole/gumhelper#8f344dc27605fb9ee063c911f8bd5fc47b9300b4",
-    "moment": "2.4.0"
+    "moment": "2.4.0",
+    "localforage": "mozilla/localForage#00c9d5f6db247a623c3e4f92a7c0e0d4ffbc8bbf"
   }
 }
