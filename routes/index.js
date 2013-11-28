@@ -189,10 +189,8 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
                 chat.senderKey = newChat.senderKey;
 
                 sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
-                  if (!err) {
-                    console.log(err);
-                  } else {
 
+                  if (!err) {
                     sendNotifications(recipient, newChat, mainKey);
                   }
                 });
