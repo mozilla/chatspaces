@@ -30,6 +30,7 @@
     </li>
     <li ng-repeat="message in messages track by $index">
       <div class="image left">
+        [[ {{ message.key }} ]]
         <img src="{{ message.value.media }}">
       </div>
       <div class="right">
