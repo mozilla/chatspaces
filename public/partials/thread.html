@@ -30,16 +30,17 @@
     </li>
     <li ng-repeat="message in messages track by $index">
       <div class="image left">
-        [[ {{ message.key }} ]]
         <img src="{{ message.value.media }}">
       </div>
       <div class="right">
-        <div class="recipients">
-          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=20" ng-repeat="recipient in messages[$index].value.recipients track by $index">
-        </div>
         <p>{{ message.value.message }}</p>
         <p>posted: {{ getDate(message.value.created) }}</p>
       </div>
     </li>
   </ul>
 </div>
+<ul class="recipient-list">
+  <li>
+    <img src="//www.gravatar.com/avatar/{{ recipient }}?size=50" ng-repeat="recipient in recipients track by $index">
+  </li>
+</ul>

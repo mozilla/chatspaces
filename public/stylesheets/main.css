@@ -154,6 +154,7 @@ h3 {
     border: 0;
     color: #eee;
     float: left;
+    font-family: Arial, sans-serif;
     font-size: 2.4rem;
     font-weight: 600;
     height: 40px;
@@ -172,6 +173,7 @@ h3 {
     background-color: #57dfb4;
     color: #e1fff5;
     float: right;
+    font-family: Arial, sans-serif;
     font-size: 2.8rem;
     font-weight: 600;
     height: 40px;
@@ -276,12 +278,6 @@ main {
     z-index: 3;
 }
 
-.profile .avatar {
-    float: left;
-    padding: 3px;
-    width: 35px;
-}
-
 .profile-view, .landing-view, .message-view {
     padding: 20px;
 }
@@ -297,7 +293,7 @@ main {
     bottom: 10px;
     position: absolute;
     top: 0;
-    width: 1014px;
+    width: 1024px;
 }
 
 #wrapper main > section.settings {
@@ -415,8 +411,22 @@ main {
 
 .search-results li {
     background-color: rgba(8, 8, 8, 0.75);
+    bottom: 0;
     color: #fff;
     padding-bottom: 0;
+}
+
+.recipient-list {
+    background-color: rgba(1, 1, 1, 0.7);
+    bottom: 0;
+    display: block;
+    position: fixed;
+    width: 1024px;
+}
+
+.recipient-list li {
+    float: left;
+    padding: 5px 5px 0 5px;
 }
 
 .contact-results li {
@@ -464,7 +474,7 @@ main {
 }
 
 #message-list .left {
-    width: 145px;
+    width: 135px;
 }
 
 #message-list .right {
@@ -479,22 +489,21 @@ main {
 }
 
 #message-list .recipients img {
-    height: 20px;
-    width: 20px;
+    height: 50px;
+    width: 50px;
 }
 
 .avatar {
-    border-radius: 100px;
     display: inline-block;
     float: left;
-    margin-right: 10px;
-    width: 40px;
+    margin-right: 5px;
+    width: 48px;
 }
 
 #message-list {
     display: block;
     float: right;
-    margin-top: 10px;
+    margin: 10px 0 55px 0;
     overflow-x: hidden;
     width: 100%;
 }
@@ -503,7 +512,7 @@ main {
     background-color: #f8f8f8;
     clear: both;
     float: left;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     min-height: 100px;
     position: relative;
     width: 100%;
