@@ -95,7 +95,7 @@ angular.module('chatspace.factories', []).
       logout: logout
     };
   }).
-  factory('cameraHelper', function ($rootScope, $http) { 
+  factory('cameraHelper', function ($rootScope, $http) {
     var videoShooter;
 
     var getScreenshot = function (callback, numFrames, interval) {
@@ -138,5 +138,62 @@ angular.module('chatspace.factories', []).
       startScreenshot: startScreenshot,
       startStream: startStream,
       resetStream: resetStream
+    };
+  }).
+  factory('localCache', function () {
+    var checkExisting = function (messages, value) {
+      var found = false;
+
+      for (var i = 0; i < messages.length; i ++) {
+        if (messages[i].key === value.key) {
+          found = true;
+          break;
+        }
+      }
+
+      return found;
+    };
+
+    var setItem = function (key, value, isDashboard) {
+      // If this is a dashboard item, we want to rewrite the parent conversation
+      // thread with the latest message, otherwise we write as is for a new message
+      if (isDashboard && value.value.reply) {
+        var messageIdx = false;
+
+        localForage.getItem('dashboard', function (messages) {
+          if (messages) {
+            for (var i = 0; i < messages.length; i ++) {
+              if (messages[i].key === value.value.reply) {
+                messageIdx = i;
+                break;
+              }
+            }
+
+            messages.splice(messageIdx, 1);
+            messages.unshift(value);
+          } else {
+            messages.unshift(value);
+          }
+
+          localForage.setItem('dashboard', messages);
+        });
+      } else {
+        localForage.getItem(key, function (messages) {
+          if (messages) {
+            if (!checkExisting(messages, value)) {
+              messages.unshift(value);
+            }
+          } else {
+            messages = [value];
+          }
+
+          localForage.setItem(key, messages);
+        });
+      }
+    };
+
+    return {
+      checkExisting: checkExisting,
+      setItem: setItem
     };
   });
