@@ -1,0 +1,15 @@
+<div class="new-message following">
+  <h2>Choose recipients</h2>
+  <ul class="recipient-results">
+    <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }">
+      <a href="javascript:;" ng-click="toggleRecipient(value.userHash, $index)">
+        <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="actions">
+    <a ng-click="cancelCamera()">Cancel</a>
+    <button ng-click="cancelCamera()">Next</button>
+  </div>
+</div>

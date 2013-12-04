@@ -140,6 +140,33 @@ h3 {
     background-color: #fff;
 }
 
+.video-wrapper {
+    height: 225px;
+    margin: 0 auto;
+    position: relative;
+    width: 300px;
+}
+
+.video-recorded {
+    display: block;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    width: 80px;
+    z-index: 6;
+}
+
+.new-message {
+    background-color: rgba(1, 1, 1, 0.9);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 6;
+}
+
 .unread {
     height: 20px;
     left: 48px;
@@ -204,6 +231,7 @@ h3 {
 .message section button {
     float: left;
 }
+
 .message-button {
     background-color: #bbb;
     border: 0;
@@ -212,16 +240,19 @@ h3 {
     font-size: 1.2rem;
     padding: 5px;
 }
+
 .info-box {
     clear: both;
     float: left;
 }
+
 .cam-box {
     clear: both;
     width: 140px;
     height: 150px;
     float: left;
 }
+
 .message-button:hover {
     background-color: #fff;
     color: #888;
@@ -230,16 +261,19 @@ h3 {
 .message .errors, .message .info {
     float: left;
 }
+
 .send-box {
     margin-top: 10px;
     margin-left: 10px;
     float: left;
 
 }
+
 .text-box {
     float: left;
 
 }
+
 .posting {
     background-color: rgba(1, 1, 1, 0.7);
     bottom: 0;
@@ -314,6 +348,12 @@ main {
     margin-top: 40px;
 }
 
+.actions {
+    margin: 0 auto;
+    text-align: center;
+    width: 300px;
+}
+
 #wrapper main > section.settings h1 {
     color: #fff;
 }
@@ -367,7 +407,6 @@ main {
 }
 .form-content {
     height: 150px;
-    background-color: #000;
     clear: both;
     float: left;
     width: 100%;
@@ -564,21 +603,21 @@ input {
     color: #ffdde1;
 }
 
-textarea, #video-preview {
+textarea {
     display: inline-block;
     float: left;
     margin: 10px 0;
 }
 
 #video-preview {
-    height: 90px;
-    margin-bottom: 10px;
-    width: 120px;
+    height: 225px;
+    margin: 40px auto;
+    width: 300px;
 }
 
 video {
-    height: 90px;
-    width: 120px;
+    height: 225px;
+    width: 300px;
 }
 
 @media only screen and (max-width: 993px) {

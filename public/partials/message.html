@@ -2,16 +2,6 @@
   <h1>Send a new message</h1>
   <form ng-submit="sendMessage()" class="message">
     <section>
-      <h2>Choose recipients</h2>
-      <ul class="recipient-results">
-        <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }">
-          <a href="javascript:;" ng-click="toggleRecipient(value.userHash, $index)">
-            <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-    <section>
       <div class="info-box">
         <div ng-if="info" class="info">
           <p>{{ info }}</p>
@@ -21,18 +11,19 @@
         </div>
       </div>
       <div class="cam-box">
-         <div id="video-preview"></div>
-         <button class="message-button" type="button" ng-click="promptCamera()">GIFCam!</button>
-         <input type="hidden" name="picture" ng-model="picture">
-         <input type="hidden" name="recipient[{{ value.userHash }}]" value="{{ value.userHash }}" ng-repeat="(key, value) in recipients track by $index">
+        <button class="message-button" type="button" ng-click="promptCamera()">GIFCam!</button>
+        <input type="hidden" name="picture" ng-model="picture">
+        <input type="hidden" name="recipient[{{ value.userHash }}]" value="{{ value.userHash }}" ng-repeat="(key, value) in recipients track by $index">
       </div>
       <div class="text-box">
         <textarea ng-model="message" required></textarea>
       </div>
       <div class="send-box">
-         <button class="message-button" type="submit">Send</button>
+        <button class="message-button" type="submit">Send</button>
       </div>
     </section>
   </form>
   <div class="posting" ng-if="posting">Posting, please wait!</div>
 </div>
+<div ng-include="'/partials/includes/camera.html'" ng-show="showCamera"></div>
+<div ng-include="'/partials/includes/following.html'" ng-show="showFollowing"></div>

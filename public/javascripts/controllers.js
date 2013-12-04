@@ -117,6 +117,7 @@ angular.module('chatspace.controllers', []).
     var since = '';
 
     $rootScope.messages = [];
+    $scope.showCamera = false;
 
     var resetForm = function () {
       if (!$routeParams.senderKey) {
@@ -129,6 +130,8 @@ angular.module('chatspace.controllers', []).
       $scope.picture = '';
       $scope.preview = '';
       $scope.posting = false;
+      $scope.showCamera = false;
+      $scope.showFollowing = false;
       $('#video-preview').empty();
       cameraHelper.resetStream();
     };
@@ -187,8 +190,29 @@ angular.module('chatspace.controllers', []).
 
     $scope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
+        $scope.showCamera = true;
         cameraHelper.startStream();
       }
+    };
+
+    $scope.cancelCamera = function () {
+      $scope.showCamera = false;
+      $scope.showFollowing = false;
+      $('#video-preview').empty();
+      cameraHelper.resetStream();
+    };
+
+    $scope.recordCamera = function () {
+      cameraHelper.startScreenshot(function (pictureData) {
+        $scope.$apply(function () {
+          $scope.picture = pictureData;
+        });
+      });
+    };
+
+    $scope.showRecipients = function () {
+      $scope.cancelCamera();
+      $scope.showFollowing = true;
     };
 
     $scope.toggleRecipient = function (userHash) {
@@ -207,34 +231,30 @@ angular.module('chatspace.controllers', []).
           $scope.recipientArr.push(r);
         }
 
-        cameraHelper.startScreenshot(function (pictureData) {
-          $scope.picture = pictureData;
+        var formData = {
+          message: escapeHtml($scope.message),
+          picture: escapeHtml($scope.picture),
+          recipients: $scope.recipientArr
+        };
 
-          var formData = {
-            message: escapeHtml($scope.message),
-            picture: escapeHtml($scope.picture),
-            recipients: $scope.recipientArr
-          };
+        if ($rootScope.reply) {
+          formData.reply = $rootScope.reply;
+        }
 
-          if ($rootScope.reply) {
-            formData.reply = $rootScope.reply;
+        $http({
+          url: '/api/message',
+          data: formData,
+          method: 'POST'
+        }).success(function (data) {
+          resetForm();
+
+          if (!$routeParams.senderKey) {
+            $location.path('/thread/' + data.key);
           }
-
-          $http({
-            url: '/api/message',
-            data: formData,
-            method: 'POST'
-          }).success(function (data) {
-            resetForm();
-
-            if (!$routeParams.senderKey) {
-              $location.path('/thread/' + data.key);
-            }
-          }).error(function (data) {
-            $scope.info = false;
-            $scope.errors = data.message;
-            $scope.posting = false;
-          });
+        }).error(function (data) {
+          $scope.info = false;
+          $scope.errors = data.message;
+          $scope.posting = false;
         });
       }
     };
@@ -243,10 +263,10 @@ angular.module('chatspace.controllers', []).
 
   }).
   controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
+    api.call();
+
     $scope.users = [];
     $scope.user = '';
-
-    api.call();
 
     $scope.blockUser = function (userHash) {
       $http({
@@ -327,7 +347,6 @@ angular.module('chatspace.controllers', []).
         $scope.errors = data.message;
       });
     };
-
   }).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
     api.call();
