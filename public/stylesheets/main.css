@@ -158,13 +158,31 @@ h3 {
 }
 
 .new-message {
-    background-color: rgba(1, 1, 1, 0.9);
     bottom: 0;
     left: 0;
     position: fixed;
     right: 0;
     top: 0;
     z-index: 6;
+}
+
+.new-message.camera {
+    background-color: rgba(1, 1, 1, 0.9);
+}
+
+.new-message.following {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.following-wrapper {
+    margin: 0 auto;
+    max-width: 800px;
+    min-width: 320px;
+}
+
+.following-wrapper .recipient-results li {
+    border-bottom: 1px solid #eee;
+    width: 100%;
 }
 
 .unread {
@@ -422,11 +440,8 @@ main {
 }
 
 .search-results li, .contact-results li, .recipient-results li {
-    border: 2px solid transparent;
-    height: 40px;
+    height: 50px;
     line-height: 40px;
-    padding: 5px;
-    margin-bottom: 5px;
     overflow: hidden;
     position: relative;
     width: 170px;
@@ -439,7 +454,7 @@ main {
     z-index: 2;
 }
 
-.search-results li, .contact-results li, .recipient-results li {
+.search-results li, .contact-results li {
     float: left;
     line-height: 40px;
     margin-bottom: 10px;
@@ -448,11 +463,11 @@ main {
 }
 
 .recipient-results li .avatar {
-    width: 40px;
+    width: 45px;
 }
 
 .recipient-results li.on {
-    border: 2px solid #f00;
+    background-color: #c7fcff;
 }
 
 .search-results li {
