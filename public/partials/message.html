@@ -13,7 +13,7 @@
       <div class="cam-box">
         <button class="message-button" type="button" ng-click="promptCamera()">GIFCam!</button>
         <input type="hidden" name="picture" ng-model="picture">
-        <input type="hidden" name="recipient[{{ value.userHash }}]" value="{{ value.userHash }}" ng-repeat="(key, value) in recipients track by $index">
+        <input type="hidden" name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index">
       </div>
       <div class="text-box">
         <textarea ng-model="message" required></textarea>

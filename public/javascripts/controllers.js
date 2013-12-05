@@ -122,7 +122,7 @@ angular.module('chatspace.controllers', []).
     var resetForm = function () {
       if (!$routeParams.senderKey) {
         $rootScope.recipients = {};
-        $rootScope.reply = false;
+        $scope.reply = false;
       }
       $scope.recipientArr = [];
       $scope.errors = false;
@@ -198,6 +198,14 @@ angular.module('chatspace.controllers', []).
     $scope.cancelCamera = function () {
       $scope.showCamera = false;
       $scope.showFollowing = false;
+      $scope.picture = '';
+      $('#video-preview').empty();
+      cameraHelper.resetStream();
+    };
+
+    $scope.back = function () {
+      $scope.showCamera = false;
+      $scope.showFollowing = false;
       $('#video-preview').empty();
       cameraHelper.resetStream();
     };
@@ -211,15 +219,15 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.showRecipients = function () {
-      $scope.cancelCamera();
+      $scope.back();
       $scope.showFollowing = true;
     };
 
     $scope.toggleRecipient = function (userHash) {
-      if ($scope.recipients[userHash]) {
-        delete $scope.recipients[userHash];
+      if ($rootScope.recipients[userHash]) {
+        delete $rootScope.recipients[userHash];
       } else {
-        $scope.recipients[userHash] = userHash;
+        $rootScope.recipients[userHash] = userHash;
       }
     };
 

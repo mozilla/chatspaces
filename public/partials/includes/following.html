@@ -2,7 +2,7 @@
   <div class="following-wrapper">
     <h2>Choose recipients</h2>
     <ul class="recipient-results">
-      <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }" ng-click="toggleRecipient(value.userHash, $index)">
+      <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }" ng-click="toggleRecipient(value.userHash)" data-t="{{ value.userHash }}">
         <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
       </li>
     </ul>
@@ -10,6 +10,6 @@
 
   <div class="actions">
     <a ng-click="cancelCamera()">Cancel</a>
-    <button ng-click="cancelCamera()">Next</button>
+    <button ng-click="back()">Next</button>
   </div>
 </div>
