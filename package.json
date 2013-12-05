@@ -25,7 +25,9 @@
     "socket.io": ">= 0.9.16",
     "crypto": "0.0.3",
     "redis": ">= 0.9.0",
-    "hiredis": ">= 0.1.15"
+    "hiredis": ">= 0.1.15",
+    "through2": ">= 0.2.3",
+    "concat-stream": ">= 1.2.1"
   },
   "devDependencies": {
     "nodemon": "*",
