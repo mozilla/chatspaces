@@ -124,6 +124,7 @@ angular.module('chatspace.controllers', []).
         $rootScope.recipients = {};
         $scope.reply = false;
       }
+
       $scope.recipientArr = [];
       $scope.errors = false;
       $scope.message = '';
