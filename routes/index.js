@@ -134,6 +134,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
   });
 
   app.post('/api/message', isLoggedIn, function (req, res) {
+    console.log(req.body.recipients)
     var sendToUser = function (sender, receiver, message, chat, callback) {
       user.sendMessage(sender, receiver, message, chat, io, callback);
     };

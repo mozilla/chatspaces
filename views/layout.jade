@@ -11,7 +11,7 @@ html(ng-app='chatspace')
   body(ng-controller='AppCtrl')
     #header(ng-if='isAuthenticated')
       button(class='toggle', ng-click='toggleSettings()') ≡
-      a(id='notifications', href='javascript:;', ng-click='goToDashboard()', ng-class='{ on: notifications.length }', ng-bind='notifications.length')
+      a(id='notifications', href='/dashboard', ng-class='{ on: notifications.length }', ng-bind='notifications.length')
 
       #top-bar
         .profile

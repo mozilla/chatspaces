@@ -8,10 +8,13 @@ angular.module('chatspace.controllers', []).
     $rootScope.friendPredicate = '-username';
     $rootScope.recipients = {};
     $rootScope.latestMessage;
+    $rootScope.latestThreadMessage;
 
-    localForage.getItem('latestMessageKey', function (key) {
-      $rootScope.latestMessage = key;
-    });
+    if ($rootScope.isAuthenticated) {
+      localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
+        $rootScope.latestMessage = key;
+      });
+    }
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -47,14 +50,15 @@ angular.module('chatspace.controllers', []).
           // also save message to local cache
           data.value.updated = data.value.created;
 
-          localCache.setItem('dashboard', data, true);
-          localCache.setItem('thread[' + key + ']', data, false);
-          localForage.setItem('latestMessageKey', data.key); // last one at the top is the latest
+          localCache.setItem($rootScope.userHash + ':dashboard', data, true);
+          localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false);
+          localForage.setItem($rootScope.userHash + ':latestMessageKey', data.key); // last one at the top is the latest dashboard key
 
           $rootScope.latestMessage = data.key;
           $rootScope.recipients = {};
 
           if ($routeParams.senderKey === senderKey) {
+            $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
             data.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
             });
@@ -77,10 +81,6 @@ angular.module('chatspace.controllers', []).
 
     $rootScope.getDate = function (timestamp) {
       return moment.unix(Math.round(timestamp / 1000)).fromNow();
-    };
-
-    $rootScope.goToDashboard = function () {
-      $location.path('/dashboard');
     };
 
     $rootScope.toggleSettings = function () {
@@ -170,14 +170,16 @@ angular.module('chatspace.controllers', []).
       $rootScope.recipients = {};
       $rootScope.reply = $routeParams.senderKey;
 
-      localForage.getItem('thread[' + $routeParams.senderKey + ']', function (data) {
+      localForage.getItem($rootScope.userHash + ':thread[' + $routeParams.senderKey + ']', function (data) {
         if (data) {
           $rootScope.messages = data;
           $rootScope.messages[0].value.recipients.forEach(function (userHash) {
             $rootScope.recipients[userHash] = userHash;
           });
 
-          since = '?since=' + data[0].key;
+          if ($rootScope.latestThreadMessage) {
+            since = '?since=' + $rootScope.latestThreadMessage;
+          }
 
           getThread();
         } else {
@@ -235,6 +237,9 @@ angular.module('chatspace.controllers', []).
       if (!$scope.posting) {
         $scope.posting = true;
 
+        // Also add yourself to the message so you can get replies.
+        $rootScope.recipients[$rootScope.userHash] = $rootScope.userHash;
+
         for (var r in $rootScope.recipients) {
           $scope.recipientArr.push(r);
         }
@@ -245,7 +250,7 @@ angular.module('chatspace.controllers', []).
           recipients: $scope.recipientArr
         };
 
-        if ($rootScope.reply) {
+        if ($routeParams.senderKey && $rootScope.reply) {
           formData.reply = $rootScope.reply;
         }
 
@@ -364,22 +369,23 @@ angular.module('chatspace.controllers', []).
 
     var since = '';
 
-    if ($rootScope.latestMessage) {
-      since = '?since=' + $rootScope.latestMessage;
-    }
-
-    $http({
-      url: '/api/feed' + since,
-      method: 'GET'
-    }).success(function (data) {
-      $scope.isLoading = false;
-    });
-
     // load all the messages from the local cache
-    localForage.getItem('dashboard', function (data) {
+    localForage.getItem($rootScope.userHash + ':dashboard', function (data) {
       if (data) {
         $rootScope.messages = data;
       }
+
+      if ($rootScope.latestMessage) {
+        since = '?since=' + $rootScope.latestMessage;
+      }
+
+      $http({
+        url: '/api/feed' + since,
+        method: 'GET'
+      }).success(function (data) {
+        $scope.isLoading = false;
+      });
+
       $scope.isLoading = false;
     });
 

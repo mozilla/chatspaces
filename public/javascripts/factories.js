@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chatspace.factories', []).
-  factory('authenticate', function ($rootScope, $http, $location, $window, user, api) {
+  factory('authenticate', function ($rootScope, $http, $location, $window, user) {
     var resetUser = function () {
       socket.emit('disconnect', {
         email: $rootScope.email
@@ -140,7 +140,7 @@ angular.module('chatspace.factories', []).
       resetStream: resetStream
     };
   }).
-  factory('localCache', function () {
+  factory('localCache', function ($rootScope) {
     var checkExisting = function (messages, value) {
       var found = false;
 
@@ -160,7 +160,7 @@ angular.module('chatspace.factories', []).
       if (isDashboard && value.value.reply) {
         var messageIdx = false;
 
-        localForage.getItem('dashboard', function (messages) {
+        localForage.getItem($rootScope.userHash + ':dashboard', function (messages) {
           if (messages) {
             for (var i = 0; i < messages.length; i ++) {
               if (messages[i].key === value.value.reply) {
@@ -175,7 +175,7 @@ angular.module('chatspace.factories', []).
             messages.unshift(value);
           }
 
-          localForage.setItem('dashboard', messages);
+          localForage.setItem($rootScope.userHash + ':dashboard', messages);
         });
       } else {
         localForage.getItem(key, function (messages) {
