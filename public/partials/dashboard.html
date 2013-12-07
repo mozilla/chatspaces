@@ -1,7 +1,7 @@
-<div class="dashboard-content">
+<div class="dashboard-content dashboard-preview">
   <ul id="message-list">
     <li ng-show="isLoading" class="loader">Loading ...</li>
-    <li ng-class="{ new: isUnread(message) }" ng-repeat="message in messages | orderObjectBy:'message.key' track by $index" ng-click="getThread(message)">
+    <li ng-class="{ new: isUnread(message) }" ng-repeat="message in messages | orderObjectBy:'updated'" ng-click="getThread(message)">
       <div class="image left">
         <img src="{{ message.value.media }}">
       </div>
@@ -11,6 +11,7 @@
         </div>
         <div class="preview-content">
           <p>{{ message.value.message }}</p>
+          <time>{{ getDate(message.value.created) }}</p>
         </div>
       </div>
     </li>

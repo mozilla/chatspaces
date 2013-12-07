@@ -167,7 +167,16 @@ h3 {
 }
 
 #message-list li.new {
-    background-color: #f1f1f1;
+    background-color: #fff;
+}
+
+.dashboard-preview #message-list li:hover {
+    background-color: #c5f3ff;
+}
+
+.dashboard-preview #message-list li:hover .left img,
+.dashboard-preview #message-list li.new:hover .left img {
+    border-left: 10px solid #37d7ff;
 }
 
 #message-list li.new .left img {
@@ -221,8 +230,7 @@ svg.progress.visible {
 
 .following-wrapper {
     margin: 50px auto 0 auto;
-    max-width: 800px;
-    min-width: 320px;
+    width: 320px;
 }
 
 .following-wrapper .recipient-results li {
@@ -241,12 +249,15 @@ svg.progress.visible {
     background-color: transparent;
     border: 0;
     color: #fff;
+    cursor: pointer;
+    display: inline-block;
     float: left;
     font-family: Arial, sans-serif;
     font-size: 2.4rem;
     font-weight: 600;
     height: 40px;
     line-height: 2.4rem;
+    padding: 0 5px;
     text-shadow: #3c816b 0 0 1px;
 }
 
@@ -717,6 +728,10 @@ h2 a {
     padding-top: 3px;
     position: relative;
     width: 100%;
+}
+
+.dashboard-preview #message-list li {
+    cursor: pointer;
 }
 
 #message-list li img {

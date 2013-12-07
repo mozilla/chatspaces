@@ -116,7 +116,7 @@ config(function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
 }).
 filter('orderObjectBy', function () {
-  return function (items, field, reverse) {
+  return function (items, field) {
     var filtered = [];
 
     angular.forEach(items, function (item) {
@@ -127,9 +127,7 @@ filter('orderObjectBy', function () {
       return a[field] > b[field];
     });
 
-    if (reverse) {
-      filtered.reverse();
-    }
+    filtered.reverse();
 
     return filtered;
   };

@@ -29,7 +29,8 @@ angular.module('chatspace.controllers', []).
 
     socket.on('notification', function (data) {
       $rootScope.$apply(function () {
-        if (data && $rootScope.notifications.indexOf(data) === -1) {
+        if (data && $rootScope.notifications.indexOf(data) === -1 &&
+           (!$routeParams.senderKey || $routeParams.senderKey !== data)) {
           $rootScope.notifications.push(data);
           $rootScope.latestMessage = data;
         }
@@ -48,7 +49,7 @@ angular.module('chatspace.controllers', []).
           }
 
           // also save message to local cache
-          data.value.updated = data.value.created;
+          data.updated = data.value.created;
 
           localCache.setItem($rootScope.userHash + ':dashboard', data, true);
           localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false);
@@ -78,6 +79,21 @@ angular.module('chatspace.controllers', []).
         };
       });
     });
+
+    $rootScope.loadDashboard = function () {
+      var since = '';
+
+      if ($rootScope.messages.length > 0) {
+        since = '?since=' + $rootScope.messages[0].key;
+      }
+
+      $http({
+        url: '/api/feed?since=' + since,
+        method: 'GET'
+      }).success(function (data) {
+        $location.path('/dashboard');
+      });
+    };
 
     $rootScope.getDate = function (timestamp) {
       return moment.unix(Math.round(timestamp / 1000)).fromNow();
