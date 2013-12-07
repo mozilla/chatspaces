@@ -117,6 +117,7 @@ angular.module('chatspace.controllers', []).
     var since = '';
 
     $rootScope.messages = [];
+    $scope.formDate = {};
     $scope.showCamera = false;
 
     var resetForm = function () {
