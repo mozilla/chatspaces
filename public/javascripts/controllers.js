@@ -408,6 +408,13 @@ angular.module('chatspace.controllers', []).
   }).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
     $scope.currentUsername = $rootScope.username;
+    $scope.cacheInfo = false;
+
+    $scope.resetCache = function () {
+      localForage.clear();
+      $rootScope.latestMessage = false;
+      $scope.cacheInfo = 'Local cache reset.';
+    };
 
     $scope.updateProfile = function () {
       $http({

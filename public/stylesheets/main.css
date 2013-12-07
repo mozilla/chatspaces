@@ -23,20 +23,25 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+
 body {
     line-height: 1;
 }
+
 ol, ul {
     list-style: none;
 }
+
 blockquote, q {
     quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
     content: '';
@@ -139,12 +144,22 @@ h3 {
 
 .profile-view form {
     float: left;
-    margin-top: 20px;
     width: 100%;
 }
 
 .profile-view input {
     margin-left: 10px;
+}
+
+.profile-view h2 {
+    margin: 40px 0 10px 0;
+}
+
+.profile-view .submit {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    width: 150px;
 }
 
 #notifications.on {
@@ -283,6 +298,7 @@ svg.progress.visible {
 .message-button {
     border: 0;
     display: inline-block;
+    text-align: center;
 }
 
 .info-box {
@@ -635,9 +651,13 @@ h2 a {
     margin: 0;
 }
 
-.loader {
-    font-size: 2rem;
-    padding: 20px;
+#message-list li.loader {
+    background-color: transparent;
+    border: 0;
+    color: #38c2cb;
+    font-size: 2.5rem;
+    padding: 40px;
+    text-align: center;
 }
 
 #message-list .delete, .contact-results .delete {
@@ -946,10 +966,6 @@ video {
 
     #header {
         margin-left: -160px;
-    }
-
-    #message-list li {
-        height: auto;
     }
 
     #message-list li span {

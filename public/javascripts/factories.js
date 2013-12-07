@@ -195,7 +195,9 @@ angular.module('chatspace.factories', []).
         var messageIdx = false;
 
         localForage.getItem($rootScope.userHash + ':dashboard', function (messages) {
-          if (messages) {
+          var msgItems = messages;
+
+          if (msgItems) {
             for (var i = 0; i < messages.length; i ++) {
               if (messages[i].key === value.value.reply) {
                 messageIdx = i;
@@ -206,10 +208,10 @@ angular.module('chatspace.factories', []).
             messages.splice(messageIdx, 1);
             messages.unshift(value);
           } else {
-            messages.unshift(value);
+            msgItems = [value];
           }
 
-          localForage.setItem($rootScope.userHash + ':dashboard', messages);
+          localForage.setItem($rootScope.userHash + ':dashboard', msgItems);
         });
       } else {
         localForage.getItem(key, function (messages) {

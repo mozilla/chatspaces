@@ -3,8 +3,8 @@
 
   <p><img src="{{ gravatar }}"> Current username: {{ currentUsername || username }}</p>
 
+  <h2>Update your username</h2>
   <form ng-submit="updateProfile()">
-    <h2>Update your username</h2>
     <div ng-if="info" class="info">
       <p>{{ info }}</p>
     </div>
@@ -13,4 +13,12 @@
     </div>
     <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
   </form>
+
+  <h2>Reset local cache</h2>
+  <div class="info-box">
+    <div ng-if="cacheInfo" class="info">
+      <p>{{ cacheInfo }}</p>
+    </div>
+  </div>
+  <button ng-click="resetCache()" class="submit message-button">Reset!</button>
 </div>
