@@ -153,6 +153,9 @@ h3 {
 
 #message-list li.new {
     background-color: #f1f1f1;
+}
+
+#message-list li.new img {
     border-left: 10px solid #e2003b;
 }
 
@@ -586,6 +589,10 @@ h2 a {
     padding: 5px 5px 0 5px;
 }
 
+.recipient-list li img {
+    width: 40px;
+}
+
 .contact-results li {
     border: 2px solid #eee;
     margin: 2px;
@@ -650,6 +657,10 @@ h2 a {
     width: 80%;
 }
 
+#message-list .right p {
+    padding-left: 10px;
+}
+
 #message-list .recipients {
     clear: both;
     float: left;
@@ -679,21 +690,17 @@ h2 a {
 
 #message-list li {
     background-color: #f8f8f8;
-    border-left: 10px solid #f1f1f1;
+    border-bottom: 1px solid #38c2cb;
     clear: both;
     float: left;
     margin-bottom: 1px;
-    min-height: 98px;
     padding-top: 3px;
     position: relative;
     width: 100%;
 }
 
 #message-list li img {
-    width: 130px;
-}
-
-#message-list li img {
+    border-left: 10px solid #f1f1f1;
     display: inline-block;
     float: left;
     margin-right: 5px;
@@ -835,12 +842,13 @@ video {
     }
 
     .text-box .submit {
-        display: none;
+        height: 50px;
+        margin: 0;
     }
 
     textarea {
         height: 85px;
-        width: 310px;
+        width: 250px;
     }
 
     #message-list .recipients img {
@@ -870,7 +878,6 @@ video {
     }
 
     #message-list .right {
-        height: 60px;
         overflow: hidden;
         width: 335px;
     }
@@ -903,15 +910,25 @@ video {
 
 @media only screen and (max-width: 459px) {
     .text-box {
-        width: 200px;
+        width: 235px;
+    }
+
+    h2 a {
+        display: block;
     }
 
     textarea {
-        width: 175px;
+        width: 155px;
+    }
+
+    .text-box .submit {
+        font-size: 1rem;
+        height: 50px;
+        width: 55px;
     }
 
     .recipient-list, #header, #wrapper {
-        width: 280px;
+        width: 320px;
     }
 
     #message-list .right {
@@ -925,7 +942,7 @@ video {
     }
 
     #header {
-        margin-left: -140px;
+        margin-left: -160px;
     }
 
     #message-list li {
@@ -940,19 +957,23 @@ video {
     }
 
     #wrapper main > section {
-        width: 280px;
+        width: 320px;
     }
 
     #wrapper main > section.settings {
-        width: 200px;
+        width: 260px;
     }
 
     #wrapper main.off > section.settings {
-        left: -240px;
+        left: -300px;
     }
 
     #wrapper main.on > section.default {
-        left: 240px;
+        left: 300px;
+    }
+
+    .contact-results li {
+        width: 290px;
     }
 }
 
