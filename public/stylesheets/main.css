@@ -417,7 +417,7 @@ svg.progress.visible {
     background-color: #00d1ff;
     color: #eee;
     padding: 20px;
-    width: 944px;
+    width: 965px;
 }
 
 main {
@@ -482,7 +482,7 @@ h2 a {
 }
 
 #wrapper main.off > section.settings {
-    left: -984px;
+    left: -1024px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
@@ -500,7 +500,7 @@ h2 a {
 }
 
 #wrapper main.on > section.default {
-    left: 984px;
+    left: 1005px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
@@ -664,7 +664,7 @@ h2 a {
 #message-list .recipients {
     clear: both;
     float: left;
-    margin-bottom: 10px;
+    margin: 0 0 10px 10px;
     width: 100%;
 }
 
@@ -806,15 +806,15 @@ video {
     }
 
     #wrapper main > section.settings {
-        width: 648px;
+        width: 670px;
     }
 
     #wrapper main.off > section.settings {
-        left: -718px;
+        left: -710px;
     }
 
     #wrapper main.on > section.default {
-        left: 718px;
+        left: 710px;
     }
 }
 
@@ -899,15 +899,15 @@ video {
     }
 
     #wrapper main > section.settings {
-        width: 340px;
+        width: 360px;
     }
 
     #wrapper main.off > section.settings {
-        left: -380px;
+        left: -400px;
     }
 
     #wrapper main.on > section.default {
-        left: 380px;
+        left: 400px;
     }
 }
 
