@@ -17,8 +17,8 @@
   </ul>
 </div>
 <ul class="recipient-list">
-  <li>
-    <img src="//www.gravatar.com/avatar/{{ recipient }}?size=50" ng-repeat="recipient in recipients track by $index">
+  <li ng-repeat="recipient in recipients track by $index">
+    <img src="//www.gravatar.com/avatar/{{ recipient }}?size=50">
   </li>
 </ul>
 <div ng-include="'/partials/includes/camera.html'" ng-show="showCamera"></div>

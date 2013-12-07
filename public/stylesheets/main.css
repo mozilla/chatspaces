@@ -66,6 +66,10 @@ html, body {
     position: relative;
 }
 
+body {
+    background-image: url('/images/background.png');
+}
+
 body, textarea, input {
     font-family: 'FiraSans-Light', Arial, sans-serif;
 }
@@ -129,8 +133,18 @@ h3 {
     min-width: 30px;
 }
 
-.content-wrapper, .friends-view {
+.content-wrapper, .friends-view, .profile-view {
     padding: 20px 0;
+}
+
+.profile-view form {
+    float: left;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.profile-view input {
+    margin-left: 10px;
 }
 
 #notifications.on {
@@ -150,7 +164,7 @@ h3 {
 }
 
 .video-recorded {
-    border: 2px solid #57dfb4;
+    border: 2px solid #2ae7ce;
     display: block;
     left: 0;
     margin: 0 auto;
@@ -206,15 +220,16 @@ svg.progress.visible {
 }
 
 .toggle {
-    background-color: #333;
+    background-color: transparent;
     border: 0;
-    color: #eee;
+    color: #fff;
     float: left;
     font-family: Arial, sans-serif;
     font-size: 2.4rem;
     font-weight: 600;
     height: 40px;
     line-height: 2.4rem;
+    text-shadow: #3c816b 0 0 1px;
 }
 
 .action {
@@ -226,8 +241,8 @@ svg.progress.visible {
 }
 
 .add-message {
-    background-color: #57dfb4;
-    color: #e1fff5;
+    background-color: transparent;
+    color: #fff;
     float: right;
     font-family: Arial, sans-serif;
     font-size: 2.8rem;
@@ -274,8 +289,22 @@ svg.progress.visible {
     width: 100%;
 }
 
-.message .errors, .message .info {
+.errors, .info {
     float: left;
+    font-family: 'FiraSans-Regular';
+    margin: 5px 0;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.info {
+    background-color: #4bc066;
+    color: #e2ffe9;
+}
+
+.errors {
+    background-color: #ed3047;
+    color: #ffdde1;
 }
 
 .cam-box {
@@ -285,7 +314,7 @@ svg.progress.visible {
 }
 
 .cam-box .message-button, .submit {
-    background-color: #57dfb4;
+    background-color: #2ae7ce;
     color: #e1fff5;
     float: left;
     font-family: 'FiraSans-Regular';
@@ -328,6 +357,10 @@ svg.progress.visible {
     width: 1024px;
 }
 
+#header .avatar {
+    width: 40px;
+}
+
 #top-bar {
     position: absolute;
     right: 0;
@@ -336,7 +369,7 @@ svg.progress.visible {
 }
 
 #header {
-    background-color: rgba(1, 1, 1, 0.85);
+    background-color: #2ae7ce;
     height: 40px;
     left: 50%;
     margin-left: -512px;
@@ -345,17 +378,21 @@ svg.progress.visible {
 }
 
 #wrapper, main {
-    background-color: #fff;
     height: 100%;
     overflow: hidden;
     position: relative;
 }
 
-main {
-    z-index: 3;
+#wrapper {
+    background-color: #fff;
+    box-shadow: #55a6a3 0 0 5px;
 }
 
-.profile-view, .landing-view, .message-view {
+.landing #wrapper {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.landing-view, .message-view {
     padding: 20px;
 }
 
@@ -374,7 +411,7 @@ main {
 }
 
 #wrapper main > section.settings {
-    background-color: #b0b0b0;
+    background-color: #00d1ff;
     color: #eee;
     padding: 20px;
     width: 944px;
@@ -385,7 +422,7 @@ main {
 }
 
 .actions {
-    margin: 20px auto;
+    margin: 0 auto;
     text-align: center;
     width: 300px;
 }
@@ -409,12 +446,23 @@ main {
     line-height: 4rem;
 }
 
+h1, h2 {
+    color: #359eb5;
+    padding: 3px 10px;
+}
+
+h2 a {
+    color: #3bd6c9;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
 #wrapper main > section.settings h1 {
     color: #fff;
 }
 
 #wrapper main > section.settings li {
-    background-color: #ccc;
+    background-color: #73e6ff;
     margin: 0 -20px 2px -20px;
 }
 
@@ -427,7 +475,7 @@ main {
 }
 
 #wrapper main > section.settings li a:hover {
-    background-color: #fff;
+    background-color: #a6fff3;
 }
 
 #wrapper main.off > section.settings {
@@ -475,6 +523,7 @@ main {
 .contact-results {
     clear: both;
     float: left;
+    padding: 10px;
 }
 
 .search-results li, .contact-results li, .recipient-results li {
@@ -494,10 +543,15 @@ main {
 
 .search-results li, .contact-results li {
     float: left;
-    line-height: 50px;
+    line-height: 45px;
     margin-bottom: 10px;
     position: relative;
     width: 208px;
+}
+
+.contact-results li a {
+    color: #666;
+    text-decoration: none;
 }
 
 .recipient-results li .avatar {
@@ -507,9 +561,9 @@ main {
 
 .recipient-results li.on {
     background-color: #111;
-    color: #57dfb4;
-    border-left: 5px solid #57dfb4;
-    border-right: 5px solid #57dfb4;
+    color: #2ae7ce;
+    border-left: 5px solid #2ae7ce;
+    border-right: 5px solid #2ae7ce;
 }
 
 .search-results li {
@@ -520,7 +574,7 @@ main {
 }
 
 .recipient-list {
-    background-color: rgba(1, 1, 1, 0.7);
+    background-color: rgba(1, 1, 1, 0.8);
     bottom: 0;
     display: block;
     position: fixed;
@@ -533,33 +587,45 @@ main {
 }
 
 .contact-results li {
-    background-color: rgba(255, 255, 255, 0.85);
+    border: 2px solid #eee;
     margin: 2px;
-}
-
-.search-results li .avatar {
-    width: 35px;
 }
 
 .delete {
     background-color: #f00;
     border: 0;
-    border-radius: 100px;
     color: #fff;
     font-family: Arial, sans-serif;
     font-size: 0.9rem;
-    height: 20px;
+    height: 28px;
+    padding: 5px;
     position: absolute;
 }
 
+.search-wrapper {
+    padding: 10px;
+}
+
 .search-input {
-    margin-bottom: 30px;
+    border: 2px solid #eee;
+    margin: 0 0 30px 10px;
+}
+
+.search-results {
+    padding-left: 10px;
 }
 
 .search-results .delete {
     left: 50px;
     top: 40px;
     width: 25px;
+}
+
+.search-results li {
+    border-bottom: 1px solid #555;
+    border-top: 1px solid #777;
+    clear: both;
+    margin: 0;
 }
 
 .loader {
@@ -600,7 +666,7 @@ main {
     display: inline-block;
     float: left;
     margin-right: 5px;
-    width: 40px;
+    width: 45px;
 }
 
 #message-list {
@@ -674,22 +740,6 @@ input {
     font-size: 1rem;
     margin: 10px 0;
     padding: 5px;
-}
-
-.errors, .info {
-    font-family: 'FiraSans-Regular';
-    margin: 5px 0;
-    padding: 5px 10px;
-}
-
-.info {
-    background-color: #4bc066;
-    color: #e2ffe9;
-}
-
-.errors {
-    background-color: #ed3047;
-    color: #ffdde1;
 }
 
 textarea {
@@ -903,5 +953,11 @@ video {
 
     #wrapper main.on > section.default {
         left: 240px;
+    }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (max--moz-device-pixel-ratio: 2) {
+    body {
+        background-image: url('/images/background@2X.png');
     }
 }

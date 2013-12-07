@@ -1,10 +1,10 @@
 <div class="profile-view">
-  <h2>Your profile</h2>
+  <h1>Your profile</h1>
 
-  <p><img src="{{ gravatar }}"> Current username: {{ currentUsername }}</p>
+  <p><img src="{{ gravatar }}"> Current username: {{ currentUsername || username }}</p>
 
-  <h3>Update your username</h3>
   <form ng-submit="updateProfile()">
+    <h2>Update your username</h2>
     <div ng-if="info" class="info">
       <p>{{ info }}</p>
     </div>
