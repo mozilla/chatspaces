@@ -9,10 +9,9 @@
         <div class="recipients">
           <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=50" ng-repeat="recipient in messages[$index].value.recipients track by $index">
         </div>
-      </div>
-      <div class="preview-content">
-        <p>{{ message.value.message }}</p>
-        <p>posted: {{ getDate(message.value.created) }}</p>
+        <div class="preview-content">
+          <p>{{ message.value.message }}</p>
+        </div>
       </div>
     </li>
   </ul>

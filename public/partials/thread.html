@@ -1,28 +1,6 @@
 <div class="dashboard-content">
   <div class="form-content">
-    <form ng-submit="sendMessage()">
-      <section>
-        <div class="info-box">
-          <div ng-if="info" class="info">
-            <p>{{ info }}</p>
-          </div>
-          <div ng-if="errors" class="errors">
-            <p>{{ errors }}</p>
-          </div>
-        </div>
-        <div class="cam-box">
-          <button class="message-button" type="button" ng-click="promptCamera()">GIFCam!</button>
-          <input type="hidden" name="picture" ng-model="picture">
-          <input type="hidden" name="recipient[{{ recipient }}]" value="{{ recipient }}" ng-repeat="recipient in recipients track by $index">
-        </div>
-        <div class="text-box">
-          <textarea ng-model="message" required></textarea>
-        </div>
-        <div class="send-box">
-          <button class="message-button" type="submit">Send</button>
-        </div>
-      </section>
-    </form>
+    <form ng-submit="sendMessage()" ng-include="'/partials/includes/message_form.html'"></form>
     <div class="posting" ng-if="posting">Posting, please wait!</div>
   </div>
   <ul id="message-list">
@@ -33,7 +11,7 @@
       </div>
       <div class="right">
         <p>{{ message.value.message }}</p>
-        <p>posted: {{ getDate(message.value.created) }}</p>
+        <time>{{ getDate(message.value.created) }}</time>
       </div>
     </li>
   </ul>

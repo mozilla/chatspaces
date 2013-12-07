@@ -138,71 +138,64 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
       user.sendMessage(sender, receiver, message, chat, io, callback);
     };
 
-    if (!req.body.message) {
+    var recipients = req.body.recipients;
+
+    var chat = {
+      media: req.body.picture,
+      recipients: recipients,
+      reply: req.body.reply || ''
+    };
+
+    if (recipients.length < 1) {
       res.status(400);
       res.json({
-        message: 'message cannot be empty'
+        message: 'you need to send to at least 1 person'
       });
     } else {
-      var recipients = req.body.recipients;
 
-      var chat = {
-        media: req.body.picture,
-        recipients: recipients,
-        reply: req.body.reply || ''
+      var sendNotifications = function (recipient, newChat, mainKey) {
+        user.sendNotification(req, recipient, io, newChat, function (err, notification) {
+          var notificationKey = 'notification:' + mainKey;
+          redisClient.set(notificationKey, mainKey);
+          redisClient.expire(notificationKey, TTL_LIMIT);
+
+          var notificationListKey = 'notifications:' + recipient;
+          redisClient.lpush(notificationListKey, 'notification:' + mainKey);
+          redisClient.expire(notificationListKey, TTL_LIMIT);
+
+          io.sockets.in(recipient).emit('notification', mainKey);
+        });
       };
 
-      if (recipients.length < 1) {
-        res.status(400);
-        res.json({
-          message: 'you need to send to at least 1 person'
-        });
-      } else {
-
-        var sendNotifications = function (recipient, newChat, mainKey) {
-          user.sendNotification(req, recipient, io, newChat, function (err, notification) {
-            var notificationKey = 'notification:' + mainKey;
-            redisClient.set(notificationKey, mainKey);
-            redisClient.expire(notificationKey, TTL_LIMIT);
-
-            var notificationListKey = 'notifications:' + recipient;
-            redisClient.lpush(notificationListKey, 'notification:' + mainKey);
-            redisClient.expire(notificationListKey, TTL_LIMIT);
-
-            io.sockets.in(recipient).emit('notification', mainKey);
+      sendToUser(req.session.userHash, req.session.userHash, req.body.message, chat, function (err, newChat) {
+        if (err) {
+          res.status(400);
+          res.json({
+            message: err.toString()
           });
-        };
+        } else {
+          var mainKey = newChat.reply || newChat.senderKey;
 
-        sendToUser(req.session.userHash, req.session.userHash, req.body.message, chat, function (err, newChat) {
-          if (err) {
-            res.status(400);
-            res.json({
-              message: err.toString()
-            });
-          } else {
-            var mainKey = newChat.reply || newChat.senderKey;
+          recipients.forEach(function (recipient) {
+            if (recipient !== req.session.userHash) {
+              console.log('sending to recipient ', recipient)
+              chat.created = newChat.created;
+              chat.senderKey = newChat.senderKey;
 
-            recipients.forEach(function (recipient) {
-              if (recipient !== req.session.userHash) {
-                console.log('sending to recipient ', recipient)
-                chat.created = newChat.created;
-                chat.senderKey = newChat.senderKey;
+              sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
 
-                sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
+                if (!err) {
+                  sendNotifications(recipient, newChat, mainKey);
+                }
+              });
+            }
+          });
 
-                  if (!err) {
-                    sendNotifications(recipient, newChat, mainKey);
-                  }
-                });
-              }
-            });
-
-            res.json({
-              key: mainKey
-            });
-          }
-        });
-      }
+          res.json({
+            key: mainKey
+          });
+        }
+      });
     }
   });
 

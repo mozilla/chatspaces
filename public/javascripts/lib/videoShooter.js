@@ -7,7 +7,7 @@ function VideoShooter (videoElement) {
   canvas.width = videoElement.width;
   canvas.height = videoElement.height;
 
-  this.getShot = function (callback, numFrames, interval) {
+  this.getShot = function (callback, progressCallback, numFrames, interval) {
     numFrames = numFrames !== undefined ? numFrames : 3;
     interval = interval !== undefined ? interval : 0.1; // In seconds
 
@@ -19,19 +19,21 @@ function VideoShooter (videoElement) {
     captureFrame();
 
     function captureFrame() {
-        ag.addFrame(videoElement);
-        pendingFrames--;
+      ag.addFrame(videoElement);
+      pendingFrames--;
 
-        if(pendingFrames > 0) {
-            setTimeout(captureFrame, interval * 1000); // timeouts are in milliseconds
-        } else {
-            ag.getBase64GIF(function(image) {
-                var img = document.createElement('img');
-                img.src = image;
-                callback(image);
-                image = null;
-            });
-        }
+      progressCallback((numFrames - pendingFrames) / numFrames);
+
+      if (pendingFrames > 0) {
+        setTimeout(captureFrame, interval * 1000); // timeouts are in milliseconds
+      } else {
+        ag.getBase64GIF(function (image) {
+          var img = document.createElement('img');
+          img.src = image;
+          callback(image);
+          image = null;
+        });
+      }
     }
 
   };

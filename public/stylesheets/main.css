@@ -112,32 +112,34 @@ h3 {
     padding: 8px 10px;
 }
 
-#notifications, .unread {
-    background-color: #f00;
-    border-radius: 100px;
-    color: #fff;
+#notifications {
+    background-color: #e2003b;
+    color: #ffc5c6;
     display: none;
     float: left;
-    font-family: Arial, sans-serif;
-    height: 22px;
-    line-height: 20px;
-    margin: 4px;
+    font-family: 'FiraSans-Regular';
+    font-size: 2rem;
+    height: 30px;
+    line-height: 2rem;
+    margin-left: 5px;
     padding: 5px;
     text-align: center;
     text-decoration: none;
-    width: 22px;
+    text-shadow: #791a1c 0 0 1px;
+    min-width: 30px;
 }
 
 .content-wrapper, .friends-view {
-    padding: 20px;
+    padding: 20px 0;
 }
 
-#notifications.on, .unread {
+#notifications.on {
     display: inline-block;
 }
 
 #message-list li.new {
-    background-color: #fff;
+    background-color: #f1f1f1;
+    border-left: 10px solid #e2003b;
 }
 
 .video-wrapper {
@@ -148,13 +150,28 @@ h3 {
 }
 
 .video-recorded {
+    border: 2px solid #57dfb4;
     display: block;
     left: 0;
     margin: 0 auto;
     position: absolute;
     top: 0;
-    width: 80px;
+    width: 85px;
     z-index: 6;
+}
+
+svg.progress {
+    z-index: 6;
+    opacity: 0;
+    width: 95px;
+    height: 95px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+svg.progress.visible {
+    opacity: 1;
 }
 
 .new-message {
@@ -166,32 +183,26 @@ h3 {
     z-index: 6;
 }
 
-.new-message.camera {
-    background-color: rgba(1, 1, 1, 0.9);
-}
-
-.new-message.following {
-    background-color: rgba(255, 255, 255, 0.95);
+.new-message.camera, .new-message.following {
+    background-color: rgba(5, 5, 5, 0.9);
 }
 
 .following-wrapper {
-    margin: 0 auto;
+    margin: 50px auto 0 auto;
     max-width: 800px;
     min-width: 320px;
 }
 
 .following-wrapper .recipient-results li {
-    border-bottom: 1px dashed #111;
+    background-color: rgba(81, 81, 81, 0.25);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    color: #eee;
+    clear: both;
+    float: left;
+    margin-bottom: 3px;
+    padding: 3px 0;
     width: 100%;
-}
-
-.unread {
-    height: 20px;
-    left: 48px;
-    padding: 3px;
-    position: absolute;
-    top: 10px;
-    width: 20px;
 }
 
 .toggle {
@@ -236,7 +247,8 @@ h3 {
 .preview-content {
     clear: both;
     float: left;
-    padding: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 100%;
 }
 
@@ -251,58 +263,64 @@ h3 {
 }
 
 .message-button {
-    background-color: #bbb;
     border: 0;
-    color: #eee;
     display: inline-block;
-    font-size: 1.2rem;
-    padding: 5px;
 }
 
 .info-box {
     clear: both;
     float: left;
-}
-
-.cam-box {
-    clear: both;
-    width: 140px;
-    height: 150px;
-    float: left;
-}
-
-.message-button:hover {
-    background-color: #fff;
-    color: #888;
+    margin: 5px 0;
+    width: 100%;
 }
 
 .message .errors, .message .info {
     float: left;
 }
 
-.send-box {
-    margin-top: 10px;
-    margin-left: 10px;
+.cam-box {
+    clear: both;
+    width: 150px;
     float: left;
+}
 
+.cam-box .message-button, .submit {
+    background-color: #57dfb4;
+    color: #e1fff5;
+    float: left;
+    font-family: 'FiraSans-Regular';
+    font-size: 1.4rem;
+    height: 60px;
+    letter-spacing: 0.01rem;
+    text-align: center;
+    text-shadow: #3c816b 0 0 1px;
+    width: 70px;
+}
+
+.cam-box .message-button:first-child {
+    font-size: 1.8rem;
+    margin-right: 5px;
 }
 
 .text-box {
     float: left;
-
+    width: 870px;
 }
 
 .posting {
     background-color: rgba(1, 1, 1, 0.7);
     bottom: 0;
     color: #eee;
+    font-family: 'FiraSans-Light';
     font-size: 2rem;
+    font-style: italic;
     left: 0;
     line-height: 4rem;
     position: absolute;
     right: 0;
     text-align: center;
     top: 0;
+    z-index: 10;
 }
 
 #header, #wrapper {
@@ -318,7 +336,7 @@ h3 {
 }
 
 #header {
-    background-color: rgba(1, 1, 1, 0.4);
+    background-color: rgba(1, 1, 1, 0.85);
     height: 40px;
     left: 50%;
     margin-left: -512px;
@@ -327,7 +345,7 @@ h3 {
 }
 
 #wrapper, main {
-    background-color: #f0f0f0;
+    background-color: #fff;
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -386,12 +404,9 @@ main {
 }
 
 .following .actions a {
-    color: #111;
-}
-
-.following .actions button {
-    background-color: #aaa;
-    color: #fff;
+    clear: none;
+    display: inline-block;
+    line-height: 4rem;
 }
 
 #wrapper main > section.settings h1 {
@@ -445,12 +460,13 @@ main {
     float: left;
     width: 100%;
 }
+
 .form-content {
-    height: 150px;
     clear: both;
     float: left;
     width: 100%;
 }
+
 .profile {
     float: left;
     width: 100%;
@@ -462,7 +478,7 @@ main {
 }
 
 .search-results li, .contact-results li, .recipient-results li {
-    height: 50px;
+    height: 45px;
     line-height: 50px;
     overflow: hidden;
     position: relative;
@@ -485,11 +501,15 @@ main {
 }
 
 .recipient-results li .avatar {
+    margin-right: 10px;
     width: 45px;
 }
 
 .recipient-results li.on {
-    background-color: #c7fcff;
+    background-color: #111;
+    color: #57dfb4;
+    border-left: 5px solid #57dfb4;
+    border-right: 5px solid #57dfb4;
 }
 
 .search-results li {
@@ -593,10 +613,12 @@ main {
 
 #message-list li {
     background-color: #f8f8f8;
+    border-left: 10px solid #f1f1f1;
     clear: both;
     float: left;
-    margin-bottom: 3px;
-    min-height: 100px;
+    margin-bottom: 1px;
+    min-height: 98px;
+    padding-top: 3px;
     position: relative;
     width: 100%;
 }
@@ -608,13 +630,43 @@ main {
 #message-list li img {
     display: inline-block;
     float: left;
-    margin-right: 10px;
+    margin-right: 5px;
+    width: 125px;
+}
+
+.submit {
+    background-color: #38c2cb;
+    float: right;
+    margin-right: 15px;
+}
+
+.camera .submit {
+    float: left;
     width: 130px;
 }
 
-#message-list li span {
+.cancel {
+    clear: both;
+    float: left;
+    display: block;
+}
+
+#message-list li p {
+    color: #555;
     display: inline-block;
+    font-size: 1.2rem;
+    line-height: 1.4rem;
     padding: 5px;
+}
+
+time {
+    bottom: 0;
+    color: #888;
+    font-size: 0.8rem;
+    font-style: italic;
+    padding: 5px 15px 5px 8px;
+    position: absolute;
+    right: 10px;
 }
 
 input {
@@ -641,9 +693,15 @@ input {
 }
 
 textarea {
+    background-color: #f8f8f8;
+    border: 0;
+    color: #225351;
     display: inline-block;
     float: left;
-    margin: 10px 0;
+    height: 38px;
+    font-size: 1.3rem;
+    outline: none;
+    width: 760px;
 }
 
 #video-preview {
@@ -663,7 +721,7 @@ video {
         margin-top: -440px;
     }
 
-    .recipient-list {
+    #wrapper main > section, .recipient-list {
         width: 727px;
     }
 
@@ -675,12 +733,16 @@ video {
         margin-left: -364px;
     }
 
-    #message-list .right {
-        width: 70%;
+    .text-box {
+        width: 577px;
     }
 
-    #wrapper main > section {
-        width: 718px;
+    textarea {
+        width: 467px;
+    }
+
+    #message-list .right {
+        width: 70%;
     }
 
     #wrapper main > section.settings {
@@ -702,8 +764,33 @@ video {
         width: 340px;
     }
 
-    .recipient-list {
+    .recipient-list, #header, #wrapper {
         width: 420px;
+    }
+
+    .cam-box {
+        clear: none;
+        width: 75px;
+    }
+
+    .cam-box .message-button {
+        clear: both;
+        font-size: 1.5rem;
+        height: 50px;
+        margin-bottom: 5px;
+    }
+
+    .text-box {
+        width: 345px;
+    }
+
+    .text-box .submit {
+        display: none;
+    }
+
+    textarea {
+        height: 85px;
+        width: 310px;
     }
 
     #message-list .recipients img {
@@ -714,10 +801,6 @@ video {
     .message {
         height: 400px;
         margin-top: -440px;
-    }
-
-    #header, #wrapper {
-        width: 420px;
     }
 
     #header {
@@ -742,6 +825,15 @@ video {
         width: 335px;
     }
 
+    #message-list li p {
+        font-size: 1rem;
+    }
+
+    time {
+        font-size: 0.7rem;
+        padding: 3px 18px 3px 5px;
+    }
+
     #wrapper main > section {
         width: 420px;
     }
@@ -760,12 +852,15 @@ video {
 }
 
 @media only screen and (max-width: 459px) {
-    textarea {
-        height: 100px;
+    .text-box {
         width: 200px;
     }
 
-    .recipient-list {
+    textarea {
+        width: 175px;
+    }
+
+    .recipient-list, #header, #wrapper {
         width: 280px;
     }
 
@@ -777,10 +872,6 @@ video {
         height: 450px;
         margin-top: -500px;
         width: 220px;
-    }
-
-    #header, #wrapper {
-        width: 280px;
     }
 
     #header {

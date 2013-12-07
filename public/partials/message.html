@@ -1,28 +1,6 @@
 <div class="content-wrapper">
   <h1>Send a new message</h1>
-  <form ng-submit="sendMessage()" class="message">
-    <section>
-      <div class="info-box">
-        <div ng-if="info" class="info">
-          <p>{{ info }}</p>
-        </div>
-        <div ng-if="errors" class="errors">
-          <p>{{ errors }}</p>
-        </div>
-      </div>
-      <div class="cam-box">
-        <button class="message-button" type="button" ng-click="promptCamera()">GIFCam!</button>
-        <input type="hidden" name="picture" ng-model="picture">
-        <input type="hidden" name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index">
-      </div>
-      <div class="text-box">
-        <textarea ng-model="message" required></textarea>
-      </div>
-      <div class="send-box">
-        <button class="message-button" type="submit">Send</button>
-      </div>
-    </section>
-  </form>
+  <form ng-submit="sendMessage()" ng-include="'/partials/includes/message_form.html'"></form>
   <div class="posting" ng-if="posting">Posting, please wait!</div>
 </div>
 <div ng-include="'/partials/includes/camera.html'" ng-show="showCamera"></div>

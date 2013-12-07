@@ -4,8 +4,8 @@
     <img class="video-recorded" src="{{ picture }}" ng-show="picture">
   </div>
   <div class="actions">
-    <a ng-click="cancelCamera()">Cancel</a>
-    <button ng-click="recordCamera()">Record</button>
-    <button ng-click="showRecipients()">Next</button>
+    <button ng-click="recordCamera()" class="submit">Record</button>
+    <button ng-click="showRecipients()" class="submit">Finished!</button>
+    <a ng-click="cancelCamera()" class="cancel">Go back</a>
   </div>
 </div>

@@ -195,6 +195,8 @@ angular.module('chatspace.controllers', []).
       if ($rootScope.isAuthenticated && navigator.getMedia) {
         $scope.showCamera = true;
         cameraHelper.startStream();
+      } else {
+        $scope.back();
       }
     };
 
