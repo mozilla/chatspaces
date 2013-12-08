@@ -5,7 +5,7 @@
   </div>
   <ul id="message-list">
     <li ng-show="isLoading" class="loader">Loading ...</li>
-    <li ng-repeat="message in messages | orderObjectBy:'updated'">
+    <li ng-repeat="(key, message) in messages | orderObjectBy:'updated'">
       <div class="image left">
         <img src="{{ message.value.media }}">
       </div>

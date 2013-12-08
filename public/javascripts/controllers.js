@@ -44,15 +44,19 @@ angular.module('chatspace.controllers', []).
         if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           var key = data.value.reply || data.key;
 
-          if (!localCache.checkExisting($rootScope.messages, data)) {
-            $rootScope.messages.unshift(data);
-          }
+          $rootScope.messages[data.key] = data;
 
           // also save message to local cache
           data.updated = data.value.created;
 
-          localCache.setItem($rootScope.userHash + ':dashboard', data, true);
-          localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false);
+          localCache.setItem($rootScope.userHash + ':dashboard', data, true, function () {
+            console.log('saved dashboard');
+          });
+
+          localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false, function () {
+            console.log('saved thread');
+          });
+
           localForage.setItem($rootScope.userHash + ':latestMessageKey', data.key); // last one at the top is the latest dashboard key
 
           $rootScope.latestMessage = data.key;
@@ -83,8 +87,8 @@ angular.module('chatspace.controllers', []).
     $rootScope.loadDashboard = function () {
       var since = '';
 
-      if ($rootScope.messages.length > 0) {
-        since = '?since=' + $rootScope.messages[0].key;
+      if ($rootScope.latestMessage) {
+        since = '?since=' + $rootScope.latestMessage;
       }
 
       $http({
@@ -132,7 +136,7 @@ angular.module('chatspace.controllers', []).
 
     var since = '';
 
-    $rootScope.messages = [];
+    $rootScope.messages = {};
     $scope.formDate = {};
     $scope.showCamera = false;
 
@@ -190,14 +194,17 @@ angular.module('chatspace.controllers', []).
 
       localForage.getItem($rootScope.userHash + ':thread[' + $routeParams.senderKey + ']', function (data) {
         if (data) {
-          $rootScope.messages = data;
-          $rootScope.messages[0].value.recipients.forEach(function (userHash) {
-            $rootScope.recipients[userHash] = userHash;
+          data.forEach(function (d) {
+            $rootScope.messages[d.key] = d;
+            console.log('** ', d)
+            d.value.recipients.forEach(function (userHash) {
+              $rootScope.recipients[userHash] = userHash;
+            });
+
+            $rootScope.latestThreadMessage = d.value.reply || d.key;
           });
 
-          if ($rootScope.latestThreadMessage) {
-            since = '?since=' + $rootScope.latestThreadMessage;
-          }
+          since = '?since=' + $rootScope.latestThreadMessage;
 
           getThread();
         } else {
@@ -384,7 +391,7 @@ angular.module('chatspace.controllers', []).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
     api.call();
 
-    $rootScope.messages = [];
+    $rootScope.messages = {};
     $scope.isLoading = true;
 
     var since = '';
@@ -392,11 +399,11 @@ angular.module('chatspace.controllers', []).
     // load all the messages from the local cache
     localForage.getItem($rootScope.userHash + ':dashboard', function (data) {
       if (data) {
-        $rootScope.messages = data;
-      }
-
-      if ($rootScope.latestMessage) {
-        since = '?since=' + $rootScope.latestMessage;
+        data.forEach(function (d) {
+          $rootScope.messages[d.key] = d;
+          console.log('********* ', d.key)
+          since = '?since=' + d.key;
+        });
       }
 
       $http({

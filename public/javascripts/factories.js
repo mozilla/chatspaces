@@ -9,6 +9,23 @@ angular.module('chatspace.factories', []).
 
       $rootScope.username = null;
       localStorage.removeItem('personaEmail');
+
+      $http({
+              url: '/api/profile',
+              method: 'GET'
+            }).success(function (data) {
+              localStorage.setItem('personaEmail', data.email);
+              $rootScope.email = data.email;
+              $rootScope.username = data.username;
+              $rootScope.gravatar = data.gravatar;
+
+              if (data.username) {
+                $window.location.href = '/dashboard';
+              } else {
+                $location.path('/profile');
+              }
+
+            })
       user.call();
     };
 
@@ -175,61 +192,52 @@ angular.module('chatspace.factories', []).
     };
   }).
   factory('localCache', function ($rootScope) {
-    var checkExisting = function (messages, value) {
-      var found = false;
-
-      for (var i = 0; i < messages.length; i ++) {
-        if (messages[i].key === value.key) {
-          found = true;
-          break;
-        }
-      }
-
-      return found;
-    };
-
-    var setItem = function (key, value, isDashboard) {
+    var setItem = function (key, value, isDashboard, callback) {
       // If this is a dashboard item, we want to rewrite the parent conversation
       // thread with the latest message, otherwise we write as is for a new message
+      var msgItems = [];
+
       if (isDashboard && value.value.reply) {
         var messageIdx = false;
 
         localForage.getItem($rootScope.userHash + ':dashboard', function (messages) {
-          var msgItems = messages;
-
-          if (msgItems) {
+          if (messages) {
             for (var i = 0; i < messages.length; i ++) {
-              if (messages[i].key === value.value.reply) {
+              if (messages[i].key === value.value.reply || messages[i].key === key) {
                 messageIdx = i;
                 break;
               }
             }
 
-            messages.splice(messageIdx, 1);
-            messages.unshift(value);
-          } else {
-            msgItems = [value];
+            if (messageIdx) {
+              messages.splice(messageIdx, 1);
+            }
+
+            msgItems = messages;
           }
 
-          localForage.setItem($rootScope.userHash + ':dashboard', msgItems);
+          msgItems.unshift(value);
+
+          localForage.setItem($rootScope.userHash + ':dashboard', msgItems, function () {
+            callback();
+          });
         });
       } else {
         localForage.getItem(key, function (messages) {
-          if (messages) {
-            if (!checkExisting(messages, value)) {
-              messages.unshift(value);
-            }
-          } else {
+          if (!messages) {
             messages = [value];
           }
 
-          localForage.setItem(key, messages);
+          messages.unshift(value);
+
+          localForage.setItem(key, messages, function () {
+            callback();
+          });
         });
       }
     };
 
     return {
-      checkExisting: checkExisting,
       setItem: setItem
     };
   });
