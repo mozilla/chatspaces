@@ -9,23 +9,6 @@ angular.module('chatspace.factories', []).
 
       $rootScope.username = null;
       localStorage.removeItem('personaEmail');
-
-      $http({
-              url: '/api/profile',
-              method: 'GET'
-            }).success(function (data) {
-              localStorage.setItem('personaEmail', data.email);
-              $rootScope.email = data.email;
-              $rootScope.username = data.username;
-              $rootScope.gravatar = data.gravatar;
-
-              if (data.username) {
-                $window.location.href = '/dashboard';
-              } else {
-                $location.path('/profile');
-              }
-
-            })
       user.call();
     };
 

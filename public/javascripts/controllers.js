@@ -196,7 +196,7 @@ angular.module('chatspace.controllers', []).
         if (data) {
           data.forEach(function (d) {
             $rootScope.messages[d.key] = d;
-            console.log('** ', d)
+
             d.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
             });
@@ -399,6 +399,7 @@ angular.module('chatspace.controllers', []).
     // load all the messages from the local cache
     localForage.getItem($rootScope.userHash + ':dashboard', function (data) {
       if (data) {
+        console.log(data.length)
         data.forEach(function (d) {
           $rootScope.messages[d.key] = d;
           console.log('********* ', d.key)
@@ -412,8 +413,6 @@ angular.module('chatspace.controllers', []).
       }).success(function (data) {
         $scope.isLoading = false;
       });
-
-      $scope.isLoading = false;
     });
 
     $scope.isUnread = function (message) {
