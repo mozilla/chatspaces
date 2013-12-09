@@ -162,6 +162,17 @@ h3 {
     width: 150px;
 }
 
+.submit:after, .message-button:after {
+    border: 7px solid transparent;
+    border-color: #fff330 transparent transparent #fff330;
+    content: '';
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 0;
+}
+
 #notifications.on {
     display: inline-block;
 }
@@ -351,6 +362,7 @@ svg.progress.visible {
     font-size: 1.4rem;
     height: 60px;
     letter-spacing: 0.01rem;
+    position: relative;
     text-align: center;
     text-shadow: #3c816b 0 0 1px;
     width: 70px;

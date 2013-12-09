@@ -9,10 +9,17 @@ angular.module('chatspace.controllers', []).
     $rootScope.recipients = {};
     $rootScope.latestMessage;
     $rootScope.latestThreadMessage;
+    $rootScope.dashboardList = [];
 
     if ($rootScope.isAuthenticated) {
       localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
         $rootScope.latestMessage = key;
+      });
+
+      localForage.getItem($rootScope.userHash + ':threads', function (data) {
+        if (data) {
+          $rootScope.dashboardList = data;
+        }
       });
     }
 
@@ -45,30 +52,33 @@ angular.module('chatspace.controllers', []).
           var key = data.value.reply || data.key;
 
           $rootScope.messages[data.key] = data;
+          $rootScope.recipients = {};
 
           // also save message to local cache
           data.updated = data.value.created;
 
-          localCache.setItem($rootScope.userHash + ':dashboard', data, true, function () {
-            console.log('saved dashboard');
-          });
-
-          localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false, function () {
-            console.log('saved thread');
-          });
-
-          localForage.setItem($rootScope.userHash + ':latestMessageKey', data.key); // last one at the top is the latest dashboard key
-
-          $rootScope.latestMessage = data.key;
-          $rootScope.recipients = {};
+          localCache.setListItem($rootScope.userHash + ':threads', key);
 
           if ($routeParams.senderKey === senderKey) {
+            localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false, function () {
+              console.log('saved thread');
+            });
+
+            localForage.setItem($rootScope.userHash + ':latestMessageKey', data.key); // last one at the top is the latest dashboard key
+
             $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
             data.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
             });
 
             $rootScope.reply = senderKey;
+          } else {
+            console.log('*** ', data.key)
+            localCache.setItem($rootScope.userHash + ':dashboard', data, true, function () {
+              console.log('saved dashboard');
+            });
+
+            $rootScope.latestMessage = data.key;
           }
         }
       });
