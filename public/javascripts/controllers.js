@@ -15,12 +15,6 @@ angular.module('chatspace.controllers', []).
       localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
         $rootScope.latestMessage = key;
       });
-
-      localForage.getItem($rootScope.userHash + ':threads', function (data) {
-        if (data) {
-          $rootScope.dashboardList = data;
-        }
-      });
     }
 
     socket.on('friend', function (data) {
@@ -51,21 +45,16 @@ angular.module('chatspace.controllers', []).
         if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           var key = data.value.reply || data.key;
 
-          $rootScope.messages[data.key] = data;
           $rootScope.recipients = {};
 
           // also save message to local cache
           data.updated = data.value.created;
-
-          localCache.setListItem($rootScope.userHash + ':threads', key);
+          $rootScope.messages[data.key] = data;
+          localCache.setItem(key, data);
+          localForage.setItem($rootScope.userHash + ':message[' + data.key + ']', data);
+          localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
 
           if ($routeParams.senderKey === senderKey) {
-            localCache.setItem($rootScope.userHash + ':thread[' + key + ']', data, false, function () {
-              console.log('saved thread');
-            });
-
-            localForage.setItem($rootScope.userHash + ':latestMessageKey', data.key); // last one at the top is the latest dashboard key
-
             $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
             data.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
@@ -73,12 +62,7 @@ angular.module('chatspace.controllers', []).
 
             $rootScope.reply = senderKey;
           } else {
-            console.log('*** ', data.key)
-            localCache.setItem($rootScope.userHash + ':dashboard', data, true, function () {
-              console.log('saved dashboard');
-            });
-
-            $rootScope.latestMessage = data.key;
+            $rootScope.latestMessage = key;
           }
         }
       });
@@ -201,25 +185,31 @@ angular.module('chatspace.controllers', []).
 
       $rootScope.recipients = {};
       $rootScope.reply = $routeParams.senderKey;
+      $rootScope.threadList = [];
 
-      localForage.getItem($rootScope.userHash + ':thread[' + $routeParams.senderKey + ']', function (data) {
+      localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
         if (data) {
-          data.forEach(function (d) {
-            $rootScope.messages[d.key] = d;
+          $rootScope.threadList = data;
+        }
 
-            d.value.recipients.forEach(function (userHash) {
+        console.log('!!!! ', $rootScope.threadList)
+        $rootScope.threadList.forEach(function (d) {
+          localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
+            $rootScope.messages[d] = message;
+
+            message.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
             });
 
-            $rootScope.latestThreadMessage = d.value.reply || d.key;
+            $rootScope.latestThreadMessage = message.value.reply || message.key;
+
+            if ($rootScope.latestThreadMessage) {
+              since = '?since=' + $rootScope.latestThreadMessage;
+            }
           });
+        });
 
-          since = '?since=' + $rootScope.latestThreadMessage;
-
-          getThread();
-        } else {
-          getThread();
-        }
+        getThread();
 
         $scope.isLoading = false;
       });
@@ -401,27 +391,38 @@ angular.module('chatspace.controllers', []).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
     api.call();
 
-    $rootScope.messages = {};
-    $scope.isLoading = true;
+    $http({
+      url: '/api/profile',
+      method: 'GET'
+    }).success(function (data) {
+      $rootScope.userHash = data.userHash;
+      $rootScope.messages = {};
+      $scope.isLoading = true;
 
-    var since = '';
+      var since = '';
 
-    // load all the messages from the local cache
-    localForage.getItem($rootScope.userHash + ':dashboard', function (data) {
-      if (data) {
-        console.log(data.length)
-        data.forEach(function (d) {
-          $rootScope.messages[d.key] = d;
-          console.log('********* ', d.key)
-          since = '?since=' + d.key;
+      // load all the messages from the local cache
+      localForage.getItem($rootScope.userHash + ':dashboardList', function (data) {
+        if (data) {
+          $rootScope.dashboardList = data;
+        }
+
+        $rootScope.dashboardList.forEach(function (d) {
+          localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (thread) {
+            $rootScope.messages[d] = thread;
+          });
         });
-      }
 
-      $http({
-        url: '/api/feed' + since,
-        method: 'GET'
-      }).success(function (data) {
-        $scope.isLoading = false;
+        if ($rootScope.dashboardList[0]) {
+          since = '?since=' + $rootScope.dashboardList[0];
+        }
+
+        $http({
+          url: '/api/feed' + since,
+          method: 'GET'
+        }).success(function (data) {
+          $scope.isLoading = false;
+        });
       });
     });
 

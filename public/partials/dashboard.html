@@ -7,7 +7,7 @@
       </div>
       <div class="right">
         <div class="recipients">
-          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=50" ng-repeat="recipient in messages[$index].value.recipients track by $index">
+          <img src="http://www.gravatar.com/avatar/{{ recipient }}?s=50" ng-repeat="recipient in message.value.recipients track by $index">
         </div>
         <div class="preview-content">
           <p>{{ message.value.message }}</p>

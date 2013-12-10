@@ -175,89 +175,42 @@ angular.module('chatspace.factories', []).
     };
   }).
   factory('localCache', function ($rootScope) {
-    var setListItem = function (key, value) {
-      var keyName = $rootScope.userHash + ':threads';
+    var setItem = function (key, value) {
+      var dashboardKey = $rootScope.userHash + ':dashboardList';
+      var threadKey = $rootScope.userHash + ':threadList[' + key + ']';
+      $rootScope.dashboardList = [];
+      $rootScope.threadList = [];
 
-      localForage.getItem(keyName, function (data) {
-        if (data && data.length > 0) {
-          if (data.indexOf(key) === -1) {
-            localForage.setItem(keyName, data.unshift(key));
-          }
-        } else {
-          data = [];
-          localForage.setItem(keyName, data);
+      localForage.getItem(dashboardKey, function (data) {
+        if (data) {
+          $rootScope.dashboardList = data;
         }
+
+        if ($rootScope.dashboardList.indexOf(key) > -1) {
+          $rootScope.dashboardList.splice($rootScope.dashboardList.indexOf(key), 1);
+        }
+
+        $rootScope.dashboardList.unshift(value.key);
+
+        localForage.setItem(dashboardKey, $rootScope.dashboardList);
+      });
+
+      localForage.getItem(threadKey, function (data) {
+        if (data) {
+          $rootScope.threadList = data;
+        }
+
+        if ($rootScope.threadList.indexOf(value.key) > -1) {
+          $rootScope.threadList.splice($rootScope.threadList.indexOf(value.key), 1);
+        }
+
+        $rootScope.threadList.unshift(value.key);
+
+        localForage.setItem(threadKey, $rootScope.threadList);
       });
     };
 
-    var setItem = function (key, value, isDashboard, callback) {
-      // If this is a dashboard item, we want to rewrite the parent conversation
-      // thread with the latest message, otherwise we write as is for a new message
-      var keyName = $rootScope.userHash + ':threads';
-      var dashboardItems = $rootScope.userHash + ':dashboard';
-
-      if (isDashboard && value.value.reply) {
-        var messageIdx = false;
-        console.log('a reply ', value.key)
-
-        localForage.getItem(keyName, function (data) {
-          if (data && data.indexOf(value.value.reply) > -1) {
-            data.splice(data.indexOf(value.value.reply), 1);
-          }
-
-          $rootScope.messages.unshift(value);
-          console.log(msgItems.length)
-          localForage.setItem(keyName, data);
-
-          localForage.setItem(dashboardItems, function () {
-            callback();
-          });
-        });
-
-        localForage.getItem(dashboardItems, function (messages) {
-          if (messages) {
-            $rootScope.messages = messages;
-
-            localForage.getItem(keyName, function (data) {
-              if (data && data.length && data.indexOf(value.value.reply) > -1) {
-                data.splice(data.indexOf(value.value.reply), 1);
-              }
-
-              $rootScope.messages.unshift(value);
-              console.log(msgItems.length)
-              localForage.setItem(keyName, data);
-
-              localForage.setItem(dashboardItems, function () {
-                callback();
-              });
-            });
-          } else {
-            $rootScope.messages[key] = ;
-
-            localForage.setItem(keyName, value.value.reply);
-            localForage.setItem(dashboardItems, $rootScope.messages, function () {
-              callback();
-            });
-          }
-        });
-      } else {
-        console.log('a new messages ', value.key)
-        localForage.getItem(key, function (messages) {
-          if (!messages) {
-            messages = [value];
-          }
-
-          messages.unshift(value);
-
-          localForage.setItem(key, messages, function () {
-            callback();
-          });
-        });
-      }
-    };
-
     return {
-      setListItem: setListItem,
       setItem: setItem
     };
   });

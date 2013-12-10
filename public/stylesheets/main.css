@@ -1023,7 +1023,7 @@ video {
     }
 }
 
-@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (max--moz-device-pixel-ratio: 2) {
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min--moz-device-pixel-ratio: 2) {
     body {
         background-image: url('/images/background@2X.png');
     }
