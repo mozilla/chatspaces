@@ -53,15 +53,8 @@ table {
 }
 
 @font-face {
-    font-family: 'FiraSans-Light';
-    src: url('../fonts/FiraSans-Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'FiraSans-Regular';
-    src: url('../fonts/FiraSans-Regular.woff') format('woff');
+    font-family: 'DroidSansMono';
+    src: url('../fonts/DroidSansMono-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -76,7 +69,7 @@ body {
 }
 
 body, textarea, input {
-    font-family: 'FiraSans-Light', Arial, sans-serif;
+    font-family: 'DroidSansMono', Arial, sans-serif;
 }
 
 .default {
@@ -126,7 +119,7 @@ h3 {
     color: #ffc5c6;
     display: none;
     float: left;
-    font-family: 'FiraSans-Regular';
+    font-family: 'DroidSansMono';
     font-size: 2rem;
     height: 30px;
     line-height: 2rem;
@@ -332,7 +325,7 @@ svg.progress.visible {
 
 .errors, .info {
     float: left;
-    font-family: 'FiraSans-Regular';
+    font-family: Helvetica, Arial, sans-serif;
     margin: 5px 0;
     padding: 5px 10px;
     width: 100%;
@@ -358,7 +351,7 @@ svg.progress.visible {
     background-color: #2ae7ce;
     color: #e1fff5;
     float: left;
-    font-family: 'FiraSans-Regular';
+    font-family: 'DroidSansMono';
     font-size: 1.4rem;
     height: 60px;
     letter-spacing: 0.01rem;
@@ -382,7 +375,7 @@ svg.progress.visible {
     background-color: rgba(1, 1, 1, 0.7);
     bottom: 0;
     color: #eee;
-    font-family: 'FiraSans-Light';
+    font-family: 'DroidSansMono';
     font-size: 2rem;
     font-style: italic;
     left: 0;
@@ -641,7 +634,7 @@ h2 a {
     background-color: #f00;
     border: 0;
     color: #fff;
-    font-family: Arial, sans-serif;
+    font-family: 'DroidSansMono';
     font-size: 0.9rem;
     height: 28px;
     padding: 5px;
