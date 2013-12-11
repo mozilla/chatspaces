@@ -190,9 +190,11 @@ angular.module('chatspace.controllers', []).
       localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
         if (data) {
           $rootScope.threadList = data;
+          $rootScope.latestThreadMessage = data[0];
+
+          since = '?since=' + $rootScope.latestThreadMessage;
         }
 
-        console.log('!!!! ', $rootScope.threadList)
         $rootScope.threadList.forEach(function (d) {
           localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
             $rootScope.messages[d] = message;
@@ -200,17 +202,10 @@ angular.module('chatspace.controllers', []).
             message.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
             });
-
-            $rootScope.latestThreadMessage = message.value.reply || message.key;
-
-            if ($rootScope.latestThreadMessage) {
-              since = '?since=' + $rootScope.latestThreadMessage;
-            }
           });
         });
 
         getThread();
-
         $scope.isLoading = false;
       });
     }
