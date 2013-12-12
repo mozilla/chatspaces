@@ -191,7 +191,6 @@ angular.module('chatspace.factories', []).
         }
 
         $rootScope.dashboardList.unshift(value.key);
-
         localForage.setItem(dashboardKey, $rootScope.dashboardList);
       });
 
@@ -205,7 +204,6 @@ angular.module('chatspace.factories', []).
         }
 
         $rootScope.threadList.unshift(value.key);
-
         localForage.setItem(threadKey, $rootScope.threadList);
       });
     };

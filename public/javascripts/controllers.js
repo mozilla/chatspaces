@@ -266,7 +266,9 @@ angular.module('chatspace.controllers', []).
         }
 
         // Also add yourself to the message so you can get replies.
-        $scope.recipientArr.push($rootScope.userHash);
+        if ($scope.recipientArr.indexOf($rootScope.userHash) === -1) {
+          $scope.recipientArr.push($rootScope.userHash);
+        }
 
         var formData = {
           message: escapeHtml($scope.message),
@@ -407,13 +409,13 @@ angular.module('chatspace.controllers', []).
 
         $rootScope.dashboardList.forEach(function (d) {
           localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (thread) {
-            $rootScope.messages[d] = thread;
-
-            thread.value.recipients.forEach(function (userHash) {
-              if (userHash !== $rootScope.userHash) {
-                $rootScope.recipients[userHash] = userHash;
+            thread.value.recipients.forEach(function (r, idx) {
+              if (r === $rootScope.userHash) {
+                thread.value.recipients.splice(idx, 1);
               }
             });
+
+            $rootScope.messages[d] = thread;
           });
         });
 
