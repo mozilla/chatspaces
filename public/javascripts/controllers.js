@@ -45,8 +45,6 @@ angular.module('chatspace.controllers', []).
         if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
           var key = data.value.reply || data.key;
 
-          $rootScope.recipients = {};
-
           // also save message to local cache
           data.updated = data.value.created;
           $rootScope.messages[data.key] = data;
@@ -57,7 +55,9 @@ angular.module('chatspace.controllers', []).
           if ($routeParams.senderKey === senderKey) {
             $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
             data.value.recipients.forEach(function (userHash) {
-              $rootScope.recipients[userHash] = userHash;
+              if (userHash !== $rootScope.userHash) {
+                $rootScope.recipients[userHash] = userHash;
+              }
             });
 
             $rootScope.reply = senderKey;
@@ -200,7 +200,9 @@ angular.module('chatspace.controllers', []).
             $rootScope.messages[d] = message;
 
             message.value.recipients.forEach(function (userHash) {
-              $rootScope.recipients[userHash] = userHash;
+              if (userHash !== $rootScope.userHash) {
+                $rootScope.recipients[userHash] = userHash;
+              }
             });
           });
         });
@@ -259,12 +261,12 @@ angular.module('chatspace.controllers', []).
       if (!$scope.posting) {
         $scope.posting = true;
 
-        // Also add yourself to the message so you can get replies.
-        $rootScope.recipients[$rootScope.userHash] = $rootScope.userHash;
-
         for (var r in $rootScope.recipients) {
           $scope.recipientArr.push(r);
         }
+
+        // Also add yourself to the message so you can get replies.
+        $scope.recipientArr.push($rootScope.userHash);
 
         var formData = {
           message: escapeHtml($scope.message),
@@ -391,6 +393,7 @@ angular.module('chatspace.controllers', []).
       method: 'GET'
     }).success(function (data) {
       $rootScope.userHash = data.userHash;
+      $rootScope.recipients = {};
       $rootScope.messages = {};
       $scope.isLoading = true;
 
@@ -405,6 +408,12 @@ angular.module('chatspace.controllers', []).
         $rootScope.dashboardList.forEach(function (d) {
           localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (thread) {
             $rootScope.messages[d] = thread;
+
+            thread.value.recipients.forEach(function (userHash) {
+              if (userHash !== $rootScope.userHash) {
+                $rootScope.recipients[userHash] = userHash;
+              }
+            });
           });
         });
 
