@@ -5,7 +5,8 @@
   </div>
   <div class="actions">
     <button ng-click="recordCamera()" class="submit">Record</button>
-    <button ng-click="showRecipients()" class="submit">Finished!</button>
+    <button ng-click="showRecipients()" class="submit" ng-if="!reply">Next</button>
+    <button ng-click="sendMessage()" type="submit" class="submit" ng-if="reply">Send!</button>
     <a ng-click="cancelCamera()" class="cancel">Go back</a>
   </div>
 </div>

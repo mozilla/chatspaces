@@ -7,15 +7,11 @@
       <p>{{ errors }}</p>
     </div>
   </div>
-  <div class="cam-box">
-    <button class="message-button" type="button" ng-click="promptCamera()">GIF</button>
-    <button class="message-button" type="button">FILE</button>
-    <input type="hidden" name="picture" ng-model="picture">
-    <input type="hidden" name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index" ng-if="!senderKey">
-    <input type="hidden" name="recipient[{{ recipient }}]" value="{{ recipient }}" ng-repeat="recipient in recipients track by $index" ng-if="senderKey">
-  </div>
+  <input type="hidden" name="picture" ng-model="picture">
+  <input type="hidden" name="recipient[{{ value }}]" value="{{ value }}" ng-repeat="(key, value) in recipients track by $index" ng-if="!senderKey">
+  <input type="hidden" name="recipient[{{ recipient }}]" value="{{ recipient }}" ng-repeat="recipient in recipients track by $index" ng-if="senderKey">
   <div class="text-box">
     <textarea ng-model="$parent.message" placeholder="Add optional message"></textarea>
-    <button class="message-button submit" type="submit">Send</button>
+    <button class="message-button submit" type="button" ng-click="promptCamera()">Take a pic!</button>
   </div>
 </section>

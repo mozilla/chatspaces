@@ -408,6 +408,7 @@ angular.module('chatspace.controllers', []).
         }
 
         $rootScope.dashboardList.forEach(function (d) {
+          // remove any occurences of your own userHash and add the final message to the messages scope
           localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (thread) {
             thread.value.recipients.forEach(function (r, idx) {
               if (r === $rootScope.userHash) {

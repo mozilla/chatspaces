@@ -228,6 +228,10 @@ svg.progress.visible {
     z-index: 6;
 }
 
+.new-message .submit {
+    padding: 5px 20px;
+}
+
 .new-message.camera, .new-message.following {
     background-color: rgba(5, 5, 5, 0.9);
 }
@@ -341,13 +345,7 @@ svg.progress.visible {
     color: #ffdde1;
 }
 
-.cam-box {
-    clear: both;
-    width: 150px;
-    float: left;
-}
-
-.cam-box .message-button, .submit {
+.submit {
     background-color: #2ae7ce;
     color: #e1fff5;
     float: left;
@@ -361,14 +359,14 @@ svg.progress.visible {
     width: 70px;
 }
 
-.cam-box .message-button:first-child {
-    font-size: 1.8rem;
-    margin-right: 5px;
-}
-
 .text-box {
     float: left;
-    width: 870px;
+    margin-left: 10px;
+    width: 980px;
+}
+
+.text-box .submit {
+    width:180px;
 }
 
 .posting {
@@ -834,7 +832,7 @@ video {
     }
 
     .text-box {
-        width: 577px;
+        width: 687px;
     }
 
     textarea {
@@ -868,30 +866,20 @@ video {
         width: 420px;
     }
 
-    .cam-box {
-        clear: none;
-        width: 75px;
-    }
-
-    .cam-box .message-button {
-        clear: both;
-        font-size: 1.5rem;
-        height: 50px;
-        margin-bottom: 5px;
-    }
-
     .text-box {
-        width: 345px;
+        width: 400px;
     }
 
     .text-box .submit {
-        height: 50px;
+        font-size: 1rem;
+        height: 67px;
         margin: 0;
+        width: 100px;
     }
 
     textarea {
-        height: 85px;
-        width: 250px;
+        height: 45px;
+        width: 275px;
     }
 
     #message-list .recipients img {
@@ -953,7 +941,7 @@ video {
 
 @media only screen and (max-width: 459px) {
     .text-box {
-        width: 235px;
+        width: 300px;
     }
 
     h2 a {
@@ -961,13 +949,8 @@ video {
     }
 
     textarea {
-        width: 155px;
-    }
-
-    .text-box .submit {
         font-size: 1rem;
-        height: 50px;
-        width: 55px;
+        width: 175px;
     }
 
     .recipient-list, #header, #wrapper {
