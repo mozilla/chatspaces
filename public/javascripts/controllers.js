@@ -47,10 +47,12 @@ angular.module('chatspace.controllers', []).
 
           // also save message to local cache
           data.updated = data.value.created;
+
           $rootScope.messages[data.key] = data;
-          localCache.setItem(key, data);
+
           localForage.setItem($rootScope.userHash + ':message[' + data.key + ']', data);
           localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
+          localCache.setItem(key, data);
 
           if ($routeParams.senderKey === senderKey) {
             $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
@@ -409,7 +411,7 @@ angular.module('chatspace.controllers', []).
 
         $rootScope.dashboardList.forEach(function (d) {
           // remove any occurences of your own userHash and add the final message to the messages scope
-          localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (thread) {
+          localForage.getItem($rootScope.userHash + ':dashMessage[' + d + ']', function (thread) {
             thread.value.recipients.forEach(function (r, idx) {
               if (r === $rootScope.userHash) {
                 thread.value.recipients.splice(idx, 1);

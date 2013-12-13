@@ -356,7 +356,7 @@ svg.progress.visible {
     position: relative;
     text-align: center;
     text-shadow: #3c816b 0 0 1px;
-    width: 70px;
+    width: 150px;
 }
 
 .text-box {
@@ -366,7 +366,7 @@ svg.progress.visible {
 }
 
 .text-box .submit {
-    width:180px;
+    width: 180px;
 }
 
 .posting {
@@ -781,6 +781,10 @@ time {
     padding: 5px 0 5px 8px;
     position: absolute;
     right: 0;
+}
+
+.thread-view time {
+    right: 15px;
 }
 
 input {

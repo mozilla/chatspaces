@@ -178,8 +178,29 @@ angular.module('chatspace.factories', []).
     var setItem = function (key, value) {
       var dashboardKey = $rootScope.userHash + ':dashboardList';
       var threadKey = $rootScope.userHash + ':threadList[' + key + ']';
+      var dashMessage = $rootScope.userHash + ':dashMessage[' + key + ']';
       $rootScope.dashboardList = [];
       $rootScope.threadList = [];
+
+      if (value.value.reply) {
+        // save the latest to the dashboard
+        localForage.getItem(dashMessage, function (data) {
+          if (data) {
+            data.value.key = key;
+
+          } else {
+            data = value;
+            value.key = key;
+          }
+
+          data.value.message = value.value.message;
+          data.value.media = value.value.media;
+          data.updated = value.value.created;
+          localForage.setItem(dashMessage, value);
+        });
+      } else {
+        localForage.setItem(dashMessage, value);
+      }
 
       localForage.getItem(dashboardKey, function (data) {
         if (data) {
@@ -190,7 +211,7 @@ angular.module('chatspace.factories', []).
           $rootScope.dashboardList.splice($rootScope.dashboardList.indexOf(key), 1);
         }
 
-        $rootScope.dashboardList.unshift(value.key);
+        $rootScope.dashboardList.unshift(key);
         localForage.setItem(dashboardKey, $rootScope.dashboardList);
       });
 

@@ -46,7 +46,7 @@ service('user', function ($rootScope) {
       $rootScope.isAuthenticated = false;
       $rootScope.settings = false;
       $rootScope.friends = {};
-      $rootScope.messages = [];
+      $rootScope.messages = {};
       $rootScope.blocked = {};
       $rootScope.notifications = [];
     }
