@@ -23,6 +23,19 @@ run(function ($rootScope, $http, $location, authenticate) {
           $rootScope.gravatar = data.gravatar;
           $rootScope.userHash = data.userHash;
           $rootScope.isAuthenticated = true;
+          $rootScope.picture = '';
+
+          localForage.getItem($rootScope.userHash + ':lastPic', function (pic) {
+            if (pic) {
+              $rootScope.picture = pic;
+            }
+          });
+
+          localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
+            if (key) {
+              $rootScope.latestMessage = key;
+            }
+          });
 
           socket.emit('join', {
             email: data.email

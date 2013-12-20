@@ -7,15 +7,8 @@ angular.module('chatspace.controllers', []).
     user.call();
     $rootScope.friendPredicate = '-username';
     $rootScope.recipients = {};
-    $rootScope.latestMessage;
     $rootScope.latestThreadMessage;
     $rootScope.dashboardList = [];
-
-    if ($rootScope.isAuthenticated) {
-      localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
-        $rootScope.latestMessage = key;
-      });
-    }
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -145,7 +138,6 @@ angular.module('chatspace.controllers', []).
       $scope.recipientArr = [];
       $scope.errors = false;
       $scope.message = '';
-      $scope.picture = '';
       $scope.preview = '';
       $scope.posting = false;
       $scope.showCamera = false;
@@ -226,7 +218,6 @@ angular.module('chatspace.controllers', []).
     $scope.cancelCamera = function () {
       $scope.showCamera = false;
       $scope.showFollowing = false;
-      $scope.picture = '';
       $('#video-preview').empty();
       cameraHelper.resetStream();
     };
@@ -241,7 +232,7 @@ angular.module('chatspace.controllers', []).
     $scope.recordCamera = function () {
       cameraHelper.startScreenshot(function (pictureData) {
         $scope.$apply(function () {
-          $scope.picture = pictureData;
+          $rootScope.picture = pictureData;
         });
       });
     };
@@ -261,14 +252,9 @@ angular.module('chatspace.controllers', []).
 
     $scope.sendMessage = function () {
       // if a picture hasn't been selected, jump to the camera overlay
-      if (!$scope.picture) {
+      if (!$rootScope.picture) {
+        $scope.back();
         $scope.promptCamera();
-        return;
-      }
-
-      // if recipients haven't been selected jump to the recipients overlay
-      if (!$rootScope.recipients) {
-        $scope.showRecipients();
         return;
       }
 
@@ -286,7 +272,7 @@ angular.module('chatspace.controllers', []).
 
         var formData = {
           message: escapeHtml($scope.message),
-          picture: escapeHtml($scope.picture),
+          picture: escapeHtml($rootScope.picture),
           recipients: $scope.recipientArr
         };
 
@@ -299,6 +285,7 @@ angular.module('chatspace.controllers', []).
           data: formData,
           method: 'POST'
         }).success(function (data) {
+          localForage.setItem($rootScope.userHash + ':lastPic', $rootScope.picture);
           resetForm();
 
           if (!$routeParams.senderKey) {
