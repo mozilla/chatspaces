@@ -260,6 +260,18 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.sendMessage = function () {
+      // if a picture hasn't been selected, jump to the camera overlay
+      if (!$scope.picture) {
+        $scope.promptCamera();
+        return;
+      }
+
+      // if recipients haven't been selected jump to the recipients overlay
+      if (!$rootScope.recipients) {
+        $scope.showRecipients();
+        return;
+      }
+
       if (!$scope.posting) {
         $scope.posting = true;
 

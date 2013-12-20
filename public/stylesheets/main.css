@@ -68,7 +68,7 @@ body {
     background-image: url('/images/background.png');
 }
 
-body, textarea, input {
+body, input {
     font-family: 'DroidSansMono', Arial, sans-serif;
 }
 
@@ -85,13 +85,6 @@ body, textarea, input {
     margin-top: 20px;
     padding: 10px;
     text-decoration: none;
-}
-
-textarea {
-    height: 70px;
-    padding: 10px;
-    resize: none;
-    width: 350px;
 }
 
 h1, h2, h3 {
@@ -794,16 +787,18 @@ input {
     padding: 5px;
 }
 
-textarea {
+input.message-field {
     background-color: #f8f8f8;
     border: 0;
     color: #225351;
     display: inline-block;
     float: left;
-    height: 38px;
+    height: 40px;
     font-size: 1.3rem;
+    margin: 0;
     outline: none;
-    width: 760px;
+    padding: 10px;
+    width: 755px;
 }
 
 #video-preview {
