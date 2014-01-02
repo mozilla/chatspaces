@@ -20,8 +20,8 @@ run(function ($rootScope, $http, $location, authenticate) {
         }).success(function (data) {
           $rootScope.email = data.email;
           $rootScope.username = data.username;
-          $rootScope.gravatar = data.gravatar;
           $rootScope.userHash = data.userHash;
+          $rootScope.avatar = data.avatar;
           $rootScope.isAuthenticated = true;
           $rootScope.picture = '';
 

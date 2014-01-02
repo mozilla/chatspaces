@@ -37,7 +37,7 @@ angular.module('chatspace.factories', []).
               localStorage.setItem('personaEmail', data.email);
               $rootScope.email = data.email;
               $rootScope.username = data.username;
-              $rootScope.gravatar = data.gravatar;
+              $rootScope.avatar = data.avatar;
 
               if (data.username) {
                 $window.location.href = '/dashboard';
@@ -150,7 +150,7 @@ angular.module('chatspace.factories', []).
       });
     };
 
-    var startScreenshot = function (callback) {
+    var startScreenshot = function (frames, seconds, callback) {
       progressCircleTo(0);
 
       svg.attr('class', 'progress visible');
@@ -160,7 +160,7 @@ angular.module('chatspace.factories', []).
         callback(pictureData);
       }, function (progress) {
         progressCircleTo(progress);
-      }, 10, 0.2);
+      }, frames, seconds);
     };
 
     var resetStream = function () {

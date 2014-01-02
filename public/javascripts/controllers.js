@@ -2,13 +2,16 @@
 
 angular.module('chatspace.controllers', []).
   controller('AppCtrl',
-    function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user, localCache) {
+    function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user, localCache, cameraHelper) {
 
     user.call();
     $rootScope.friendPredicate = '-username';
     $rootScope.recipients = {};
+    $rootScope.recipientAvatars = [];
     $rootScope.latestThreadMessage;
     $rootScope.dashboardList = [];
+    $scope.showCamera = false;
+    $scope.showFollowing = false;
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -47,6 +50,9 @@ angular.module('chatspace.controllers', []).
           localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
           localCache.setItem(key, data);
 
+          $rootScope.recipientAvatars = data.value.recipientAvatars;
+          $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+
           if ($routeParams.senderKey === senderKey) {
             $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
             data.value.recipients.forEach(function (userHash) {
@@ -73,7 +79,7 @@ angular.module('chatspace.controllers', []).
       });
     });
 
-    $rootScope.loadDashboard = function () {
+    $scope.loadDashboard = function () {
       var since = '';
 
       if ($rootScope.latestMessage) {
@@ -88,7 +94,7 @@ angular.module('chatspace.controllers', []).
       });
     };
 
-    $rootScope.getDate = function (timestamp) {
+    $scope.getDate = function (timestamp) {
       return moment.unix(Math.round(timestamp / 1000)).fromNow();
     };
 
@@ -100,7 +106,7 @@ angular.module('chatspace.controllers', []).
       }
     };
 
-    $rootScope.newMessage = function () {
+    $scope.newMessage = function () {
         $rootScope.settings = false;
     };
 
@@ -110,9 +116,25 @@ angular.module('chatspace.controllers', []).
       $rootScope.isAuthenticated = true;
     }
 
-    $rootScope.logout = function () {
+    $scope.logout = function () {
       authenticate.logout();
     }
+
+    $scope.promptCamera = function () {
+      if ($rootScope.isAuthenticated && navigator.getMedia) {
+        $scope.showCamera = true;
+        cameraHelper.startStream();
+      } else {
+        $scope.cancelCamera();
+      }
+    };
+
+    $scope.cancelCamera = function () {
+      $scope.showCamera = false;
+      $scope.showFollowing = false;
+      $('#video-preview').empty();
+      cameraHelper.resetStream();
+    };
   }).
   controller('HomeCtrl', function ($scope, $rootScope, $location, authenticate) {
     $scope.login = function () {
@@ -127,7 +149,6 @@ angular.module('chatspace.controllers', []).
 
     $rootScope.messages = {};
     $scope.formDate = {};
-    $scope.showCamera = false;
 
     var resetForm = function () {
       if (!$routeParams.senderKey) {
@@ -140,8 +161,6 @@ angular.module('chatspace.controllers', []).
       $scope.message = '';
       $scope.preview = '';
       $scope.posting = false;
-      $scope.showCamera = false;
-      $scope.showFollowing = false;
       $('#video-preview').empty();
       cameraHelper.resetStream();
     };
@@ -206,15 +225,6 @@ angular.module('chatspace.controllers', []).
       });
     }
 
-    $scope.promptCamera = function () {
-      if ($rootScope.isAuthenticated && navigator.getMedia) {
-        $scope.showCamera = true;
-        cameraHelper.startStream();
-      } else {
-        $scope.back();
-      }
-    };
-
     $scope.cancelCamera = function () {
       $scope.showCamera = false;
       $scope.showFollowing = false;
@@ -222,15 +232,8 @@ angular.module('chatspace.controllers', []).
       cameraHelper.resetStream();
     };
 
-    $scope.back = function () {
-      $scope.showCamera = false;
-      $scope.showFollowing = false;
-      $('#video-preview').empty();
-      cameraHelper.resetStream();
-    };
-
     $scope.recordCamera = function () {
-      cameraHelper.startScreenshot(function (pictureData) {
+      cameraHelper.startScreenshot(10, 0.2, function (pictureData) {
         $scope.$apply(function () {
           $rootScope.picture = pictureData;
         });
@@ -238,7 +241,7 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.showRecipients = function () {
-      $scope.back();
+      $scope.cancelCamera();
       $scope.showFollowing = true;
     };
 
@@ -253,7 +256,7 @@ angular.module('chatspace.controllers', []).
     $scope.sendMessage = function () {
       // if a picture hasn't been selected, jump to the camera overlay
       if (!$rootScope.picture) {
-        $scope.back();
+        $scope.cancelCamera();
         $scope.promptCamera();
         return;
       }
@@ -286,6 +289,7 @@ angular.module('chatspace.controllers', []).
           method: 'POST'
         }).success(function (data) {
           localForage.setItem($rootScope.userHash + ':lastPic', $rootScope.picture);
+          $scope.cancelCamera();
           resetForm();
 
           if (!$routeParams.senderKey) {
@@ -447,7 +451,7 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('ProfileCtrl', function ($scope, $rootScope, $http, $location) {
+  controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, cameraHelper) {
     $scope.currentUsername = $rootScope.username;
     $scope.cacheInfo = false;
 
@@ -457,17 +461,35 @@ angular.module('chatspace.controllers', []).
       $scope.cacheInfo = 'Local cache reset.';
     };
 
-    $scope.updateProfile = function () {
+    $scope.updateAvatar = function () {
+      cameraHelper.startScreenshot(1, 0, function (pictureData) {
+        $scope.$apply(function () {
+          $rootScope.avatar = pictureData;
+        });
+      });
+    };
+
+    $scope.saveAvatar = function () {
+      $scope.updateProfile(function () {
+        $scope.cancelCamera();
+      });
+    };
+
+    $scope.updateProfile = function (callback) {
       $http({
         url: '/api/profile',
         data: {
-          username: $scope.username
+          username: $scope.username,
+          avatar: $rootScope.avatar
         },
         method: 'PUT'
       }).success(function (data) {
         $scope.errors = false;
-        $scope.info = data.message;
         $rootScope.username = $scope.username = $scope.currentUsername = data.username;
+
+        if (callback) {
+          callback();
+        }
       }).error(function (data) {
         $scope.info = false;
         $scope.errors = data.message;

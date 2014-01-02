@@ -352,6 +352,10 @@ svg.progress.visible {
     width: 150px;
 }
 
+.submit.photo {
+    font-size: 1.1rem;
+}
+
 .text-box {
     float: left;
     margin-left: 10px;
@@ -384,7 +388,7 @@ svg.progress.visible {
 }
 
 #header .avatar {
-    width: 40px;
+    width: 80px;
 }
 
 #top-bar {
@@ -582,7 +586,7 @@ h2 a {
 
 .recipient-results li .avatar {
     margin-right: 10px;
-    width: 45px;
+    width: 60px;
 }
 
 .recipient-results li.on {
@@ -696,8 +700,7 @@ h2 a {
 }
 
 #message-list .recipients img {
-    height: 50px;
-    width: 50px;
+    width: 80px;
 }
 
 .avatar {
@@ -734,7 +737,6 @@ h2 a {
     display: inline-block;
     float: left;
     margin-right: 5px;
-    width: 125px;
 }
 
 #message-list .left img {
@@ -882,8 +884,7 @@ video {
     }
 
     #message-list .recipients img {
-        height: 30px;
-        width: 30px;
+        width: 80px;
     }
 
     .message {

@@ -1,0 +1,11 @@
+<div class="new-message camera">
+  <div class="video-wrapper">
+    <div id="video-preview"></div>
+    <img class="video-recorded" src="{{ avatar }}">
+  </div>
+  <div class="actions">
+    <button ng-click="updateAvatar()" class="submit photo">Take photo!</button>
+    <button ng-click="saveAvatar()" class="submit">Done</button>
+    <a ng-click="cancelCamera()" class="cancel">Go back</a>
+  </div>
+</div>

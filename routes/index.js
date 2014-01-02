@@ -8,7 +8,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
   });
 
   app.get('/api/profile', isLoggedIn, function (req, res) {
-    user.getProfile(req, function (newUser, username) {
+    user.getProfile(req, function (newUser, username, avatar) {
       if (newUser) {
         console.log('username not found, redirect to profile page');
         res.json(newUser);
@@ -18,7 +18,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
         res.json({
           email: req.session.email,
           username: username,
-          gravatar: user.gravatarUrl(req.session.userHash),
+          avatar: avatar,
           userHash: req.session.userHash
         });
       }
@@ -183,7 +183,6 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
               chat.senderKey = newChat.senderKey;
 
               sendToUser(recipient, req.session.userHash, req.body.message, chat, function (err) {
-
                 if (!err) {
                   sendNotifications(recipient, newChat, mainKey);
                 }
@@ -234,15 +233,6 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
         message: 'username is invalid'
       });
     } else {
-
-      if (username === req.session.username) {
-        res.json({
-          username: username,
-          message: 'no change'
-        });
-        return;
-      }
-
       user.updateProfile(req, username, function (err, status) {
         if (err) {
           res.status(400);
@@ -254,7 +244,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
 
           res.json({
             username: username,
-            message: 'updated username'
+            message: 'updated profile'
           });
         }
       });
