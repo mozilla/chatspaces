@@ -10,8 +10,8 @@ angular.module('chatspace.controllers', []).
     $rootScope.recipientAvatars = [];
     $rootScope.latestThreadMessage;
     $rootScope.dashboardList = [];
-    $scope.showCamera = false;
-    $scope.showFollowing = false;
+    $rootScope.showCamera = false;
+    $rootScope.showFollowing = false;
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -120,18 +120,18 @@ angular.module('chatspace.controllers', []).
       authenticate.logout();
     }
 
-    $scope.promptCamera = function () {
+    $rootScope.promptCamera = function () {
       if ($rootScope.isAuthenticated && navigator.getMedia) {
-        $scope.showCamera = true;
+        $rootScope.showCamera = true;
         cameraHelper.startStream();
       } else {
-        $scope.cancelCamera();
+        $rootScope.cancelCamera();
       }
     };
 
-    $scope.cancelCamera = function () {
-      $scope.showCamera = false;
-      $scope.showFollowing = false;
+    $rootScope.cancelCamera = function () {
+      $rootScope.showCamera = false;
+      $rootScope.showFollowing = false;
       $('#video-preview').empty();
       cameraHelper.resetStream();
     };
@@ -149,6 +149,7 @@ angular.module('chatspace.controllers', []).
 
     $rootScope.messages = {};
     $scope.formDate = {};
+    $scope.cancelCamera();
 
     var resetForm = function () {
       if (!$routeParams.senderKey) {
@@ -225,13 +226,6 @@ angular.module('chatspace.controllers', []).
       });
     }
 
-    $scope.cancelCamera = function () {
-      $scope.showCamera = false;
-      $scope.showFollowing = false;
-      $('#video-preview').empty();
-      cameraHelper.resetStream();
-    };
-
     $scope.recordCamera = function () {
       cameraHelper.startScreenshot(10, 0.2, function (pictureData) {
         $scope.$apply(function () {
@@ -256,7 +250,6 @@ angular.module('chatspace.controllers', []).
     $scope.sendMessage = function () {
       // if a picture hasn't been selected, jump to the camera overlay
       if (!$rootScope.picture) {
-        $scope.cancelCamera();
         $scope.promptCamera();
         return;
       }
@@ -296,6 +289,7 @@ angular.module('chatspace.controllers', []).
             $location.path('/thread/' + data.key);
           }
         }).error(function (data) {
+          $scope.cancelCamera();
           $scope.info = false;
           $scope.errors = data.message;
           $scope.posting = false;
