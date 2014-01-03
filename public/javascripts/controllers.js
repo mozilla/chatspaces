@@ -301,23 +301,77 @@ angular.module('chatspace.controllers', []).
           method: 'POST'
         }).success(function (data) {
           localForage.setItem($rootScope.userHash + ':lastPic', $rootScope.picture);
-          $scope.cancelCamera();
+          $rootScope.cancelCamera();
           resetForm();
 
           if (!$routeParams.senderKey) {
             $location.path('/thread/' + data.key);
           }
         }).error(function (data) {
-          $scope.cancelCamera();
-          $scope.info = false;
-          $scope.errors = data.message;
-          $scope.posting = false;
+          // A failed message goes immediately into the Drafts section
+          var created = Math.round(Date.now() / 1000);
+          console.log('error sending post');
+          localForage.getItem($rootScope.userHash + ':draftList', function (drafts) {
+            if (!drafts) {
+              drafts = [];
+            }
+
+            if (drafts.indexOf(created) === -1) {
+              drafts.push(created);
+              localForage.setItem($rootScope.userHash + ':draftList', drafts);
+              localForage.setItem($rootScope.userHash + ':draft[' + created + ']', {
+                key: created,
+                value: formData
+              });
+            }
+
+            $location.path('/drafts');
+          });
         });
       }
     };
   }).
-  controller('DraftsCtrl', function ($scope, $rootScope, $location) {
+  controller('DraftsCtrl', function ($scope, $rootScope, $location, $http) {
+    $scope.draftMessages = {};
+    $scope.draftList = [];
 
+    $http({
+      url: '/api/profile',
+      method: 'GET'
+    }).success(function (data) {
+      $rootScope.userHash = data.userHash;
+
+      localForage.getItem($rootScope.userHash + ':draftList', function (drafts) {
+        if (drafts) {
+          $scope.draftList = drafts;
+
+          drafts.forEach(function (d) {
+            localForage.getItem($rootScope.userHash + ':draft[' + d + ']', function (message) {
+              $scope.$apply(function () {
+                $scope.draftMessages[d] = message;
+              });
+            });
+          });
+        }
+      });
+    });
+
+    $scope.resendMessage = function (message) {
+      $http({
+        url: '/api/message',
+        data: message.value,
+        method: 'POST'
+      }).success(function (data) {
+        localForage.setItem($rootScope.userHash + ':lastPic', message.value.picture);
+        delete $scope.draftMessages[message.key];
+        $scope.draftList.splice($scope.draftList.indexOf(message.key), 1);
+
+        localForage.removeItem($rootScope.userHash + ':draft[' + message.key + ']');
+        localForage.setItem($rootScope.userHash + ':draftList', $scope.draftList);
+      }).error(function () {
+        console.log('could not send, keeping in drafts');
+      });
+    };
   }).
   controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
     api.call();
@@ -438,7 +492,7 @@ angular.module('chatspace.controllers', []).
             $rootScope.recipientAvatars = thread.value.recipientAvatars;
 
             if ($rootScope.recipientAvatars) {
-           //   $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
             }
 
             $rootScope.messages[d] = thread;

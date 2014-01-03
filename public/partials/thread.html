@@ -1,5 +1,11 @@
 <div class="dashboard-content thread-view">
   <div class="form-content">
+    <div ng-if="info" class="info">
+      <p>{{ info }}</p>
+    </div>
+    <div ng-if="errors" class="errors">
+      <p>{{ errors }}</p>
+    </div>
     <form ng-submit="sendMessage()" ng-include="'/partials/includes/message_form.html'"></form>
     <div class="posting" ng-if="posting">Posting, please wait!</div>
   </div>
