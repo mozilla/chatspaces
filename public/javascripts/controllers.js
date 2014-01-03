@@ -394,6 +394,9 @@ angular.module('chatspace.controllers', []).
 
     $scope.isLoading = true;
 
+    $rootScope.recipients = {};
+    $rootScope.messages = {};
+
     var since = '';
 
     // load all the messages from the local cache
