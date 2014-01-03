@@ -200,32 +200,48 @@ angular.module('chatspace.controllers', []).
     if ($routeParams.senderKey) {
       $rootScope.notifications.splice($rootScope.notifications.indexOf($routeParams.senderKey), 1);
 
-      $rootScope.recipients = {};
       $rootScope.reply = $routeParams.senderKey;
       $rootScope.threadList = [];
 
-      localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
-        if (data) {
-          $rootScope.threadList = data;
-          $rootScope.latestThreadMessage = data[0];
+      $http({
+        url: '/api/profile',
+        method: 'GET'
+      }).success(function (data) {
+        $rootScope.userHash = data.userHash;
+        $rootScope.recipients = {};
+        $rootScope.messages = {};
+        $rootScope.recipientAvatars = [];
+        $scope.isLoading = true;
 
-          since = '?since=' + $rootScope.latestThreadMessage;
-        }
+        localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
+          if (data) {
+            $rootScope.threadList = data;
+            $rootScope.latestThreadMessage = data[0];
 
-        $rootScope.threadList.forEach(function (d) {
-          localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
-            $rootScope.messages[d] = message;
+            since = '?since=' + $rootScope.latestThreadMessage;
+          }
 
-            message.value.recipients.forEach(function (userHash) {
-              if (userHash !== $rootScope.userHash) {
-                $rootScope.recipients[userHash] = userHash;
+          $rootScope.threadList.forEach(function (d) {
+            localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
+              $rootScope.messages[d] = message;
+
+              message.value.recipients.forEach(function (userHash) {
+                if (userHash !== $rootScope.userHash) {
+                  $rootScope.recipients[userHash] = userHash;
+                }
+              });
+
+              $rootScope.recipientAvatars = message.value.recipientAvatars;
+
+              if ($rootScope.recipientAvatars) {
+                $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
               }
             });
           });
-        });
 
-        getThread();
-        $scope.isLoading = false;
+          getThread();
+          $scope.isLoading = false;
+        });
       });
     }
 
@@ -392,47 +408,53 @@ angular.module('chatspace.controllers', []).
   controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
     api.call();
 
-    $scope.isLoading = true;
+    $http({
+      url: '/api/profile',
+      method: 'GET'
+    }).success(function (data) {
+      $rootScope.userHash = data.userHash;
+      $rootScope.recipients = {};
+      $rootScope.messages = {};
+      $scope.isLoading = true;
+      $rootScope.recipientAvatars = [];
 
-    $rootScope.recipients = {};
-    $rootScope.messages = {};
+      var since = '';
 
-    var since = '';
+      // load all the messages from the local cache
+      localForage.getItem($rootScope.userHash + ':dashboardList', function (data) {
+        if (data) {
+          $rootScope.dashboardList = data;
+        }
 
-    // load all the messages from the local cache
-    localForage.getItem($rootScope.userHash + ':dashboardList', function (data) {
-      if (data) {
-        $rootScope.dashboardList = data;
-      }
+        $rootScope.dashboardList.forEach(function (d) {
+          // remove any occurences of your own userHash and add the final message to the messages scope
+          localForage.getItem($rootScope.userHash + ':dashMessage[' + d + ']', function (thread) {
+            thread.value.recipients.forEach(function (r, idx) {
+              if (r === $rootScope.userHash) {
+                thread.value.recipients.splice(idx, 1);
+              }
+            });
 
-      $rootScope.dashboardList.forEach(function (d) {
-        // remove any occurences of your own userHash and add the final message to the messages scope
-        localForage.getItem($rootScope.userHash + ':dashMessage[' + d + ']', function (thread) {
-          thread.value.recipients.forEach(function (r, idx) {
-            if (r === $rootScope.userHash) {
-              thread.value.recipients.splice(idx, 1);
+            $rootScope.recipientAvatars = thread.value.recipientAvatars;
+
+            if ($rootScope.recipientAvatars) {
+           //   $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
             }
+
+            $rootScope.messages[d] = thread;
           });
-
-          $rootScope.recipientAvatars = thread.value.recipientAvatars;
-
-          if ($rootScope.recipientAvatars) {
-         //   $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-          }
-
-          $rootScope.messages[d] = thread;
         });
-      });
 
-      if ($rootScope.dashboardList[0]) {
-        since = '?since=' + $rootScope.dashboardList[0];
-      }
+        if ($rootScope.dashboardList[0]) {
+          since = '?since=' + $rootScope.dashboardList[0];
+        }
 
-      $http({
-        url: '/api/feed' + since,
-        method: 'GET'
-      }).success(function (data) {
-        $scope.isLoading = false;
+        $http({
+          url: '/api/feed' + since,
+          method: 'GET'
+        }).success(function (data) {
+          $scope.isLoading = false;
+        });
       });
     });
 
