@@ -1,13 +1,13 @@
 <div class="dashboard-content dashboard-preview">
   <ul id="message-list">
     <li ng-show="isLoading" class="loader">Loading ...</li>
-    <li ng-class="{ new: isUnread(message) }" ng-repeat="(key, message) in messages | orderObjectBy:'updated' track by $index" ng-click="getThread(message)">
+    <li ng-class="{ new: isUnread(message) }" ng-repeat="(key, message) in messages | orderObjectBy:'updated' track by $index" ng-click="getThread(message)" on-finish-render>
       <div class="image left">
         <img src="{{ message.value.media }}">
       </div>
       <div class="right">
         <div class="recipients">
-          <img src="{{ recipient }}" ng-repeat="recipient in recipientAvatars track by $index">
+          <img src="{{ recipient }}" class="avatar" ng-class-even="'even'" ng-repeat="recipient in recipientAvatars track by $index">
         </div>
         <div class="preview-content">
           <p>{{ message.value.message }}</p>

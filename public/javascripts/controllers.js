@@ -51,7 +51,10 @@ angular.module('chatspace.controllers', []).
           localCache.setItem(key, data);
 
           $rootScope.recipientAvatars = data.value.recipientAvatars;
-          $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+
+          if ($rootScope.recipientAvatars) {
+            $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+          }
 
           if ($routeParams.senderKey === senderKey) {
             $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
@@ -414,6 +417,12 @@ angular.module('chatspace.controllers', []).
                 thread.value.recipients.splice(idx, 1);
               }
             });
+
+            $rootScope.recipientAvatars = thread.value.recipientAvatars;
+
+            if ($rootScope.recipientAvatars) {
+           //   $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+            }
 
             $rootScope.messages[d] = thread;
           });

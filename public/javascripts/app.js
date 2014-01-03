@@ -8,9 +8,9 @@ angular.module('chatspace', [
   'chatspace.factories',
   'chatspace.controllers'
 ]).
-run(function ($rootScope, $http, $location, authenticate) {
+run(function ($rootScope, $http, $location, $timeout, authenticate) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    setTimeout(function () {
+    $timeout(function () {
       if (!$rootScope.isAuthenticated) {
         $location.path('/');
       } else {
@@ -50,7 +50,7 @@ run(function ($rootScope, $http, $location, authenticate) {
           authenticate.logout();
         });
       }
-    }, 2);
+    }, 100);
   });
 }).
 service('user', function ($rootScope) {
@@ -65,10 +65,10 @@ service('user', function ($rootScope) {
     }
   }
 }).
-service('api', function ($http) {
+service('api', function ($http, $timeout) {
   return {
     call: function () {
-      setTimeout(function () {
+      $timeout(function () {
         console.log('calling services');
         $http({
           url: '/api/following',
@@ -143,5 +143,55 @@ filter('orderObjectBy', function () {
     filtered.reverse();
 
     return filtered;
+  };
+}).
+directive('onFinishRender', function ($timeout) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attr) {
+      if (scope.$last) {
+        $timeout(function () {
+          var avatars = $('.avatar');
+          var amount = .12;
+
+          for (var i = 0; i < avatars.length; i ++) {
+            var img = avatars[i];
+            var dpr = window.devicePixelRatio || 1;
+            var width = img.width * dpr;
+            var height = img.height * dpr;
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            ctx.beginPath();
+
+            if (img.classList.contains('even')) {
+              ctx.moveTo(amount * width, 0);
+              ctx.lineTo(width - amount * width, 0);
+              ctx.lineTo(width, height);
+              ctx.lineTo(0, height);
+              ctx.lineTo(amount * width, 0);
+            } else {
+              ctx.moveTo(0, 0);
+              ctx.lineTo(width, 0);
+              ctx.lineTo(width - width * amount, height);
+              ctx.lineTo(amount * width, height);
+              ctx.lineTo(0, 0);
+            }
+
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, 80, 60, 0, 0, width, height);
+
+            canvas.style.width = img.width + 'px';
+            canvas.style.height = img.height + 'px';
+            var margin = (-amount * img.width | 0) + 'px';
+            canvas.style.marginRight = margin;
+            img.parentNode.insertBefore(canvas, img);
+            img.style.display = 'none';
+          }
+          scope.$emit('ngRepeatFinished');
+        });
+      }
+    }
   };
 });
