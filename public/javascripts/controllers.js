@@ -255,7 +255,7 @@ angular.module('chatspace.controllers', []).
 
     $scope.showRecipients = function () {
       $scope.cancelCamera();
-      $scope.showFollowing = true;
+      $rootScope.showFollowing = true;
     };
 
     $scope.toggleRecipient = function (userHash) {
