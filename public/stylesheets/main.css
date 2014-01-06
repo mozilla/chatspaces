@@ -439,8 +439,7 @@ svg.progress.visible {
 #wrapper main > section.settings {
     background-color: #00d1ff;
     color: #eee;
-    padding: 20px;
-    width: 965px;
+    width: 100%;
 }
 
 main {
@@ -483,20 +482,27 @@ h2 a {
     text-decoration: none;
 }
 
+#wrapper main > section.settings {
+    height: 280px;
+    margin-top: 20px;
+    position: absolute;
+    z-index: 2;
+}
+
 #wrapper main > section.settings h1 {
     color: #fff;
 }
 
 #wrapper main > section.settings li {
     background-color: #73e6ff;
-    margin: 0 -20px 2px -20px;
+    margin: 0 0 2px;
 }
 
 #wrapper main > section.settings li a {
     color: #555;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     display: block;
-    padding: 20px;
+    padding: 10px 20px;
     text-decoration: none;
 }
 
@@ -505,25 +511,13 @@ h2 a {
 }
 
 #wrapper main.off > section.settings {
-    left: -1024px;
+    top: -320px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
 
-#wrapper main.off > section.default,
 #wrapper main.on > section.settings {
-    left: 0;
-    -moz-transition: 0.3s ease-out;
-    transition: 0.3s ease-out;
-}
-
-#wrapper main.on #top-bar {
-    position: absolute;
-    top: 0;
-}
-
-#wrapper main.on > section.default {
-    left: 1005px;
+    top: -20px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
 }
@@ -811,14 +805,6 @@ video {
     #wrapper main > section.settings {
         width: 670px;
     }
-
-    #wrapper main.off > section.settings {
-        left: -710px;
-    }
-
-    #wrapper main.on > section.default {
-        left: 710px;
-    }
 }
 
 @media only screen and (max-width: 727px) {
@@ -893,14 +879,6 @@ video {
     #wrapper main > section.settings {
         width: 360px;
     }
-
-    #wrapper main.off > section.settings {
-        left: -400px;
-    }
-
-    #wrapper main.on > section.default {
-        left: 400px;
-    }
 }
 
 @media only screen and (max-width: 459px) {
@@ -948,14 +926,6 @@ video {
 
     #wrapper main > section.settings {
         width: 260px;
-    }
-
-    #wrapper main.off > section.settings {
-        left: -300px;
-    }
-
-    #wrapper main.on > section.default {
-        left: 300px;
     }
 
     .contact-results li {
