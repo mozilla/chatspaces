@@ -50,10 +50,12 @@ angular.module('chatspace.controllers', []).
           localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
           localCache.setItem(key, data);
 
-          $rootScope.recipientAvatars = data.value.recipientAvatars;
+          if (data.value.recipientAvatars) {
+            $rootScope.recipientAvatars = data.value.recipientAvatars;
 
-          if ($rootScope.recipientAvatars) {
-            $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+            if ($rootScope.recipientAvatars) {
+              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+            }
           }
 
           if ($routeParams.senderKey === senderKey) {
@@ -210,7 +212,7 @@ angular.module('chatspace.controllers', []).
         $rootScope.userHash = data.userHash;
         $rootScope.recipients = {};
         $rootScope.messages = {};
-        $rootScope.recipientAvatars = [];
+       // $rootScope.recipientAvatars = [];
         $scope.isLoading = true;
 
         localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {

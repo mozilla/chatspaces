@@ -649,7 +649,7 @@ h2 a {
 #message-list {
     display: block;
     float: right;
-    margin: 10px 0 55px 0;
+    margin: 10px 0 70px 0;
     overflow-x: hidden;
     width: 100%;
 }
@@ -673,6 +673,7 @@ h2 a {
     display: inline-block;
     float: left;
     height: 90px;
+    margin: 0 3px;
     overflow: hidden;
     position: relative;
     width: 90px;
@@ -716,6 +717,23 @@ h2 a {
     font-size: 1.2rem;
     line-height: 1.4rem;
     padding: 5px;
+}
+
+.recipient-list {
+    background-color: rgba(1, 1, 1, 0.7);
+    bottom: 0;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+}
+
+.recipient-list .avatar {
+    height: 50px;
+    width: 50px;
+}
+
+.recipient-list .avatar img {
+    height: 55px;
 }
 
 time {

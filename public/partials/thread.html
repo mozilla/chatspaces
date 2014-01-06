@@ -23,6 +23,8 @@
   </ul>
 </div>
 <div class="recipient-list">
-  <img src="{{ recipient }}" ng-class-even="'even'" class="avatar" ng-repeat="recipient in recipientAvatars track by $index" on-finish-render>
+  <div class="avatar" ng-repeat="recipient in recipientAvatars track by $index">
+    <img src="{{ recipient }}">
+  </div>
 </div>
 <div ng-include="'/partials/includes/camera.html'" ng-show="showCamera"></div>
