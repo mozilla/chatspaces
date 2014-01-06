@@ -1,0 +1,22 @@
+<h2>Search for contacts</h2>
+
+<input ng-model="user" placeholder="Type in a username" class="search-input">
+<button type="button" ng-click="searchUsers()">Search</button>
+
+<div class="info-box">
+  <div ng-if="info" class="info">
+    <p>{{ info }}</p>
+  </div>
+  <div ng-if="errors" class="errors">
+    <p>{{ errors }}</p>
+  </div>
+</div>
+<ul class="user-results">
+  <li ng-repeat="user in users | orderObjectBy:friendPredicate:true">
+    <div class="avatar">
+      <img src="{{ user.avatar }}">
+    </div>
+    <span>{{ user.username }}</span>
+    <button class="add" ng-click="requestFriend(user)">Add</button>
+  </li>
+</ul>

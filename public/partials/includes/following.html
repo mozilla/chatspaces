@@ -1,9 +1,12 @@
 <div class="new-message following">
   <div class="following-wrapper">
     <h2>Choose recipients</h2>
-    <ul class="recipient-results">
+    <ul class="user-results">
       <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }" ng-click="toggleRecipient(value.userHash)" data-t="{{ value.userHash }}">
-        <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
+        <div class="avatar">
+          <img src="{{ value.avatar }}">
+        </div>
+        <span>{{ value.username }}</span>
       </li>
     </ul>
   </div>

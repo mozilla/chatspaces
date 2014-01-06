@@ -84,7 +84,7 @@ service('api', function ($http, $timeout, $rootScope) {
           url: '/api/notifications',
           method: 'GET'
         });
-      });
+      }, 500);
     }
   };
 }).
@@ -109,6 +109,10 @@ config(function ($routeProvider, $locationProvider) {
     .when('/friends', {
       controller: 'FriendCtrl',
       templateUrl: 'partials/friends.html'
+    })
+    .when('/search', {
+      controller: 'FriendCtrl',
+      templateUrl: 'partials/search.html'
     })
     .when('/message', {
       controller: 'MessageCtrl',
@@ -143,56 +147,5 @@ filter('orderObjectBy', function () {
     filtered.reverse();
 
     return filtered;
-  };
-}).
-directive('onFinishRender', function ($timeout) {
-  return {
-    restrict: 'A',
-    link: function (scope, element, attr) {
-      var img = element[0];
-
-      $(img).bind('load', function() {
-        var amount = .12;
-
-        // for (var i = 0; i < avatars.length; i ++) {
-        var dpr = window.devicePixelRatio || 1;
-        var width = img.width * dpr;
-        var height = img.height * dpr;
-        var canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        var ctx = canvas.getContext('2d');
-        ctx.beginPath();
-        ctx.lineCap = 'round';
-        ctx.lineWidth = 8;
-
-        if ($(img).hasClass('even')) {
-          ctx.moveTo(amount * width, 0);
-          ctx.lineTo(width - amount * width, 0);
-          ctx.lineTo(width, height);
-          ctx.lineTo(0, height);
-          ctx.lineTo(amount * width, 0);
-        } else {
-          ctx.moveTo(0, 0);
-          ctx.lineTo(width, 0);
-          ctx.lineTo(width - width * amount, height);
-          ctx.lineTo(amount * width, height);
-          ctx.lineTo(0, 0);
-        }
-
-        ctx.clip();
-        ctx.drawImage(img, 0, 0, 120, 90, 0, 0, width, height);
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 5;
-        ctx.stroke();
-
-        canvas.style.width = img.width + 'px';
-        canvas.style.height = img.height + 'px';
-        var margin = (-amount * img.width | 0) + 3 + 'px';
-        canvas.style.marginRight = margin;
-        img.parentNode.insertBefore(canvas, img);
-        img.style.display = 'none';
-      });
-    }
   };
 });

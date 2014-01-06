@@ -9,6 +9,10 @@ block content
         li(ng-if='isAuthenticated')
           a(href='/friends', ng-click='toggleSettings()') Friends
         li(ng-if='isAuthenticated')
+          a(href='/search', ng-click='toggleSettings()') Search Users
+        li(ng-if='isAuthenticated')
+          a(href='/blocked', ng-click='toggleSettings()') Blocked
+        li(ng-if='isAuthenticated')
           a(href='/profile', ng-click='toggleSettings()') Profile
         li(ng-if='isAuthenticated')
           a(href='/drafts', ng-click='toggleSettings()') Drafts

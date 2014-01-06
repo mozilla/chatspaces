@@ -445,7 +445,7 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('BlockedCtrl', function ($scope, $rootScope, $http, $location, api) {
+  controller('BlockedCtrl', function ($scope, $rootScope, $http, api) {
     api.call();
 
     $scope.unblockUser = function (userHash, idx) {

@@ -225,25 +225,21 @@ svg.progress.visible {
     padding: 5px 20px;
 }
 
-.new-message.camera, .new-message.following {
+.new-message.camera {
     background-color: rgba(5, 5, 5, 0.9);
 }
 
-.following-wrapper {
-    margin: 50px auto 0 auto;
-    width: 320px;
+.new-message.following {
+    background-color: #fff;
+}
+
+.new-message.following .cancel {
+    color: #111;
 }
 
 .following-wrapper .recipient-results li {
-    background-color: rgba(81, 81, 81, 0.25);
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    color: #eee;
-    clear: both;
-    float: left;
-    margin-bottom: 3px;
-    padding: 3px 0;
-    width: 100%;
 }
 
 .toggle {
@@ -550,79 +546,36 @@ h2 a {
     width: 100%;
 }
 
-.contact-results {
-    clear: both;
-    float: left;
-    padding: 10px;
+.user-results {
+    width: 100%;
 }
 
-.search-results li, .contact-results li, .recipient-results li {
-    height: 45px;
-    line-height: 50px;
-    overflow: hidden;
-    position: relative;
-    width: 170px;
-}
-
-.search-results {
-    display: block;
-    position: absolute;
-    top: 105px;
-    z-index: 2;
-}
-
-.search-results li, .contact-results li {
+.user-results li {
+    border-bottom: 2px solid #eee;
     float: left;
     line-height: 45px;
     margin-bottom: 10px;
     position: relative;
-    width: 208px;
+    width: 100%;
 }
 
-.contact-results li a {
-    color: #666;
-    text-decoration: none;
+.user-results li.on {
+    background-color: #eee;
+    border-bottom: 2px solid #ccc;
+    color: #111;
 }
 
-.recipient-results li .avatar {
-    margin-right: 10px;
-    width: 60px;
-}
-
-.recipient-results li.on {
-    background-color: #111;
-    color: #2ae7ce;
-    border-left: 5px solid #2ae7ce;
-    border-right: 5px solid #2ae7ce;
-}
-
-.search-results li {
-    background-color: rgba(8, 8, 8, 0.75);
-    bottom: 0;
-    color: #fff;
-    padding-bottom: 0;
-}
-
-.recipient-list {
-    background-color: rgba(1, 1, 1, 0.8);
-    bottom: 0;
-    display: block;
-    position: fixed;
-    width: 1024px;
-}
-
-.recipient-list li {
+.user-results span {
+    display: inline-block;
     float: left;
-    padding: 5px 5px 0 5px;
+    margin-left: 10px;
 }
 
-.recipient-list li img {
-    width: 40px;
-}
-
-.contact-results li {
-    border: 2px solid #eee;
-    margin: 2px;
+.user-results .block {
+    bottom: 0;
+    display: inline-block;
+    position: absolute;
+    right: 10px;
 }
 
 .delete {
@@ -634,6 +587,7 @@ h2 a {
     height: 28px;
     padding: 5px;
     position: absolute;
+    right: 10px;
 }
 
 .search-wrapper {
@@ -645,21 +599,10 @@ h2 a {
     margin: 0 0 30px 10px;
 }
 
-.search-results {
-    padding-left: 10px;
-}
-
 .search-results .delete {
     left: 50px;
     top: 40px;
     width: 25px;
-}
-
-.search-results li {
-    border-bottom: 1px solid #555;
-    border-top: 1px solid #777;
-    clear: both;
-    margin: 0;
 }
 
 #message-list li.loader {
@@ -703,13 +646,6 @@ h2 a {
     width: 80px;
 }
 
-.avatar {
-    display: inline-block;
-    float: left;
-    margin-right: 5px;
-    width: 45px;
-}
-
 #message-list {
     display: block;
     float: right;
@@ -733,9 +669,24 @@ h2 a {
     cursor: pointer;
 }
 
-#message-list li img.avatar {
+.avatar {
+    display: inline-block;
+    float: left;
     height: 90px;
-    width: 120px;
+    overflow: hidden;
+    position: relative;
+    width: 90px;
+}
+
+.avatar img {
+    left: -5px;
+    position: absolute;
+    top: -5px;
+}
+
+#message-list li .avatar {
+    height: 50px;
+    width: 50px;
 }
 
 #message-list .left img {
@@ -774,11 +725,7 @@ time {
     font-style: italic;
     padding: 5px 0 5px 8px;
     position: absolute;
-    right: 0;
-}
-
-.thread-view time {
-    right: 15px;
+    right: 10px;
 }
 
 input {
