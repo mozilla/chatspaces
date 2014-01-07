@@ -472,7 +472,6 @@ angular.module('chatspace.controllers', []).
       $rootScope.recipients = {};
       $rootScope.messages = {};
       $scope.isLoading = true;
-      $rootScope.recipientAvatars = [];
 
       var since = '';
 
@@ -491,13 +490,18 @@ angular.module('chatspace.controllers', []).
               }
             });
 
-            $rootScope.recipientAvatars = thread.value.recipientAvatars;
-
-            if ($rootScope.recipientAvatars) {
-              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-            }
-
             $rootScope.messages[d] = thread;
+
+            $rootScope.$apply(function () {
+              $rootScope.recipientAvatars = [];
+
+              if (thread.value.recipientAvatars) {
+                $rootScope.recipientAvatars = thread.value.recipientAvatars;
+              }
+
+              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
+              $scope.recipientAvatars = $rootScope.recipientAvatars;
+            });
           });
         });
 
