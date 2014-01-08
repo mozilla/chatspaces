@@ -42,7 +42,7 @@ run(function ($rootScope, $http, $location, $timeout, authenticate) {
           });
 
           if (!$rootScope.username) {
-            $location.path('/profile');
+            $location.path('/new');
           } else if ($location.path() === '/') {
             $location.path('/dashboard');
           }
@@ -93,6 +93,10 @@ config(function ($routeProvider, $locationProvider) {
     .when('/', {
       controller: 'HomeCtrl',
       templateUrl: 'partials/home.html'
+    })
+    .when('/new', {
+      controller: 'ProfileCtrl',
+      templateUrl: 'partials/new_profile.html'
     })
     .when('/profile', {
       controller: 'ProfileCtrl',

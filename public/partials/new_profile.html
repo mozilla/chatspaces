@@ -1,0 +1,19 @@
+<div class="profile-view">
+  <h1>Create your profile</h1>
+
+  <section ng-show="!currentUsername">
+    <h2>Create a username</h2>
+    <form ng-submit="updateProfile()">
+      <div ng-if="info" class="info">
+        <p>{{ info }}</p>
+      </div>
+      <div ng-if="errors" class="errors">
+        <p>{{ errors }}</p>
+      </div>
+      <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
+      <p>Your username is how friends will find you on chatpspaces so choose a name your friends know you by.</p>
+      <button type="button" ng-click="saveUsername()">Next</button>
+    </form>
+  </section>
+</div>
+<div ng-include="'/partials/includes/camera_avatar.html'" ng-show="showCamera"></div>

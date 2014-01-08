@@ -545,6 +545,12 @@ angular.module('chatspace.controllers', []).
       });
     };
 
+    $scope.saveUsername = function () {
+      $scope.updateProfile(function () {
+        $scope.promptCamera();
+      });
+    };
+
     $scope.updateProfile = function (callback) {
       $http({
         url: '/api/profile',
