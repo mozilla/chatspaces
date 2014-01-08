@@ -471,7 +471,10 @@ angular.module('chatspace.controllers', []).
       $rootScope.userHash = data.userHash;
       $rootScope.recipients = {};
       $rootScope.messages = {};
+      $rootScope.recipientAvatars = {};
       $scope.isLoading = true;
+
+      var recipientAvatars = [];
 
       var since = '';
 
@@ -484,24 +487,11 @@ angular.module('chatspace.controllers', []).
         $rootScope.dashboardList.forEach(function (d) {
           // remove any occurences of your own userHash and add the final message to the messages scope
           localForage.getItem($rootScope.userHash + ':dashMessage[' + d + ']', function (thread) {
-            thread.value.recipients.forEach(function (r, idx) {
-              if (r === $rootScope.userHash) {
-                thread.value.recipients.splice(idx, 1);
-              }
-            });
+            recipientAvatars = thread.value.recipientAvatars;
 
             $rootScope.messages[d] = thread;
-
-            $rootScope.$apply(function () {
-              $rootScope.recipientAvatars = [];
-
-              if (thread.value.recipientAvatars) {
-                $rootScope.recipientAvatars = thread.value.recipientAvatars;
-              }
-
-              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-              $scope.recipientAvatars = $rootScope.recipientAvatars;
-            });
+            $rootScope.recipientAvatars[d] = thread.value.recipientAvatars || [];
+            $rootScope.recipientAvatars[d].splice($rootScope.recipientAvatars[d].indexOf($rootScope.avatar), 1);
           });
         });
 

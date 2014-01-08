@@ -7,7 +7,7 @@
       </div>
       <div class="right">
         <div class="recipients">
-          <div class="avatar" ng-repeat="recipient in recipientAvatars track by $index">
+          <div class="avatar" ng-repeat="recipient in recipientAvatars[message.key] track by $index">
             <img src="{{ recipient }}">
           </div>
         </div>
