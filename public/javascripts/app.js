@@ -42,6 +42,8 @@ run(function ($rootScope, $http, $location, $timeout, authenticate) {
           });
 
           if (!$rootScope.username) {
+            localForage.setItem('newUser', true);
+            localForage.setItem('firstMessage', true);
             $location.path('/new');
           } else if ($location.path() === '/') {
             $location.path('/dashboard');

@@ -1,7 +1,7 @@
 <div class="profile-view">
-  <h1>Create your profile</h1>
+  <h1 ng-show="!currUsername">Create your profile</h1>
 
-  <section ng-show="!currentUsername">
+  <section ng-show="!currUsername">
     <h2>Create a username</h2>
     <form ng-submit="updateProfile()">
       <div ng-if="info" class="info">
@@ -14,6 +14,11 @@
       <p>Your username is how friends will find you on chatpspaces so choose a name your friends know you by.</p>
       <button type="button" ng-click="saveUsername()">Next</button>
     </form>
+  </section>
+  <section ng-show="avatar">
+    <img src="{{ avatar }}">
+    <button ng-click="promptCamera()">Take a pic!</button>
+    <button ng-click="searchFriends()">Done</button>
   </section>
 </div>
 <div ng-include="'/partials/includes/camera_avatar.html'" ng-show="showCamera"></div>

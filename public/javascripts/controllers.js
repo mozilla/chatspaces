@@ -303,6 +303,7 @@ angular.module('chatspace.controllers', []).
           method: 'POST'
         }).success(function (data) {
           localForage.setItem($rootScope.userHash + ':lastPic', $rootScope.picture);
+          localForage.setItem('newMessage', false);
           $rootScope.cancelCamera();
           resetForm();
 
@@ -380,6 +381,17 @@ angular.module('chatspace.controllers', []).
 
     $scope.users = [];
     $scope.user = '';
+    $scope.showNewMessageGuide = true;
+
+    localForage.getItem('newMessage', function (st) {
+      if (st) {
+        $scope.showNewMessageGuide = false;
+      }
+    });
+
+    $scope.goToDashboard = function () {
+      $location.path('/dashboard');
+    };
 
     $scope.blockUser = function (userHash) {
       $http({
@@ -525,6 +537,12 @@ angular.module('chatspace.controllers', []).
     $scope.currentUsername = $rootScope.username;
     $scope.cacheInfo = false;
 
+    localForage.getItem('newUser', function (st) {
+      if (!st) {
+        $location.path('/profile');
+      }
+    });
+
     $scope.resetCache = function () {
       localForage.clear();
       $rootScope.latestMessage = false;
@@ -543,6 +561,12 @@ angular.module('chatspace.controllers', []).
       $scope.updateProfile(function () {
         $scope.cancelCamera();
       });
+    };
+
+    $scope.searchFriends = function () {
+      // new user is flagged as existing user once they go through the username and avatar process
+      localForage.setItem('newUser', false);
+      $location.path('/search');
     };
 
     $scope.saveUsername = function () {
