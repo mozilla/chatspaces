@@ -15,7 +15,7 @@ html(ng-app='chatspace')
 
       #top-bar
         .profile
-          a.action.add-message(href='/message', ng-click='newMessage()', title='new message') +
+          a.action.add-message(href='/message', ng-click='newMessage()', title='new message', ng-show='username') +
 
     #wrapper
       block content

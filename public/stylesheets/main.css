@@ -72,6 +72,18 @@ body, input {
     font-family: 'DroidSansMono', Arial, sans-serif;
 }
 
+.new-message-tooltip {
+    background-color: #eee;
+    border: 2px dashed #ccc;
+    font-size: 1.3rem;
+    padding: 10px;
+    position: absolute;
+    right: 50px;
+    top: 10px;
+    width: 280px;
+    z-index: 2;
+}
+
 .default {
     margin-bottom: 30px;
     overflow-x: auto;
@@ -447,6 +459,7 @@ main {
 }
 
 .actions {
+    clear: both;
     margin: 0 auto;
     text-align: center;
     width: 300px;
@@ -461,6 +474,7 @@ main {
 
 .actions button {
     border: 0;
+    font-size: 1.6rem;
     margin: 10px;
     padding: 5px;
 }

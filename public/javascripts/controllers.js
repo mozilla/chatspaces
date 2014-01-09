@@ -212,7 +212,6 @@ angular.module('chatspace.controllers', []).
         $rootScope.userHash = data.userHash;
         $rootScope.recipients = {};
         $rootScope.messages = {};
-       // $rootScope.recipientAvatars = [];
         $scope.isLoading = true;
 
         localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
@@ -304,6 +303,7 @@ angular.module('chatspace.controllers', []).
         }).success(function (data) {
           localForage.setItem($rootScope.userHash + ':lastPic', $rootScope.picture);
           localForage.setItem('newMessage', false);
+          $scope.hasMessages = true;
           $rootScope.cancelCamera();
           resetForm();
 
@@ -536,6 +536,7 @@ angular.module('chatspace.controllers', []).
   controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, cameraHelper) {
     $scope.currentUsername = $rootScope.username;
     $scope.cacheInfo = false;
+    $scope.selectedUsername = false;
 
     localForage.getItem('newUser', function (st) {
       if (!st) {
@@ -559,6 +560,7 @@ angular.module('chatspace.controllers', []).
 
     $scope.saveAvatar = function () {
       $scope.updateProfile(function () {
+        $scope.selectedUsername = true;
         $scope.cancelCamera();
       });
     };

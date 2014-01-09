@@ -70,6 +70,8 @@ service('user', function ($rootScope) {
 service('api', function ($http, $timeout, $rootScope) {
   return {
     call: function () {
+      $rootScope.hasMessages = false;
+
       $timeout(function () {
         console.log('calling services');
         $http({
@@ -87,6 +89,12 @@ service('api', function ($http, $timeout, $rootScope) {
           method: 'GET'
         });
       }, 500);
+
+      localForage.getItem('newMessage', function (st) {
+        if (!st) {
+          $rootScope.hasMessages = true;
+        }
+      });
     }
   };
 }).
