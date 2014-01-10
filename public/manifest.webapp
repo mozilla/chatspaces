@@ -1,0 +1,23 @@
+{
+    "name": "Chatspaces",
+    "description": "Snazzy chat app",
+    "launch_path": "/",
+    "orientation": "portrait",
+    "type": "hosted",
+    "developer": {
+        "name": "Mozilla",
+        "url": "http://mozilla.org"
+    },
+    "default_locale": "en",
+    "icons": {
+        "60": "/images/icons/60.png"
+    },
+    "permissions": {
+        "desktop-notification": {},
+        "push": {}
+    },
+    "messages": [
+        { "push": "/index.html" },
+        { "notification": "/index.html" }
+    ] 
+}
