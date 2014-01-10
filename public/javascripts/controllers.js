@@ -521,8 +521,15 @@ angular.module('chatspace.controllers', []).
     });
 
     $scope.isUnread = function (message) {
-      return !!(($rootScope.notifications.indexOf(message.value.reply) > -1) ||
-               ($rootScope.notifications.indexOf(message.value.senderKey) > -1));
+      var count = 0;
+
+      $rootScope.notifications.forEach(function (n) {
+        if (n === message.value.senderKey) {
+          count ++;
+        }
+      });
+
+      return count;
     };
 
     $scope.getThread = function (message) {

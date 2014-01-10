@@ -11,7 +11,6 @@ html(ng-app='chatspace')
   body(ng-controller='AppCtrl', ng-class='{ landing : !isAuthenticated }')
     #header(ng-if='isAuthenticated')
       a(class='toggle', ng-click='toggleSettings()') ≡
-      a(id='notifications', ng-click='loadDashboard()', ng-class='{ on: notifications.length }', ng-bind='notifications.length')
 
       #top-bar
         .profile

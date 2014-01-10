@@ -14,6 +14,7 @@
         <div class="preview-content">
           <p>{{ message.value.message }}</p>
           <time>{{ getDate(message.updated) }}</time>
+          <span class="notification">{{ isUnread(message) }}</span>
         </div>
       </div>
     </li>
