@@ -12,13 +12,17 @@
       </div>
       <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
       <p>Your username is how friends will find you on chatpspaces so choose a name your friends know you by.</p>
-      <button type="button" ng-click="saveUsername()">Next</button>
     </form>
+    <div class="actions">
+      <button type="button" ng-click="saveUsername()">Next</button>
+    </div>
   </section>
   <section ng-show="selectedUsername" class="actions">
     <img src="{{ avatar }}">
-    <button ng-click="promptCamera()">Take a pic!</button>
-    <button ng-click="searchFriends()">Done</button>
+    <div class="actions">
+      <button ng-click="promptCamera()">Take a pic!</button>
+      <button ng-click="searchFriends()">Done</button>
+    </div>
   </section>
 </div>
 <div ng-include="'/partials/includes/camera_avatar.html'" ng-show="showCamera"></div>

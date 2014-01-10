@@ -171,6 +171,10 @@ h3 {
     width: 0;
 }
 
+button[disabled] {
+    opacity: 0.2;
+}
+
 #notifications.on {
     display: inline-block;
 }
