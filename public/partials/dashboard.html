@@ -6,15 +6,15 @@
         <img src="{{ message.value.media }}">
       </div>
       <div class="right">
-        <div class="recipients">
-          <div class="avatar" ng-repeat="recipient in recipientAvatars[message.key] track by $index">
-            <img src="{{ recipient }}">
-          </div>
-        </div>
+        <time>{{ getDate(message.updated) }}</time>
         <div class="preview-content">
           <p>{{ message.value.message }}</p>
-          <time>{{ getDate(message.updated) }}</time>
-          <span class="notification">{{ isUnread(message) }}</span>
+          <span class="notification" ng-show="isUnread(message)">{{ isUnread(message) }}</span>
+        </div>
+      </div>
+      <div class="recipients">
+        <div class="avatar" ng-repeat="recipient in recipientAvatars[message.key] track by $index">
+          <img src="{{ recipient }}">
         </div>
       </div>
     </li>

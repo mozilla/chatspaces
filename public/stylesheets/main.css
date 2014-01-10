@@ -157,20 +157,20 @@ h3 {
 .new:after {
     border: 25px solid transparent;
     border-color: transparent #fff330 #fff330 transparent;
-    bottom: 0;
     content: '';
     display: block;
     position: absolute;
     right: 0;
+    top: 45px;
     width: 0;
 }
 
 .notification {
-    bottom: 2px;
     font-family: 'DroidSansMono';
     font-size: 1.1rem;
     position: absolute;
     right: 2px;
+    top: 75px;
     z-index: 2;
 }
 
@@ -639,22 +639,30 @@ h2 a {
 }
 
 #message-list .right {
-    width: 80%;
+    width: 85%;
 }
 
 #message-list .right p {
+    clear: both;
+    float: left;
     padding-left: 10px;
 }
 
 #message-list .recipients {
+    background-color: #eee;
     clear: both;
     float: left;
-    margin: 0 0 10px 10px;
+    padding: 10px 0;
     width: 100%;
 }
 
 #message-list .recipients img {
+    margin: 0 5px;
     width: 80px;
+}
+
+#message-list .recipients img:first-child {
+    margin-left: 10px;
 }
 
 #message-list {
@@ -748,13 +756,13 @@ h2 a {
 }
 
 time {
-    bottom: 0;
+    clear: both;
     color: #888;
+    display: block;
+    float: left;
     font-size: 0.8rem;
     font-style: italic;
     padding: 5px 0 5px 8px;
-    position: absolute;
-    right: 10px;
 }
 
 input {
@@ -848,6 +856,14 @@ video {
         width: 80px;
     }
 
+    .new:after {
+        top: 15px;
+    }
+
+    .notification {
+        top: 45px;
+    }
+
     .message {
         height: 400px;
         margin-top: -440px;
@@ -880,7 +896,7 @@ video {
 
     time {
         font-size: 0.7rem;
-        padding: 3px 18px 3px 5px;
+        padding-left: 10px;
     }
 
     #wrapper main > section {
@@ -899,6 +915,11 @@ video {
 
     h2 a {
         display: block;
+    }
+
+    .notification {
+        right: -7px;
+        top: 30px;
     }
 
     input[type="text"] {
