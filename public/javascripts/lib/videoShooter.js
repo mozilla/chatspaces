@@ -28,6 +28,9 @@ function VideoShooter (videoElement) {
         setTimeout(captureFrame, interval * 1000); // timeouts are in milliseconds
       } else {
         ag.getBase64GIF(function (image) {
+
+          ag.destroy();
+          
           var img = document.createElement('img');
           img.src = image;
           callback(image);
