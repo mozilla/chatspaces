@@ -52,10 +52,6 @@ angular.module('chatspace.controllers', []).
 
           if (data.value.recipientAvatars) {
             $rootScope.recipientAvatars = data.value.recipientAvatars;
-
-            if ($rootScope.recipientAvatars) {
-              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-            }
           }
 
           if ($routeParams.senderKey === senderKey) {
@@ -233,10 +229,6 @@ angular.module('chatspace.controllers', []).
               });
 
               $rootScope.recipientAvatars = message.value.recipientAvatars;
-
-              if ($rootScope.recipientAvatars) {
-                $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-              }
             });
           });
 
@@ -503,7 +495,6 @@ angular.module('chatspace.controllers', []).
 
             $rootScope.messages[d] = thread;
             $rootScope.recipientAvatars[d] = thread.value.recipientAvatars || [];
-            $rootScope.recipientAvatars[d].splice($rootScope.recipientAvatars[d].indexOf($rootScope.avatar), 1);
           });
         });
 

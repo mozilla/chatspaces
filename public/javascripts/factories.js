@@ -208,10 +208,6 @@ angular.module('chatspace.factories', []).
           $rootScope.dashboardList = data;
         }
 
-        if ($rootScope.dashboardList.indexOf(key) > -1) {
-          $rootScope.dashboardList.splice($rootScope.dashboardList.indexOf(key), 1);
-        }
-
         $rootScope.dashboardList.unshift(key);
 
         for (var i = maxMessageCount; i < $rootScope.dashboardList.length; i ++) {
@@ -225,10 +221,6 @@ angular.module('chatspace.factories', []).
       localForage.getItem(threadKey, function (data) {
         if (data) {
           $rootScope.threadList = data;
-        }
-
-        if ($rootScope.threadList.indexOf(value.key) > -1) {
-          $rootScope.threadList.splice($rootScope.threadList.indexOf(value.key), 1);
         }
 
         $rootScope.threadList.unshift(value.key);

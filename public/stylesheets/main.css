@@ -89,6 +89,10 @@ body, input {
     overflow-x: auto;
 }
 
+.default p {
+    padding: 10px;
+}
+
 .persona {
     background-color: #bbb;
     color: #eee;
@@ -191,6 +195,10 @@ button[disabled] {
     border-left: 10px solid #37d7ff;
 }
 
+.dashboard-preview #message-list li:hover .recipients {
+    background-color: #b9e9f6;
+}
+
 #message-list li.new .left img {
     border-left: 10px solid #e2003b;
 }
@@ -269,7 +277,7 @@ svg.progress.visible {
     font-weight: 600;
     height: 40px;
     line-height: 2.4rem;
-    padding: 0 5px;
+    padding: 0 10px;
     text-shadow: #3c816b 0 0 1px;
 }
 
@@ -290,6 +298,7 @@ svg.progress.visible {
     font-weight: 600;
     height: 40px;
     line-height: 2.8rem;
+    padding-right: 5px;
     text-decoration: none;
     text-shadow: #3c816b 0 0 1px;
     width: 40px;
