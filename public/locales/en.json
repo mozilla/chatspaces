@@ -18,6 +18,5 @@
   "ERROR_COULD_NOT_SEARCH_USERS": "Error: Could not search users",
   "BLOCKED_USER": "Blocked user",
   "UNFOLLOWED_USER": "Unfollowed user",
-  "ADDED_USER": "Added user",
-
+  "ADDED_USER": "Added user"
 }
