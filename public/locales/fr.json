@@ -1,4 +1,11 @@
 {
-  "CHATSPACES": "Chatspaces2",
-  "FOO": "This is a paragraph"
+  "CHATSPACES": "Chatspaces",
+  "ADD_A_NEW_MESSAGE": "Add a new message",
+  "THREADS": "Threads",
+  "FRIENDS": "Friends",
+  "SEARCH_USERS": "Search users",
+  "BLOCKED_USERS": "Blocked users",
+  "PROFILE": "Profile",
+  "DRAFTS": "Drafts",
+  "SIGN OUT": "Sign out"
 }
