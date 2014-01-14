@@ -1,7 +1,7 @@
 <div class="content-wrapper">
-  <h1>Send a new message</h1>
+  <h1>{{ 'SEND_A_NEW_MESSAGE' | translate }}</h1>
   <form ng-submit="sendMessage()" ng-include="'/partials/includes/message_form.html'"></form>
-  <div class="posting" ng-if="posting">Posting, please wait!</div>
+  <div class="posting" ng-if="posting">{{ 'POSTING_PLEASE_WAIT' | translate }}</div>
 </div>
 <div ng-include="'/partials/includes/camera.html'" ng-show="showCamera"></div>
 <div ng-include="'/partials/includes/following.html'" ng-show="showFollowing"></div>

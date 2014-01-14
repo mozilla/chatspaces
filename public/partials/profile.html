@@ -1,14 +1,14 @@
 <div class="profile-view">
-  <h1>Your profile</h1>
+  <h1>{{ 'YOUR_PROFILE' | translate }}</h1>
 
   <section>
     <img src="{{ avatar }}">
-    <button ng-click="promptCamera()">Take a pic!</button>
+    <button ng-click="promptCamera()">{{ 'TAKE_A_PIC' | translate }}</button>
   </section>
 
-  <p>Current username: {{ currentUsername || username }}</p>
+  <p>{{ 'CURRENT_USERNAME' | translate }}: {{ currentUsername || username }}</p>
 
-  <h2>Update your username</h2>
+  <h2>{{ 'UPDATE_YOUR_USERNAME' | translate }}</h2>
   <form ng-submit="updateProfile()">
     <div ng-if="info" class="info">
       <p>{{ info }}</p>
@@ -19,12 +19,12 @@
     <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
   </form>
 
-  <h2>Reset local cache</h2>
+  <h2>{{ 'RESET_LOCAL_CACHE' | translate }}</h2>
   <div class="info-box">
     <div ng-if="cacheInfo" class="info">
       <p>{{ cacheInfo }}</p>
     </div>
   </div>
-  <button ng-click="resetCache()" class="submit message-button">Reset!</button>
+  <button ng-click="resetCache()" class="submit message-button">{{ 'RESET' | translate }}</button>
 </div>
 <div ng-include="'/partials/includes/camera_avatar.html'" ng-show="showCamera"></div>

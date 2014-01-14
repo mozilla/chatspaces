@@ -1,6 +1,6 @@
 <div class="new-message following">
   <div class="following-wrapper">
-    <h2>Choose recipients</h2>
+    <h2>{{ 'CHOOSE_RECIPIENTS' | translate }}</h2>
     <ul class="user-results">
       <li ng-repeat="(key, value) in friends track by $index" ng-class="{ on: recipients[value.userHash] }" ng-click="toggleRecipient(value.userHash)" data-t="{{ value.userHash }}">
         <div class="avatar">
@@ -12,7 +12,7 @@
   </div>
 
   <div class="actions">
-    <button ng-click="sendMessage()" type="submit" class="submit">Send!</button>
-    <a ng-click="cancelCamera()" class="cancel">Cancel</a>
+    <button ng-click="sendMessage()" type="submit" class="submit">{{ 'SEND' | translate }}</button>
+    <a ng-click="cancelCamera()" class="cancel">{{ 'CANCEL' | translate }}</a>
   </div>
 </div>

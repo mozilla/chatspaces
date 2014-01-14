@@ -12,6 +12,6 @@
   <input type="hidden" name="recipient[{{ recipient }}]" value="{{ recipient }}" ng-repeat="recipient in recipients track by $index" ng-if="senderKey">
   <div class="text-box">
     <input type="text" class="message-field" ng-model="$parent.message" placeholder="Add optional message">
-    <button class="message-button submit" type="button" ng-click="promptCamera()">Next!</button>
+    <button class="message-button submit" type="button" ng-click="promptCamera()">{{ 'NEXT' | translate }}</button>
   </div>
 </section>
