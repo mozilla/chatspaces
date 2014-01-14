@@ -7,5 +7,17 @@
   "BLOCKED_USERS": "Blocked users",
   "PROFILE": "Profile",
   "DRAFTS": "Drafts",
-  "SIGN OUT": "Sign out"
+  "SIGN_OUT": "Sign out",
+  "LOCAL_CACHE_RESET": "Local cache reset.",
+  "ERROR_USERNAME_TAKEN": "Error: Username taken",
+  "ERROR_COULD_NOT_UNBLOCK_USER": "Error: Could not unblock user",
+  "ERROR_COULD_NOT_UNFOLLOW_USER": "Error: Could not unfollow user",
+  "ERROR_COULD_NOT_BLOCK_USER": "Error: Could not block user",
+  "ERROR_COULD_NOT_RETRIEVE_THREAD": "Error: Could not retrieve thread",
+  "ERROR_COULD_NOT_FOLLOW_USER": "Error: Could not follow user",
+  "ERROR_COULD_NOT_SEARCH_USERS": "Error: Could not search users",
+  "BLOCKED_USER": "Blocked user",
+  "UNFOLLOWED_USER": "Unfollowed user",
+  "ADDED_USER": "Added user",
+
 }
