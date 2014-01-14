@@ -406,19 +406,15 @@ angular.module('chatspace.controllers', []).
     };
 
     $scope.deleteFriend = function (user) {
-      var verify = confirm('Are you sure you want to unfriend ' + $rootScope.friends[user].username + '? :(');
-
-      if (verify) {
-        $http({
-          url: '/api/unfollow/' + user,
-          method: 'DELETE'
-        }).success(function (data) {
-          delete $rootScope.friends[user];
-          $scope.info = data.message;
-        }).error(function (data) {
-          $scope.errors = data.message;
-        });
-      }
+      $http({
+        url: '/api/unfollow/' + user,
+        method: 'DELETE'
+      }).success(function (data) {
+        delete $rootScope.friends[user];
+        $scope.info = data.message;
+      }).error(function (data) {
+        $scope.errors = data.message;
+      });
     };
 
     $scope.requestFriend = function (user) {
