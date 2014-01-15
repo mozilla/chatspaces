@@ -1,5 +1,5 @@
 <div class="friends-view">
-  <h2>Friends</h2>
+  <h2>{{ 'FRIENDS' | translate }}</h2>
 
   <ul class="user-results">
     <li ng-repeat="(key, value) in friends | orderObjectBy:friendPredicate:true">
@@ -7,8 +7,8 @@
         <img src="{{ value.avatar }}">
       </div>
       <span>{{ value.username }}</span>
-      <button class="delete" ng-click="deleteFriend(value.userHash)">Unfollow</button>
-      <a href="javascript:;" class="block" ng-click="blockUser(value.userHash)">Block</a>
+      <button class="delete" ng-click="deleteFriend(value.userHash)">{{ 'UNFOLLOW' | translate }}</button>
+      <a href="javascript:;" class="block" ng-click="blockUser(value.userHash)">{{ 'BLOCK' | translate }}</a>
     </li>
   </ul>
 </div>

@@ -1,24 +1,25 @@
 <div class="dashboard-content dashboard-preview">
   <ul id="message-list">
-    <li ng-show="isLoading" class="loader">Loading ...</li>
+    <li ng-show="isLoading" class="loader">{{ 'LOADING' | translate }}</li>
     <li ng-class="{ new: isUnread(message) }" ng-repeat="(key, message) in messages | orderObjectBy:'updated' track by $index" ng-click="getThread(message)">
       <div class="image left">
         <img src="{{ message.value.media }}">
       </div>
       <div class="right">
-        <div class="recipients">
-          <div class="avatar" ng-repeat="recipient in recipientAvatars[message.key] track by $index">
-            <img src="{{ recipient }}">
-          </div>
-        </div>
+        <time>{{ getDate(message.updated) }}</time>
         <div class="preview-content">
           <p>{{ message.value.message }}</p>
-          <time>{{ getDate(message.updated) }}</time>
+          <span class="notification" ng-show="isUnread(message)">{{ isUnread(message) }}</span>
+        </div>
+      </div>
+      <div class="recipients">
+        <div class="avatar" ng-repeat="recipient in recipientAvatars[message.key] track by $index">
+          <img src="{{ recipient }}">
         </div>
       </div>
     </li>
   </ul>
 </div>
 <div class="new-message-tooltip" ng-show="!hasMessages">
-  <p>Send a message to your friends</p>
+  <p>{{ 'SEND_A_MESSAGE_TO_YOUR_FRIENDS' | translate }}</p>
 </div>

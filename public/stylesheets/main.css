@@ -89,6 +89,10 @@ body, input {
     overflow-x: auto;
 }
 
+.default p {
+    padding: 10px;
+}
+
 .persona {
     background-color: #bbb;
     color: #eee;
@@ -117,23 +121,6 @@ h3 {
     line-height: 1.2rem;
     margin-bottom: 20px;
     padding: 8px 10px;
-}
-
-#notifications {
-    background-color: #e2003b;
-    color: #ffc5c6;
-    display: none;
-    float: left;
-    font-family: 'DroidSansMono';
-    font-size: 2rem;
-    height: 30px;
-    line-height: 2rem;
-    margin-left: 5px;
-    padding: 5px;
-    text-align: center;
-    text-decoration: none;
-    text-shadow: #791a1c 0 0 1px;
-    min-width: 30px;
 }
 
 .content-wrapper, .friends-view, .profile-view {
@@ -171,8 +158,28 @@ h3 {
     width: 0;
 }
 
-#notifications.on {
-    display: inline-block;
+.new:after {
+    border: 25px solid transparent;
+    border-color: transparent #fff330 #fff330 transparent;
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    width: 0;
+}
+
+.notification {
+    font-family: 'DroidSansMono';
+    font-size: 1.1rem;
+    position: absolute;
+    right: 2px;
+    top: 75px;
+    z-index: 2;
+}
+
+button[disabled] {
+    opacity: 0.2;
 }
 
 #message-list li.new {
@@ -186,6 +193,10 @@ h3 {
 .dashboard-preview #message-list li:hover .left img,
 .dashboard-preview #message-list li.new:hover .left img {
     border-left: 10px solid #37d7ff;
+}
+
+.dashboard-preview #message-list li:hover .recipients {
+    background-color: #b9e9f6;
 }
 
 #message-list li.new .left img {
@@ -266,7 +277,7 @@ svg.progress.visible {
     font-weight: 600;
     height: 40px;
     line-height: 2.4rem;
-    padding: 0 5px;
+    padding: 0 10px;
     text-shadow: #3c816b 0 0 1px;
 }
 
@@ -287,6 +298,7 @@ svg.progress.visible {
     font-weight: 600;
     height: 40px;
     line-height: 2.8rem;
+    padding-right: 5px;
     text-decoration: none;
     text-shadow: #3c816b 0 0 1px;
     width: 40px;
@@ -636,22 +648,30 @@ h2 a {
 }
 
 #message-list .right {
-    width: 80%;
+    width: 85%;
 }
 
 #message-list .right p {
+    clear: both;
+    float: left;
     padding-left: 10px;
 }
 
 #message-list .recipients {
+    background-color: #eee;
     clear: both;
     float: left;
-    margin: 0 0 10px 10px;
+    padding: 10px 0;
     width: 100%;
 }
 
 #message-list .recipients img {
+    margin: 0 5px;
     width: 80px;
+}
+
+#message-list .recipients img:first-child {
+    margin-left: 10px;
 }
 
 #message-list {
@@ -732,7 +752,7 @@ h2 a {
     bottom: 0;
     padding: 10px;
     position: fixed;
-    width: 100%;
+    width: 1004px;
 }
 
 .recipient-list .avatar {
@@ -745,13 +765,13 @@ h2 a {
 }
 
 time {
-    bottom: 0;
+    clear: both;
     color: #888;
+    display: block;
+    float: left;
     font-size: 0.8rem;
     font-style: italic;
     padding: 5px 0 5px 8px;
-    position: absolute;
-    right: 10px;
 }
 
 input {
@@ -792,7 +812,7 @@ video {
         margin-top: -440px;
     }
 
-    #wrapper main > section, .recipient-list {
+    #wrapper main > section {
         width: 727px;
     }
 
@@ -804,11 +824,11 @@ video {
         margin-left: -364px;
     }
 
-    .text-box {
-        width: 687px;
+    .text-box, .recipient-list {
+        width: 708px;
     }
 
-    textarea {
+    input[type="text"] {
         width: 467px;
     }
 
@@ -822,33 +842,35 @@ video {
 }
 
 @media only screen and (max-width: 727px) {
-    textarea {
-        height: 80px;
-        width: 340px;
-    }
-
-    .recipient-list, #header, #wrapper {
+    #header, #wrapper {
         width: 420px;
     }
 
-    .text-box {
+    .text-box, .recipient-list {
         width: 400px;
     }
 
     .text-box .submit {
         font-size: 1rem;
-        height: 67px;
+        height: 60px;
         margin: 0;
         width: 100px;
     }
 
-    textarea {
-        height: 45px;
+    input[type="text"] {
         width: 275px;
     }
 
     #message-list .recipients img {
         width: 80px;
+    }
+
+    .new:after {
+        top: 15px;
+    }
+
+    .notification {
+        top: 45px;
     }
 
     .message {
@@ -883,7 +905,7 @@ video {
 
     time {
         font-size: 0.7rem;
-        padding: 3px 18px 3px 5px;
+        padding-left: 10px;
     }
 
     #wrapper main > section {
@@ -896,7 +918,7 @@ video {
 }
 
 @media only screen and (max-width: 459px) {
-    .text-box {
+    .text-box, .recipient-list {
         width: 300px;
     }
 
@@ -904,12 +926,17 @@ video {
         display: block;
     }
 
-    textarea {
+    .notification {
+        right: -7px;
+        top: 30px;
+    }
+
+    input[type="text"] {
         font-size: 1rem;
         width: 175px;
     }
 
-    .recipient-list, #header, #wrapper {
+    #header, #wrapper {
         width: 320px;
     }
 

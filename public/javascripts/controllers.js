@@ -2,7 +2,7 @@
 
 angular.module('chatspace.controllers', []).
   controller('AppCtrl',
-    function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user, localCache, cameraHelper) {
+    function ($scope, authenticate, $rootScope, $http, $location, $routeParams, $translate, user, localCache, cameraHelper) {
 
     user.call();
     $rootScope.friendPredicate = '-username';
@@ -12,6 +12,9 @@ angular.module('chatspace.controllers', []).
     $rootScope.dashboardList = [];
     $rootScope.showCamera = false;
     $rootScope.showFollowing = false;
+
+    $rootScope.language = window.navigator.userLanguage || window.navigator.language || 'en';
+    $translate.uses($rootScope.language);
 
     socket.on('friend', function (data) {
       $rootScope.$apply(function () {
@@ -52,10 +55,6 @@ angular.module('chatspace.controllers', []).
 
           if (data.value.recipientAvatars) {
             $rootScope.recipientAvatars = data.value.recipientAvatars;
-
-            if ($rootScope.recipientAvatars) {
-              $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-            }
           }
 
           if ($routeParams.senderKey === senderKey) {
@@ -147,7 +146,7 @@ angular.module('chatspace.controllers', []).
       $rootScope.toggleSettings();
     };
   }).
-  controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, cameraHelper, api) {
+  controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, $translate, cameraHelper, api) {
     api.call();
 
     var since = '';
@@ -189,7 +188,7 @@ angular.module('chatspace.controllers', []).
         $scope.errors = false;
       }).error(function (data) {
         $scope.info = false;
-        $scope.errors = data.message;
+        $scope.errors = $translate('ERROR_COULD_NOT_RETRIEVE_THREAD');
       });
     };
 
@@ -233,10 +232,6 @@ angular.module('chatspace.controllers', []).
               });
 
               $rootScope.recipientAvatars = message.value.recipientAvatars;
-
-              if ($rootScope.recipientAvatars) {
-                $rootScope.recipientAvatars.splice($rootScope.recipientAvatars.indexOf($rootScope.avatar), 1);
-              }
             });
           });
 
@@ -376,7 +371,7 @@ angular.module('chatspace.controllers', []).
       });
     };
   }).
-  controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
+  controller('FriendCtrl', function ($scope, $rootScope, $http, $location, $translate, api) {
     api.call();
 
     $scope.users = [];
@@ -401,28 +396,24 @@ angular.module('chatspace.controllers', []).
         },
         method: 'POST'
       }).success(function (data) {
-        $scope.info = data.message;
+        $scope.info = $translate('BLOCKED_USER');
         delete $rootScope.friends[userHash];
       }).error(function (data) {
         $scope.info = false;
-        $scope.errors = data.message;
+        $scope.errors = $translate('ERROR_COULD_NOT_BLOCK_USER');
       });
     };
 
     $scope.deleteFriend = function (user) {
-      var verify = confirm('Are you sure you want to unfriend ' + $rootScope.friends[user].username + '? :(');
-
-      if (verify) {
-        $http({
-          url: '/api/unfollow/' + user,
-          method: 'DELETE'
-        }).success(function (data) {
-          delete $rootScope.friends[user];
-          $scope.info = data.message;
-        }).error(function (data) {
-          $scope.errors = data.message;
-        });
-      }
+      $http({
+        url: '/api/unfollow/' + user,
+        method: 'DELETE'
+      }).success(function (data) {
+        delete $rootScope.friends[user];
+        $scope.info = $translate('UNFOLLOWED_USER');
+      }).error(function (data) {
+        $scope.errors = $translate('ERROR_COULD_NOT_UNFOLLOW_USER');
+      });
     };
 
     $scope.requestFriend = function (user) {
@@ -435,9 +426,9 @@ angular.module('chatspace.controllers', []).
       }).success(function (data) {
         $scope.users = [];
         $scope.user = '';
-        $scope.info = data.message;
+        $scope.info = $translate('ADDED_USER');
       }).error(function (data) {
-        $scope.errors = data.message;
+        $scope.errors = $translate('ERROR_COULD_NOT_FOLLOW_USER');
       });
     };
 
@@ -452,14 +443,14 @@ angular.module('chatspace.controllers', []).
         }).success(function (data) {
           $scope.users = data.users;
         }).error(function (data) {
-          $scope.errors = data.message;
+          $scope.errors = $translate('ERROR_COULD_NOT_SEARCH_USERS');
         });
       } else {
         $scope.users = [];
       }
     };
   }).
-  controller('BlockedCtrl', function ($scope, $rootScope, $http, api) {
+  controller('BlockedCtrl', function ($scope, $rootScope, $http, $translate, api) {
     api.call();
 
     $scope.unblockUser = function (userHash, idx) {
@@ -469,7 +460,7 @@ angular.module('chatspace.controllers', []).
       }).success(function (data) {
         delete $rootScope.blocked[userHash];
       }).error(function (data) {
-        $scope.errors = data.message;
+        $scope.errors = $translate('ERROR_COULD_NOT_UNBLOCK_USER');
       });
     };
   }).
@@ -503,7 +494,6 @@ angular.module('chatspace.controllers', []).
 
             $rootScope.messages[d] = thread;
             $rootScope.recipientAvatars[d] = thread.value.recipientAvatars || [];
-            $rootScope.recipientAvatars[d].splice($rootScope.recipientAvatars[d].indexOf($rootScope.avatar), 1);
           });
         });
 
@@ -521,8 +511,15 @@ angular.module('chatspace.controllers', []).
     });
 
     $scope.isUnread = function (message) {
-      return !!(($rootScope.notifications.indexOf(message.value.reply) > -1) ||
-               ($rootScope.notifications.indexOf(message.value.senderKey) > -1));
+      var count = 0;
+
+      $rootScope.notifications.forEach(function (n) {
+        if (n === message.value.senderKey) {
+          count ++;
+        }
+      });
+
+      return count;
     };
 
     $scope.getThread = function (message) {
@@ -533,7 +530,7 @@ angular.module('chatspace.controllers', []).
       }
     };
   }).
-  controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, cameraHelper) {
+  controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, $translate, cameraHelper) {
     $scope.currentUsername = $rootScope.username;
     $scope.cacheInfo = false;
     $scope.selectedUsername = false;
@@ -547,7 +544,7 @@ angular.module('chatspace.controllers', []).
     $scope.resetCache = function () {
       localForage.clear();
       $rootScope.latestMessage = false;
-      $scope.cacheInfo = 'Local cache reset.';
+      $scope.cacheInfo = $translate('LOCAL_CACHE_RESET');
     };
 
     $scope.updateAvatar = function () {
@@ -594,7 +591,7 @@ angular.module('chatspace.controllers', []).
         }
       }).error(function (data) {
         $scope.info = false;
-        $scope.errors = data.message;
+        $scope.errors = $translate('ERROR_USERNAME_TAKEN');
       });
     };
   });

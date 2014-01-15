@@ -1,5 +1,5 @@
 <div class="content-wrapper">
-  <h2>Drafts</h2>
+  <h2>{{ 'DRAFTS' | translate }}</h2>
   <ul id="message-list">
     <li ng-repeat="(key, value) in draftMessages track by $index" ng-click="resendMessage(value)">
       <div class="image left">

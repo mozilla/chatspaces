@@ -1,10 +1,10 @@
 <div class="friends-view">
-  <h2>Blocked Users</h2>
+  <h2>{{ 'BLOCKED_USERS' | translate }}</h2>
 
   <ul class="user-results blocked">
     <li ng-repeat="(key, value) in blocked track by $index">
       <img src="{{ value.avatar }}" class="avatar"><span>{{ value.username }}</span>
-      <a href="javascript:;" ng-click="unblockUser(value.userHash, $index)">Unblock</a>
+      <a href="javascript:;" ng-click="unblockUser(value.userHash, $index)">{{ 'UNBLOCK' | translate }}</a>
     </li>
   </ul>
 </div>

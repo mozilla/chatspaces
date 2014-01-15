@@ -1,7 +1,7 @@
 doctype html
 html(ng-app='chatspace')
   head
-    title chatspaces
+    title {{ 'CHATSPACES' | translate }}
     meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', name='viewport')
     meta(content='yes', name='apple-mobile-web-app-capable')
     base(href='/')
@@ -11,11 +11,10 @@ html(ng-app='chatspace')
   body(ng-controller='AppCtrl', ng-class='{ landing : !isAuthenticated }')
     #header(ng-if='isAuthenticated')
       a(class='toggle', ng-click='toggleSettings()') ≡
-      a(id='notifications', ng-click='loadDashboard()', ng-class='{ on: notifications.length }', ng-bind='notifications.length')
 
       #top-bar
         .profile
-          a.action.add-message(href='/message', ng-click='newMessage()', title='new message', ng-show='username') +
+          a.action.add-message(href='/message', ng-click='newMessage()', title="{{ 'ADD_A_NEW_MESSAGE' | translate }}", ng-show='username') +
 
     #wrapper
       block content
@@ -26,6 +25,8 @@ html(ng-app='chatspace')
     script(src='/javascripts/vendor/moment/moment.js')
     script(src='/javascripts/vendor/animated-gif/dist/Animated_GIF.min.js')
     script(src='/javascripts/vendor/angular/angular.js')
+    script(src='/javascripts/vendor/angular-translate/angular-translate.js')
+    script(src='/javascripts/vendor/angular-translate-loader-static-files/angular-translate-loader-static-files.js')
     script(src='/javascripts/vendor/angular-route/angular-route.js')
     script(src='/javascripts/vendor/gumhelper/gumhelper.js')
     script(src='/javascripts/lib/videoShooter.js')

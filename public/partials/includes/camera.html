@@ -4,9 +4,9 @@
     <img class="video-recorded" src="{{ picture }}" ng-show="picture">
   </div>
   <div class="actions">
-    <button ng-click="recordCamera()" class="submit">Record</button>
-    <button ng-click="showRecipients()" class="submit" ng-if="!reply">Next</button>
-    <button ng-click="sendMessage()" type="submit" class="submit" ng-if="reply">Send!</button>
-    <a ng-click="cancelCamera()" class="cancel">Go back</a>
+    <button ng-click="recordCamera()" class="submit">{{ 'RECORD' | translate }}</button>
+    <button ng-click="showRecipients()" ng-disabled="!picture" class="submit" ng-if="!reply">{{ 'NEXT' | translate }}</button>
+    <button ng-click="sendMessage()" ng-disabled="!picture" type="submit" class="submit" ng-if="reply">{{ 'SEND' | translate }}</button>
+    <a ng-click="cancelCamera()" class="cancel">{{ 'CANCEL' | translate }}</a>
   </div>
 </div>

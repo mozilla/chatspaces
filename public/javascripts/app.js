@@ -5,6 +5,7 @@ var socket = io.connect(location.protocol + '//' + location.hostname +
 
 angular.module('chatspace', [
   'ngRoute',
+  'pascalprecht.translate',
   'chatspace.factories',
   'chatspace.controllers'
 ]).
@@ -98,7 +99,14 @@ service('api', function ($http, $timeout, $rootScope) {
     }
   };
 }).
-config(function ($routeProvider, $locationProvider) {
+config(function ($routeProvider, $locationProvider, $translateProvider) {
+  $translateProvider.useStaticFilesLoader({
+    prefix: '/locales/',
+    suffix: '.json'
+  });
+
+  $translateProvider.preferredLanguage('en');
+
   $routeProvider
     .when('/', {
       controller: 'HomeCtrl',

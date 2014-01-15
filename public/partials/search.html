@@ -1,7 +1,7 @@
-<h2>Search for contacts</h2>
+<h2>{{ 'SEARCH_FOR_USERS' | translate }}</h2>
 
 <input ng-model="user" placeholder="Type in a username" class="search-input">
-<button type="button" ng-click="searchUsers()">Search</button>
+<button type="button" ng-click="searchUsers()">{{ 'SEARCH' | translate }}</button>
 
 <div class="info-box">
   <div ng-if="info" class="info">
@@ -17,9 +17,10 @@
       <img src="{{ user.avatar }}">
     </div>
     <span>{{ user.username }}</span>
-    <button class="add" ng-click="requestFriend(user)">Add</button>
+    <button class="add" ng-click="requestFriend(user)">{{ 'ADD_USER' | translate }}</button>
   </li>
 </ul>
+<p>{{ 'FIND_YOUR_FRIENDS_BY_SEARCHING' | translate }}</p>
 <div class="actions" ng-show="showNewMessageGuide">
-  <button ng-click="goToDashboard()">Next</button>
+  <button ng-click="goToDashboard()">{{ 'NEXT' | translate }}</button>
 </div>

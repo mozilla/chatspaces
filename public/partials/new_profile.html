@@ -1,8 +1,8 @@
 <div class="profile-view">
-  <h1 ng-show="!currUsername">Create your profile</h1>
+  <h1 ng-show="!currUsername">{{ 'CREATE_YOUR_PROFILE' | translate }}</h1>
 
   <section ng-show="!currUsername">
-    <h2>Create a username</h2>
+    <h2>{{ 'CREATE_A_USERNAME' | translate }}</h2>
     <form ng-submit="updateProfile()">
       <div ng-if="info" class="info">
         <p>{{ info }}</p>
@@ -11,14 +11,18 @@
         <p>{{ errors }}</p>
       </div>
       <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
-      <p>Your username is how friends will find you on chatpspaces so choose a name your friends know you by.</p>
-      <button type="button" ng-click="saveUsername()">Next</button>
+      <p>{{ 'YOUR_USERNAME_IS_HOW' | translate }}</p>
     </form>
+    <div class="actions">
+      <button type="button" ng-click="saveUsername()">{{ 'NEXT' | translate }}</button>
+    </div>
   </section>
   <section ng-show="selectedUsername" class="actions">
     <img src="{{ avatar }}">
-    <button ng-click="promptCamera()">Take a pic!</button>
-    <button ng-click="searchFriends()">Done</button>
+    <div class="actions">
+      <button ng-click="promptCamera()">{{ 'TAKE_A_PIC' | translate }}</button>
+      <button ng-click="searchFriends()">{{ 'DONE' | translate }}</button>
+    </div>
   </section>
 </div>
 <div ng-include="'/partials/includes/camera_avatar.html'" ng-show="showCamera"></div>
