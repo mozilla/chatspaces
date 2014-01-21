@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "dependencies": {
     "jquery": "2.0.0",
-    "animated-gif": "sole/Animated_GIF#38c7e30965578591de0f9dbbc87829f9259fd289",
+    "animated-gif": "sole/Animated_GIF#43eb767979f2f68f81abbf99117c576eb759a0bf",
     "angular": "1.2.0",
     "angular-route": "1.2.0",
-    "gumhelper": "sole/gumhelper#8f344dc27605fb9ee063c911f8bd5fc47b9300b4",
+    "gumhelper": "sole/gumhelper#596ddfb555039a400b8287fc5ac01f0b2aebf6fa",
     "moment": "2.4.0",
     "localforage": "mozilla/localForage#00c9d5f6db247a623c3e4f92a7c0e0d4ffbc8bbf",
     "angular-translate": "1.1.1",

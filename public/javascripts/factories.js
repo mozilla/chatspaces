@@ -140,8 +140,8 @@ angular.module('chatspace.factories', []).
 
           // TODO: use the provided width and height to determine
           // smaller dimensions with proper aspect ratio
-          videoElement.width = 120;
-          videoElement.height = 90;
+          videoElement.width = 100;
+          videoElement.height = 75;
           $('#video-preview').append(svg)
                              .append(videoElement); // TODO: switch to directive
           videoElement.play();
