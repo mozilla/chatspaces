@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v2014-01-21-01
+# v2014-01-21-02
 
 CACHE:
 /javascripts/vendor/jquery/jquery.min.js
@@ -21,10 +21,6 @@ CACHE:
 /images/background@2X.png
 /images/icons/favicon.png
 /css/main.css
-/locales/br-pt.json
-/locales/en.json
-/locales/es.json
-/locales/pt.json
 
 # catch-all for anything else
 NETWORK:
