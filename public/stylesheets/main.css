@@ -86,7 +86,8 @@ body, input {
 
 .default {
     margin-bottom: 30px;
-    overflow-x: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .default p {
@@ -238,7 +239,7 @@ svg.progress.visible {
 .new-message {
     bottom: 0;
     left: 0;
-    position: fixed;
+    position: absolute;
     right: 0;
     top: 0;
     z-index: 6;
