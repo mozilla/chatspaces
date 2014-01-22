@@ -181,7 +181,7 @@ angular.module('chatspace.controllers', []).
 
     var getThread = function () {
       $http({
-        url: '/api/thread/' + $routeParams.senderKey + since,
+        url: '/api/thread/' + $routeParams.senderKey, // + since,
         method: 'GET'
       }).success(function (data) {
         $scope.isLoading = false;
@@ -218,7 +218,7 @@ angular.module('chatspace.controllers', []).
             $rootScope.threadList = data;
             $rootScope.latestThreadMessage = data[0];
 
-            since = '?since=' + $rootScope.latestThreadMessage;
+            //since = '?since=' + $rootScope.latestThreadMessage;
           }
 
           $rootScope.threadList.forEach(function (d) {
@@ -498,7 +498,7 @@ angular.module('chatspace.controllers', []).
         });
 
         if ($rootScope.dashboardList[0]) {
-          since = '?since=' + $rootScope.dashboardList[0];
+          //since = '?since=' + $rootScope.dashboardList[0];
         }
 
         $http({
