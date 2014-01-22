@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v2014-01-21-02
+# v2014-01-21-03
 
 CACHE:
 /javascripts/vendor/jquery/jquery.min.js
@@ -7,7 +7,6 @@ CACHE:
 /javascripts/vendor/animated-gif/dist/Animated_GIF.min.js
 /javascripts/vendor/angular/angular.js
 /javascripts/vendor/angular-translate/angular-translate.js
-/javascripts/vendor/angular-translate-loader-static-files/angular-translate-loader-static-files.js
 /javascripts/vendor/angular-route/angular-route.js
 /javascripts/vendor/gumhelper/gumhelper.js
 /javascripts/lib/videoShooter.js
