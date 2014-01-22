@@ -25,6 +25,12 @@ module.exports = function(app, configurations, express) {
     }));
     app.use(function(req, res, next) {
       res.locals.session = req.session;
+
+      if (process.env.NODE_ENV) {
+        res.locals.manifest = '/manifest.appcache';
+      } else {
+        res.locals.manifest = '';
+      }
       next();
     });
     app.locals.pretty = true;

@@ -1,0 +1,31 @@
+CACHE MANIFEST
+# v2014-01-21-01
+
+CACHE:
+/javascripts/vendor/jquery/jquery.min.js
+/javascripts/vendor/moment/moment.js
+/javascripts/vendor/animated-gif/dist/Animated_GIF.min.js
+/javascripts/vendor/angular/angular.js
+/javascripts/vendor/angular-translate/angular-translate.js
+/javascripts/vendor/angular-translate-loader-static-files/angular-translate-loader-static-files.js
+/javascripts/vendor/angular-route/angular-route.js
+/javascripts/vendor/gumhelper/gumhelper.js
+/javascripts/lib/videoShooter.js
+/javascripts/vendor/localforage/dist/localForage.js
+/javascripts/app.js
+/javascripts/factories.js
+/javascripts/controllers.js
+/fonts/DroidSansMono-webfont.woff
+/images/avatar.gif
+/images/background.png
+/images/background@2X.png
+/images/icons/favicon.png
+/css/main.css
+/locales/br-pt.json
+/locales/en.json
+/locales/es.json
+/locales/pt.json
+
+# catch-all for anything else
+NETWORK:
+*
