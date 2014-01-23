@@ -1,15 +1,7 @@
 CACHE MANIFEST
-# v2014-01-21-05
+# v2014-01-21-06
 
 CACHE:
-/javascripts/vendor/jquery/jquery.min.js
-/javascripts/vendor/moment/moment.js
-/javascripts/vendor/animated-gif/dist/Animated_GIF.min.js
-/javascripts/vendor/angular/angular.js
-/javascripts/vendor/angular-route/angular-route.js
-/javascripts/vendor/gumhelper/gumhelper.js
-/javascripts/lib/videoShooter.js
-/javascripts/vendor/localforage/dist/localForage.js
 /fonts/DroidSansMono-webfont.woff
 /images/avatar.gif
 /images/background.png
