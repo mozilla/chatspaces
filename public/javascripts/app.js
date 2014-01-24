@@ -91,7 +91,7 @@ service('api', function ($http, $timeout, $rootScope) {
         });
       }, 500);
 
-      localForage.getItem('newMessage', function (st) {
+      localForage.getItem('firstMessage', function (st) {
         if (!st) {
           $rootScope.hasMessages = true;
         }
@@ -100,13 +100,6 @@ service('api', function ($http, $timeout, $rootScope) {
   };
 }).
 config(function ($routeProvider, $locationProvider, $translateProvider) {
-  $translateProvider.useStaticFilesLoader({
-    prefix: '/locales/',
-    suffix: '.json'
-  });
-
-  $translateProvider.preferredLanguage('en');
-
   $routeProvider
     .when('/', {
       controller: 'HomeCtrl',
@@ -153,6 +146,13 @@ config(function ($routeProvider, $locationProvider, $translateProvider) {
     });
 
   $locationProvider.html5Mode(true);
+
+  $translateProvider.useStaticFilesLoader({
+    prefix: '/locales/',
+    suffix: '.json'
+  });
+
+  $translateProvider.preferredLanguage('en');
 }).
 filter('orderObjectBy', function () {
   return function (items, field) {

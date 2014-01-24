@@ -12,11 +12,6 @@
           <span class="notification" ng-show="isUnread(message)">{{ isUnread(message) }}</span>
         </div>
       </div>
-      <div class="recipients">
-        <div class="avatar" ng-repeat="recipient in recipientAvatars[message.key] track by $index">
-          <img src="{{ recipient }}">
-        </div>
-      </div>
     </li>
   </ul>
 </div>

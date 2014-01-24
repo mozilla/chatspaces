@@ -14,7 +14,7 @@
       <p>{{ 'YOUR_USERNAME_IS_HOW' | translate }}</p>
     </form>
     <div class="actions" ng-show="!selectedUsername">
-      <button type="button" ng-click="saveUsername()">{{ 'NEXT' | translate }}</button>
+      <button type="submit center" ng-click="saveUsername()">{{ 'NEXT' | translate }}</button>
     </div>
   </section>
   <section ng-show="selectedUsername" class="actions">

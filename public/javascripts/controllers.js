@@ -298,7 +298,7 @@ angular.module('chatspace.controllers', []).
         }).success(function (data) {
           localForage.setItem($rootScope.userHash + ':lastPic', $rootScope.picture);
           localForage.setItem('newMessage', false);
-          $scope.hasMessages = true;
+          $rootScope.hasMessages = true;
           $rootScope.cancelCamera();
           resetForm();
 
@@ -474,7 +474,6 @@ angular.module('chatspace.controllers', []).
       $rootScope.userHash = data.userHash;
       $rootScope.recipients = {};
       $rootScope.messages = {};
-      $rootScope.recipientAvatars = {};
       $scope.isLoading = true;
 
       var recipientAvatars = [];
@@ -490,15 +489,12 @@ angular.module('chatspace.controllers', []).
         $rootScope.dashboardList.forEach(function (d) {
           // remove any occurences of your own userHash and add the final message to the messages scope
           localForage.getItem($rootScope.userHash + ':dashMessage[' + d + ']', function (thread) {
-            recipientAvatars = thread.value.recipientAvatars;
-
             $rootScope.messages[d] = thread;
-            $rootScope.recipientAvatars[d] = thread.value.recipientAvatars || [];
           });
         });
 
         if ($rootScope.dashboardList[0]) {
-          //since = '?since=' + $rootScope.dashboardList[0];
+          since = '?since=' + $rootScope.dashboardList[0];
         }
 
         $http({

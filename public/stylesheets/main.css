@@ -72,16 +72,33 @@ body, input {
     font-family: 'DroidSansMono', Arial, sans-serif;
 }
 
+.hide {
+    display: none;
+}
+
 .new-message-tooltip {
-    background-color: #eee;
-    border: 2px dashed #ccc;
+    background-color: #f6ff03;
     font-size: 1.3rem;
     padding: 10px;
     position: absolute;
-    right: 50px;
-    top: 10px;
+    right: 0;
+    top: 30px;
     width: 280px;
     z-index: 2;
+}
+
+.new-message-tooltip:after {
+    bottom: 100%;
+    left: 90%;
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-bottom-color: #f6ff03;
+    border-width: 30px;
+    margin-left: -30px;
 }
 
 .default {
@@ -547,6 +564,7 @@ h2 a {
     top: -20px;
     -moz-transition: 0.3s ease-out;
     transition: 0.3s ease-out;
+    z-index: 3;
 }
 
 .dashboard-content {
@@ -569,6 +587,14 @@ h2 a {
 
 .user-results {
     width: 100%;
+}
+
+.submit.left {
+    width: auto;
+}
+
+.submit.center {
+    float: none;
 }
 
 .user-results li {
@@ -617,7 +643,10 @@ h2 a {
 
 .search-input {
     border: 2px solid #eee;
+    font-size: 1.5rem;
     margin: 0 0 30px 10px;
+    padding: 11px;
+    width: 800px;
 }
 
 .search-results .delete {
@@ -725,6 +754,7 @@ h2 a {
 
 .submit {
     background-color: #38c2cb;
+    border: 0;
     float: right;
     margin-right: 15px;
 }
@@ -829,6 +859,10 @@ video {
         width: 708px;
     }
 
+    .search-input {
+        width: 500px;
+    }
+
     input[type="text"] {
         width: 467px;
     }
@@ -856,6 +890,11 @@ video {
         height: 60px;
         margin: 0;
         width: 100px;
+    }
+
+    .search-input {
+        font-size: 1.2rem;
+        width: 250px;
     }
 
     input[type="text"] {
@@ -930,6 +969,12 @@ video {
     .notification {
         right: -7px;
         top: 30px;
+    }
+
+    .search-input {
+        font-size: 0.9rem;
+        padding: 18px 10px;
+        width: 160px;
     }
 
     input[type="text"] {
