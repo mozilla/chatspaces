@@ -13,7 +13,7 @@
       <input type="text" ng-model="username" placeholder="Create a username" value="{{ username }}" required>
       <p>{{ 'YOUR_USERNAME_IS_HOW' | translate }}</p>
     </form>
-    <div class="actions">
+    <div class="actions" ng-show="!selectedUsername">
       <button type="button" ng-click="saveUsername()">{{ 'NEXT' | translate }}</button>
     </div>
   </section>
