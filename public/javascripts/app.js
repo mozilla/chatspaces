@@ -5,6 +5,7 @@ var socket = io.connect(location.protocol + '//' + location.hostname +
 
 angular.module('chatspace', [
   'ngRoute',
+  'ngCookies',
   'pascalprecht.translate',
   'chatspace.factories',
   'chatspace.controllers'
@@ -146,6 +147,9 @@ config(function ($routeProvider, $locationProvider, $translateProvider) {
     });
 
   $locationProvider.html5Mode(true);
+
+  $translateProvider.useCookieStorage(true);
+  $translateProvider.useLocalStorage(true);
 
   $translateProvider.useStaticFilesLoader({
     prefix: '/locales/',

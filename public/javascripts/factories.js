@@ -8,7 +8,7 @@ angular.module('chatspace.factories', []).
       });
 
       $rootScope.username = null;
-      localStorage.removeItem('personaEmail');
+      localForage.removeItem('personaEmail');
       user.call();
     };
 
@@ -34,7 +34,7 @@ angular.module('chatspace.factories', []).
               url: '/api/profile',
               method: 'GET'
             }).success(function (data) {
-              localStorage.setItem('personaEmail', data.email);
+              localForage.setItem('personaEmail', data.email);
               $rootScope.email = data.email;
               $rootScope.username = data.username;
               $rootScope.avatar = data.avatar;

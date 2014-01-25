@@ -114,11 +114,11 @@ angular.module('chatspace.controllers', []).
         $rootScope.settings = false;
     };
 
-    var email = localStorage.getItem('personaEmail');
-
-    if (email) {
-      $rootScope.isAuthenticated = true;
-    }
+    localForage.getItem('personaEmail', function (email) {
+      if (email) {
+        $rootScope.isAuthenticated = true;
+      }
+    });
 
     $scope.logout = function () {
       authenticate.logout();
