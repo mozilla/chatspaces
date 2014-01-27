@@ -66,13 +66,18 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
       $rootScope.userHash = data.userHash;
       $scope.isLoading = true;
 
+      $timeout(function () {
+        getThread();
+      }, 1000);
+
+      /*
       localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
         if (data) {
           $rootScope.$apply(function () {
             $rootScope.threadList = data;
             $rootScope.latestThreadMessage = data[0];
 
-            since = '?since=' + $rootScope.latestThreadMessage;
+            //since = '?since=' + $rootScope.latestThreadMessage;
 
             $rootScope.threadList.forEach(function (d) {
               localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
@@ -98,6 +103,7 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
           }, 1000);
         }
       });
+*/
     });
   }
 
