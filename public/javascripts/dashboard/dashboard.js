@@ -38,6 +38,7 @@ controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $tim
         url: '/api/feed' + since,
         method: 'GET'
       }).success(function (data) {
+        console.log('getting feed data ', data)
         $scope.isLoading = false;
       });
     });
