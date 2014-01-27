@@ -42,39 +42,37 @@ controller('AppCtrl',
   });
 
   socket.on('message', function (data) {
-    $rootScope.$apply(function () {
-      var senderKey = data.value.reply || data.value.senderKey;
+    var senderKey = data.value.reply || data.value.senderKey;
 
-      if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
-        var key = data.value.reply || data.key;
+    if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
+      var key = data.value.reply || data.key;
 
-        // also save message to local cache
-        data.updated = data.value.created;
+      // also save message to local cache
+      data.updated = data.value.created;
 
-        localForage.setItem($rootScope.userHash + ':message[' + data.key + ']', data);
-        localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
-        localCache.setItem(key, data);
+      localForage.setItem($rootScope.userHash + ':message[' + data.key + ']', data);
+      localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
+      localCache.setItem(key, data);
 
-        $rootScope.$apply(function () {
-          $rootScope.messages[data.key] = data;
+      $rootScope.$apply(function () {
+        $rootScope.messages[data.key] = data;
 
-          if (data.value.recipientAvatars) {
-            $rootScope.recipientAvatars = data.value.recipientAvatars;
-          }
+        if (data.value.recipientAvatars) {
+          $rootScope.recipientAvatars = data.value.recipientAvatars;
+        }
 
-          if ($routeParams.senderKey === senderKey) {
-            $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
-            data.value.recipients.forEach(function (userHash) {
-              $rootScope.recipients[userHash] = userHash;
-            });
+        if ($routeParams.senderKey === senderKey) {
+          $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
+          data.value.recipients.forEach(function (userHash) {
+            $rootScope.recipients[userHash] = userHash;
+          });
 
-            $rootScope.reply = senderKey;
-          } else {
-            $rootScope.latestMessage = key;
-          }
-        });
-      }
-    });
+          $rootScope.reply = senderKey;
+        } else {
+          $rootScope.latestMessage = key;
+        }
+      });
+    }
   });
 
   socket.on('blocked', function (data) {
