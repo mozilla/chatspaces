@@ -32,30 +32,13 @@ controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $tim
         since = '?since=' + $rootScope.dashboardList[0];
       }
 
-      console.log('finding data ', data);
-
       $http({
         url: '/api/feed' + since,
         method: 'GET'
       }).success(function (data) {
-        console.log('getting feed data ', data)
         $scope.isLoading = false;
       });
     });
-    /*
-    $timeout(function () {
-      if ($rootScope.dashboardList[0]) {
-        since = '?since=' + $rootScope.dashboardList[0];
-      }
-
-      $http({
-        url: '/api/feed' + since,
-        method: 'GET'
-      }).success(function (data) {
-        $scope.isLoading = false;
-      });
-    }, 1000);
-*/
   });
 
   $scope.isUnread = function (message) {
