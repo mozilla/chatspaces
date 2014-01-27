@@ -152,11 +152,15 @@ filter('orderObjectBy', function () {
       filtered.push(item);
     });
 
-    filtered.sort(function (a, b) {
-      return a[field] > b[field];
-    });
+    try {
+      filtered.sort(function (a, b) {
+        return a[field] > b[field];
+      });
 
-    filtered.reverse();
+      filtered.reverse();
+    } catch (err) {
+      console.log('Could not sort messages');
+    }
 
     return filtered;
   };
