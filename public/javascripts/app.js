@@ -8,47 +8,45 @@ angular.module('chatspaces', [
 ]).
 run(function ($rootScope, $http, $location, authenticate) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    if (!$rootScope.isAuthenticated) {
-      $location.path('/');
-    } else {
-      $http({
-        url: '/api/profile',
-        method: 'GET'
-      }).success(function (data) {
-        $rootScope.email = data.email;
-        $rootScope.username = data.username;
-        $rootScope.userHash = data.userHash;
-        $rootScope.avatar = data.avatar;
-        $rootScope.isAuthenticated = true;
-        $rootScope.picture = '';
+    $rootScope.isAuthenticated = false;
+    $http({
+      url: '/api/profile',
+      method: 'GET'
+    }).success(function (data) {
+      $rootScope.email = data.email;
+      $rootScope.username = data.username;
+      $rootScope.userHash = data.userHash;
+      $rootScope.avatar = data.avatar;
+      $rootScope.isAuthenticated = true;
+      $rootScope.picture = '';
 
-        localForage.getItem($rootScope.userHash + ':lastPic', function (pic) {
-          if (pic) {
-            $rootScope.picture = pic;
-          }
-        });
-
-        localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
-          if (key) {
-            $rootScope.latestMessage = key;
-          }
-        });
-
-        socket.emit('join', {
-          email: data.email
-        });
-
-        if (!$rootScope.username) {
-          localForage.setItem('newUser', true);
-          localForage.setItem('firstMessage', true);
-          $location.path('/new');
-        } else if ($location.path() === '/') {
-          $location.path('/dashboard');
+      localForage.getItem($rootScope.userHash + ':lastPic', function (pic) {
+        if (pic) {
+          $rootScope.picture = pic;
         }
-      }).error(function (data) {
-        authenticate.logout();
       });
-    }
+
+      localForage.getItem($rootScope.userHash + ':latestMessageKey', function (key) {
+        if (key) {
+          $rootScope.latestMessage = key;
+        }
+      });
+
+      socket.emit('join', {
+        email: data.email
+      });
+
+      if (!$rootScope.username) {
+        localForage.setItem('newUser', true);
+        localForage.setItem('firstMessage', true);
+        $location.path('/new');
+      } else if ($location.path() === '/') {
+        $location.path('/dashboard');
+      }
+    }).error(function (data) {
+      authenticate.logout();
+      $location.path('/');
+    });
   });
 }).
 service('user', function ($rootScope) {
