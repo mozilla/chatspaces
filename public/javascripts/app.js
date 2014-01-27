@@ -1,14 +1,12 @@
-'use strict';
-
 var socket = io.connect(location.protocol + '//' + location.hostname +
   (location.port ? ':' + location.port : ''));
 
-angular.module('chatspace', [
+angular.module('chatspaces', [
   'ngRoute',
   'ngCookies',
   'pascalprecht.translate',
-  'chatspace.factories',
-  'chatspace.controllers'
+  'chatspaces.factories',
+  'chatspaces.controllers'
 ]).
 run(function ($rootScope, $http, $location, $timeout, authenticate) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
