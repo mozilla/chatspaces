@@ -3,6 +3,7 @@ var socket = io.connect(location.protocol + '//' + location.hostname +
 
 angular.module('chatspaces', [
   'ngRoute',
+  'btford.socket-io',
   'chatspaces.factories',
   'chatspaces.controllers'
 ]).

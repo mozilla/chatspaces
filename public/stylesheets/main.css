@@ -527,8 +527,9 @@ h2 a {
 }
 
 #wrapper main > section.settings {
-    height: 280px;
+    height: 246px;
     margin-top: 20px;
+    opacity: 0;
     position: absolute;
     z-index: 2;
 }
@@ -555,15 +556,17 @@ h2 a {
 }
 
 #wrapper main.off > section.settings {
+    opacity: 0;
     top: -320px;
-    -moz-transition: 0.3s ease-out;
-    transition: 0.3s ease-out;
+    -moz-transition: 0.2s ease-out;
+    transition: 0.2s ease-out;
 }
 
 #wrapper main.on > section.settings {
+    opacity: 1;
     top: -20px;
-    -moz-transition: 0.3s ease-out;
-    transition: 0.3s ease-out;
+    -moz-transition: 0.2s ease-out;
+    transition: 0.2s ease-out;
     z-index: 3;
 }
 

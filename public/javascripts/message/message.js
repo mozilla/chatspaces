@@ -172,26 +172,6 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
         if (!$routeParams.senderKey) {
           $location.path('/thread/' + data.key);
         }
-      }).error(function (data) {
-        // A failed message goes immediately into the Drafts section
-        var created = Math.round(Date.now() / 1000);
-        console.log('error sending post');
-        localForage.getItem($rootScope.userHash + ':draftList', function (drafts) {
-          if (!drafts) {
-            drafts = [];
-          }
-
-          if (drafts.indexOf(created) === -1) {
-            drafts.push(created);
-            localForage.setItem($rootScope.userHash + ':draftList', drafts);
-            localForage.setItem($rootScope.userHash + ':draft[' + created + ']', {
-              key: created,
-              value: formData
-            });
-          }
-
-          $location.path('/drafts');
-        });
       });
     }
   };

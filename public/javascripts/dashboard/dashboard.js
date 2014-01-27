@@ -15,6 +15,14 @@ controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $tim
 
     var since = '';
 
+    $http({
+      url: '/api/feed' + since,
+      method: 'GET'
+    }).success(function (data) {
+      $scope.isLoading = false;
+    });
+
+    /*
     // load all the messages from the local cache
     localForage.getItem($rootScope.userHash + ':dashboardList', function (data) {
       if (data) {
@@ -39,6 +47,7 @@ controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $tim
         $scope.isLoading = false;
       });
     });
+*/
   });
 
   $scope.isUnread = function (message) {

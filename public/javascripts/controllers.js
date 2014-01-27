@@ -9,8 +9,8 @@ angular.module('chatspaces.controllers', [
   'chatspaces.message'
 ]).
 controller('AppCtrl',
-  function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user, localCache, cameraHelper) {
-
+  function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user, localCache, cameraHelper, socket) {
+    console.log(socket)
   user.call();
   $rootScope.friendPredicate = '-username';
   $rootScope.recipients = {};
@@ -50,10 +50,11 @@ controller('AppCtrl',
       // also save message to local cache
       data.updated = data.value.created;
 
+      /*
       localForage.setItem($rootScope.userHash + ':message[' + data.key + ']', data);
       localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
       localCache.setItem(key, data);
-
+      */
       $rootScope.$apply(function () {
         $rootScope.messages[data.key] = data;
 
