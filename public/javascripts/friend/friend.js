@@ -61,6 +61,8 @@ controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
   };
 
   $scope.searchUsers = function () {
+    $scope.info = false;
+    $scope.errors = false;
     if ($scope.user) {
       $http({
         url: '/api/search',
@@ -69,11 +71,15 @@ controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
         },
         method: 'POST'
       }).success(function (data) {
+        if (data.users.length < 1) {
+          $scope.info = 'No users found';
+        }
         $scope.users = data.users;
       }).error(function (data) {
         $scope.errors = data.message;
       });
     } else {
+      $scope.info = 'No users found';
       $scope.users = [];
     }
   };
