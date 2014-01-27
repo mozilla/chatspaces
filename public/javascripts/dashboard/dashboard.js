@@ -1,5 +1,5 @@
 angular.module('chatspaces.dashboard', []).
-controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $routeParams, api) {
+controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $timeout, $routeParams, api) {
   api.call();
 
   $http({
@@ -32,6 +32,8 @@ controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $rou
         since = '?since=' + $rootScope.dashboardList[0];
       }
 
+      console.log('finding data ', data);
+
       $http({
         url: '/api/feed' + since,
         method: 'GET'
@@ -39,6 +41,20 @@ controller('DashboardCtrl', function ($scope, $rootScope, $http, $location, $rou
         $scope.isLoading = false;
       });
     });
+    /*
+    $timeout(function () {
+      if ($rootScope.dashboardList[0]) {
+        since = '?since=' + $rootScope.dashboardList[0];
+      }
+
+      $http({
+        url: '/api/feed' + since,
+        method: 'GET'
+      }).success(function (data) {
+        $scope.isLoading = false;
+      });
+    }, 1000);
+*/
   });
 
   $scope.isUnread = function (message) {
