@@ -5,6 +5,7 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
   var since = '';
 
   $rootScope.messages = {};
+  $rootScope.recipients = {};
   $scope.formDate = {};
   $scope.cancelCamera();
 
@@ -62,34 +63,34 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
       method: 'GET'
     }).success(function (data) {
       $rootScope.userHash = data.userHash;
-      $rootScope.recipients = {};
-      $rootScope.messages = {};
       $scope.isLoading = true;
 
       localForage.getItem($rootScope.userHash + ':threadList[' + $routeParams.senderKey + ']', function (data) {
         if (data) {
-          $rootScope.threadList = data;
-          $rootScope.latestThreadMessage = data[0];
+          $rootScope.$apply(function () {
+            $rootScope.threadList = data;
+            $rootScope.latestThreadMessage = data[0];
 
-          since = '?since=' + $rootScope.latestThreadMessage;
-        }
+            since = '?since=' + $rootScope.latestThreadMessage;
 
-        $rootScope.threadList.forEach(function (d) {
-          localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
-            $rootScope.messages[d] = message;
+            $rootScope.threadList.forEach(function (d) {
+              localForage.getItem($rootScope.userHash + ':message[' + d + ']', function (message) {
+                $rootScope.messages[d] = message;
 
-            message.value.recipients.forEach(function (userHash) {
-              if (userHash !== $rootScope.userHash) {
-                $rootScope.recipients[userHash] = userHash;
-              }
+                message.value.recipients.forEach(function (userHash) {
+                  if (userHash !== $rootScope.userHash) {
+                    $rootScope.recipients[userHash] = userHash;
+                  }
+                });
+
+                $rootScope.recipientAvatars = message.value.recipientAvatars;
+              });
             });
-
-            $rootScope.recipientAvatars = message.value.recipientAvatars;
           });
-        });
 
-        getThread();
-        $scope.isLoading = false;
+          getThread();
+          $scope.isLoading = false;
+        }
       });
     });
   }

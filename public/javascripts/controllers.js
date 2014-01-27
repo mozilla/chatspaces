@@ -51,28 +51,28 @@ controller('AppCtrl',
         // also save message to local cache
         data.updated = data.value.created;
 
-        $rootScope.messages[data.key] = data;
-
         localForage.setItem($rootScope.userHash + ':message[' + data.key + ']', data);
         localForage.setItem($rootScope.userHash + ':latestMessageKey', key); // last one at the top is the latest dashboard key
         localCache.setItem(key, data);
 
-        if (data.value.recipientAvatars) {
-          $rootScope.recipientAvatars = data.value.recipientAvatars;
-        }
+        $rootScope.$apply(function () {
+          $rootScope.messages[data.key] = data;
 
-        if ($routeParams.senderKey === senderKey) {
-          $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
-          data.value.recipients.forEach(function (userHash) {
-            if (userHash !== $rootScope.userHash) {
+          if (data.value.recipientAvatars) {
+            $rootScope.recipientAvatars = data.value.recipientAvatars;
+          }
+
+          if ($routeParams.senderKey === senderKey) {
+            $rootScope.latestThreadMessage = data.key; // last one at the top is the latest thread key
+            data.value.recipients.forEach(function (userHash) {
               $rootScope.recipients[userHash] = userHash;
-            }
-          });
+            });
 
-          $rootScope.reply = senderKey;
-        } else {
-          $rootScope.latestMessage = key;
-        }
+            $rootScope.reply = senderKey;
+          } else {
+            $rootScope.latestMessage = key;
+          }
+        });
       }
     });
   });
