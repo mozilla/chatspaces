@@ -6,7 +6,7 @@ angular.module('chatspaces.factories', []).
       });
 
       $rootScope.username = null;
-      localForage.removeItem('personaEmail');
+      localStorage.removeItem('personaEmail');
       user.call();
     };
 
@@ -32,7 +32,7 @@ angular.module('chatspaces.factories', []).
               url: '/api/profile',
               method: 'GET'
             }).success(function (data) {
-              localForage.setItem('personaEmail', data.email);
+              localStorage.setItem('personaEmail', data.email);
               $rootScope.email = data.email;
               $rootScope.username = data.username;
               $rootScope.avatar = data.avatar;
@@ -54,7 +54,6 @@ angular.module('chatspaces.factories', []).
           }
         }).
         error(function (data) {
-
           resetUser();
           console.log('Login failed');
         });
@@ -78,12 +77,10 @@ angular.module('chatspaces.factories', []).
             $location.path('/');
           });
         } else {
-
           console.log('Logout failed because ' + data.reason);
         }
       }).
       error(function (data) {
-
         console.log('error logging out: ', data);
       });
     };

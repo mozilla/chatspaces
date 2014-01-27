@@ -1,5 +1,5 @@
 angular.module('chatspaces.message', []).
-controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, cameraHelper, api) {
+controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, $timeout, cameraHelper, api) {
   api.call();
 
   var since = '';
@@ -42,6 +42,7 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
       $scope.errors = false;
     }).error(function (data) {
       $scope.info = false;
+      $scope.isLoading = false;
       $scope.errors = data.message;
     });
   };
@@ -88,8 +89,13 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
             });
           });
 
-          getThread();
-          $scope.isLoading = false;
+          $timeout(function () {
+            getThread();
+          }, 1000);
+        } else {
+          $timeout(function () {
+            getThread();
+          }, 1000);
         }
       });
     });

@@ -43,7 +43,7 @@ controller('AppCtrl',
 
   socket.on('message', function (data) {
     var senderKey = data.value.reply || data.value.senderKey;
-
+    console.log('incoming ', data)
     if ($location.path() === '/dashboard' || $routeParams.senderKey === senderKey) {
       var key = data.value.reply || data.key;
 
@@ -116,11 +116,9 @@ controller('AppCtrl',
       $rootScope.settings = false;
   };
 
-  localForage.getItem('personaEmail', function (email) {
-    if (email) {
-      $rootScope.isAuthenticated = true;
-    }
-  });
+  if (localStorage.getItem('personaEmail')) {
+    $rootScope.isAuthenticated = true;
+  }
 
   $scope.logout = function () {
     authenticate.logout();
