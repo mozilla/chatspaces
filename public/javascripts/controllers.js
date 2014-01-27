@@ -6,7 +6,8 @@ angular.module('chatspaces.controllers', [
   'chatspaces.profile',
   'chatspaces.blocked',
   'chatspaces.home',
-  'chatspaces.message'
+  'chatspaces.message',
+  'chatspaces.drafts'
 ]).
 controller('AppCtrl',
   function ($scope, authenticate, $rootScope, $http, $location, $routeParams, $translate, user, localCache, cameraHelper) {
