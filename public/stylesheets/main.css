@@ -958,6 +958,21 @@ video {
     #wrapper main > section.settings {
         width: 360px;
     }
+
+    .recipient-list {
+        padding: 5px;
+        width: 410px;
+    }
+
+    .recipient-list .avatar {
+        height: 30px;
+        width: 30px;
+    }
+
+    .recipient-list .avatar img {
+        height: 40px;
+        width: 53px;
+    }
 }
 
 @media only screen and (max-width: 459px) {
@@ -1020,6 +1035,10 @@ video {
 
     .contact-results li {
         width: 290px;
+    }
+
+    .recipient-list {
+        width: 310px;
     }
 }
 
