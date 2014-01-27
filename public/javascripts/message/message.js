@@ -1,5 +1,5 @@
 angular.module('chatspaces.message', []).
-controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, $translate, cameraHelper, api) {
+controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $location, cameraHelper, api) {
   api.call();
 
   var since = '';
@@ -41,7 +41,7 @@ controller('MessageCtrl', function ($scope, $rootScope, $http, $routeParams, $lo
       $scope.errors = false;
     }).error(function (data) {
       $scope.info = false;
-      $scope.errors = $translate('ERROR_COULD_NOT_RETRIEVE_THREAD');
+      $scope.errors = data.message;
     });
   };
 

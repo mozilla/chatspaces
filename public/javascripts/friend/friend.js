@@ -1,5 +1,5 @@
 angular.module('chatspaces.friend', []).
-controller('FriendCtrl', function ($scope, $rootScope, $http, $location, $translate, api) {
+controller('FriendCtrl', function ($scope, $rootScope, $http, $location, api) {
   api.call();
 
   $scope.users = [];
@@ -24,11 +24,11 @@ controller('FriendCtrl', function ($scope, $rootScope, $http, $location, $transl
       },
       method: 'POST'
     }).success(function (data) {
-      $scope.info = $translate('BLOCKED_USER');
+      $scope.info = data.message;
       delete $rootScope.friends[userHash];
     }).error(function (data) {
       $scope.info = false;
-      $scope.errors = $translate('ERROR_COULD_NOT_BLOCK_USER');
+      $scope.errors = data.message;
     });
   };
 
@@ -38,9 +38,9 @@ controller('FriendCtrl', function ($scope, $rootScope, $http, $location, $transl
       method: 'DELETE'
     }).success(function (data) {
       delete $rootScope.friends[user];
-      $scope.info = $translate('UNFOLLOWED_USER');
+      $scope.info = data.message;
     }).error(function (data) {
-      $scope.errors = $translate('ERROR_COULD_NOT_UNFOLLOW_USER');
+      $scope.errors = data.message;
     });
   };
 
@@ -54,9 +54,9 @@ controller('FriendCtrl', function ($scope, $rootScope, $http, $location, $transl
     }).success(function (data) {
       $scope.users = [];
       $scope.user = '';
-      $scope.info = $translate('ADDED_USER');
+      $scope.info = data.message;
     }).error(function (data) {
-      $scope.errors = $translate('ERROR_COULD_NOT_FOLLOW_USER');
+      $scope.errors = data.message;
     });
   };
 
@@ -71,7 +71,7 @@ controller('FriendCtrl', function ($scope, $rootScope, $http, $location, $transl
       }).success(function (data) {
         $scope.users = data.users;
       }).error(function (data) {
-        $scope.errors = $translate('ERROR_COULD_NOT_SEARCH_USERS');
+        $scope.errors = data.message;
       });
     } else {
       $scope.users = [];

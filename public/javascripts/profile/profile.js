@@ -1,5 +1,5 @@
 angular.module('chatspaces.profile', []).
-controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, $translate, cameraHelper) {
+controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, cameraHelper) {
   $scope.currentUsername = $rootScope.username;
   $scope.cacheInfo = false;
   $scope.selectedUsername = false;
@@ -13,7 +13,7 @@ controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, $trans
   $scope.resetCache = function () {
     localForage.clear();
     $rootScope.latestMessage = false;
-    $scope.cacheInfo = $translate('LOCAL_CACHE_RESET');
+    $scope.cacheInfo = 'Local cache reset';
   };
 
   $scope.updateAvatar = function () {
@@ -60,7 +60,7 @@ controller('ProfileCtrl', function ($scope, $rootScope, $http, $location, $trans
       }
     }).error(function (data) {
       $scope.info = false;
-      $scope.errors = $translate('ERROR_USERNAME_TAKEN');
+      $scope.errors = data.message;
     });
   };
 });

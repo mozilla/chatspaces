@@ -3,8 +3,6 @@ var socket = io.connect(location.protocol + '//' + location.hostname +
 
 angular.module('chatspaces', [
   'ngRoute',
-  'ngCookies',
-  'pascalprecht.translate',
   'chatspaces.factories',
   'chatspaces.controllers'
 ]).
@@ -98,7 +96,7 @@ service('api', function ($http, $timeout, $rootScope) {
     }
   };
 }).
-config(function ($routeProvider, $locationProvider, $translateProvider) {
+config(function ($routeProvider, $locationProvider) {
   $routeProvider
     .when('/', {
       controller: 'HomeCtrl',
@@ -145,16 +143,6 @@ config(function ($routeProvider, $locationProvider, $translateProvider) {
     });
 
   $locationProvider.html5Mode(true);
-
-  $translateProvider.useCookieStorage(true);
-  $translateProvider.useLocalStorage(true);
-
-  $translateProvider.useStaticFilesLoader({
-    prefix: '/locales/',
-    suffix: '.json'
-  });
-
-  $translateProvider.preferredLanguage('en');
 }).
 filter('orderObjectBy', function () {
   return function (items, field) {

@@ -6,11 +6,10 @@ angular.module('chatspaces.controllers', [
   'chatspaces.profile',
   'chatspaces.blocked',
   'chatspaces.home',
-  'chatspaces.message',
-  'chatspaces.drafts'
+  'chatspaces.message'
 ]).
 controller('AppCtrl',
-  function ($scope, authenticate, $rootScope, $http, $location, $routeParams, $translate, user, localCache, cameraHelper) {
+  function ($scope, authenticate, $rootScope, $http, $location, $routeParams, user, localCache, cameraHelper) {
 
   user.call();
   $rootScope.friendPredicate = '-username';
@@ -20,9 +19,6 @@ controller('AppCtrl',
   $rootScope.dashboardList = [];
   $rootScope.showCamera = false;
   $rootScope.showFollowing = false;
-
-  $rootScope.language = window.navigator.userLanguage || window.navigator.language || 'en';
-  $translate.uses($rootScope.language);
 
   socket.on('friend', function (data) {
     $rootScope.$apply(function () {

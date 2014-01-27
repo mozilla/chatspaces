@@ -7,10 +7,10 @@
       <p>{{ errors }}</p>
     </div>
     <form ng-submit="promptCamera()" ng-include="'/partials/includes/message_form.html'"></form>
-    <div class="posting" ng-if="posting">{{ 'POSTING_PLEASE_WAIT' | translate }}</div>
+    <div class="posting" ng-if="posting">Posting, please wait!</div>
   </div>
   <ul id="message-list">
-    <li ng-show="isLoading" class="loader">{{ 'LOADING' | translate }}</li>
+    <li ng-show="isLoading" class="loader">Loading</li>
     <li ng-repeat="(key, message) in messages | orderObjectBy:'updated'">
       <div class="image left">
         <img src="{{ message.value.media }}">

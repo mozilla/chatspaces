@@ -5,19 +5,17 @@ block content
     section.settings
       ul
         li(ng-if='isAuthenticated')
-          a(href='/dashboard', ng-click='toggleSettings()') {{ 'THREADS' | translate }}
+          a(href='/dashboard', ng-click='toggleSettings()') Threads
         li(ng-if='isAuthenticated')
-          a(href='/friends', ng-click='toggleSettings()') {{ 'FRIENDS' | translate }}
+          a(href='/friends', ng-click='toggleSettings()') Friends
         li(ng-if='isAuthenticated')
-          a(href='/search', ng-click='toggleSettings()') {{ 'SEARCH_USERS' | translate }}
+          a(href='/search', ng-click='toggleSettings()') Search Users
         li(ng-if='isAuthenticated')
-          a(href='/blocked', ng-click='toggleSettings()') {{ 'BLOCKED_USERS' | translate }}
+          a(href='/blocked', ng-click='toggleSettings()') Blocked Users
         li(ng-if='isAuthenticated')
-          a(href='/profile', ng-click='toggleSettings()') {{ 'PROFILE' | translate }}
+          a(href='/profile', ng-click='toggleSettings()') Profile
         li(ng-if='isAuthenticated')
-          a(href='/drafts', ng-click='toggleSettings()') {{ 'DRAFTS' | translate }}
-        li(ng-if='isAuthenticated')
-          a(href='javascript:;', ng-click='logout()') {{ 'SIGN_OUT' | translate }}
+          a(href='javascript:;', ng-click='logout()') Sign out
 
     section.default
       div(ng-view)

@@ -1,7 +1,7 @@
 doctype html
 html(ng-app='chatspaces')
   head
-    title {{ 'CHATSPACES' | translate }}
+    title Chatspaces
     meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', name='viewport')
     meta(content='yes', name='apple-mobile-web-app-capable')
     base(href='/')
@@ -14,7 +14,7 @@ html(ng-app='chatspaces')
 
       #top-bar
         .profile
-          a.action.add-message(href='/message', ng-click='newMessage()', title="{{ 'ADD_A_NEW_MESSAGE' | translate }}", ng-show='username') +
+          a.action.add-message(href='/message', ng-click='newMessage()', title="Add a new message", ng-show='username') +
 
     #wrapper
       block content
@@ -25,11 +25,6 @@ html(ng-app='chatspaces')
     script(src='/javascripts/vendor/moment/min/moment.min.js')
     script(src='/javascripts/vendor/animated-gif/dist/Animated_GIF.min.js')
     script(src='/javascripts/vendor/angular/angular.js')
-    script(src='/javascripts/vendor/angular-cookies/angular-cookies.min.js')
-    script(src='/javascripts/vendor/angular-translate/angular-translate.js')
-    script(src='/javascripts/vendor/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js')
-    script(src='/javascripts/vendor/angular-translate-storage-local/angular-translate-storage-local.min.js')
-    script(src='/javascripts/vendor/angular-translate-loader-static-files/angular-translate-loader-static-files.js')
     script(src='/javascripts/vendor/angular-route/angular-route.min.js')
     script(src='/javascripts/vendor/gumhelper/gumhelper.js')
     script(src='/javascripts/lib/videoShooter.js')
@@ -43,4 +38,3 @@ html(ng-app='chatspaces')
     script(src='/javascripts/home/home.js')
     script(src='/javascripts/message/message.js')
     script(src='/javascripts/profile/profile.js')
-    script(src='/javascripts/drafts/drafts.js')
