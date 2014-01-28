@@ -623,9 +623,11 @@ h2 a {
 
 .user-results .block {
     bottom: 0;
+    color: #ccc;
     display: inline-block;
     position: absolute;
     right: 10px;
+    text-decoration: none;
 }
 
 .delete {
