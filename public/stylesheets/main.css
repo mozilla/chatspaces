@@ -660,6 +660,10 @@ h2 a {
     width: 25px;
 }
 
+.right {
+    float: right;
+}
+
 #message-list li.loader {
     background-color: transparent;
     border: 0;
