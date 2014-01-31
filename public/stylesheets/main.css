@@ -112,7 +112,7 @@ body, input {
 }
 
 .persona {
-    background-color: #bbb;
+    background-color: #49b2c8;
     color: #eee;
     display: inline-block;
     font-size: 2rem;
@@ -457,11 +457,31 @@ svg.progress.visible {
 }
 
 .landing #wrapper {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .landing-view, .message-view {
     padding: 20px;
+}
+
+.landing-view {
+    margin: 0 auto;
+    max-width: 600px;
+    min-width: 280px;
+    text-align: center;
+}
+
+.landing-view h2 {
+    color: #fff;
+    font-size: 3rem;
+    text-shadow: #64d2e9 1px 1px 0;
+}
+
+.main-logo {
+    background: url('/images/logo.png') no-repeat;
+    height: 300px;
+    margin: 40px auto 0 auto;
+    width: 300px;
 }
 
 .recipient-results {
