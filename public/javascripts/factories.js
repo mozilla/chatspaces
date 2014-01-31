@@ -38,7 +38,7 @@ factory('authenticate', function ($rootScope, $http, $location, $window, user) {
             $rootScope.avatar = data.avatar;
 
             if (data.username) {
-              $window.location.href = '/dashboard';
+              location.reload();
             } else {
               $location.path('/profile');
             }
