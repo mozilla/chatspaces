@@ -4,9 +4,7 @@ module.exports = function (app, io, nconf, user, redisClient, isLoggedIn) {
   var TTL_LIMIT = 86400; // 1 day
 
   app.get('/', function (req, res) {
-    res.render('index', {
-      manifest: res.locals.manifest
-    });
+    res.render('index');
   });
 
   app.get('/api/profile', isLoggedIn, function (req, res) {
