@@ -2,11 +2,33 @@ CACHE MANIFEST
 # v2014-01-21-06
 
 CACHE:
+/javascripts/vendor/jquery/jquery.min.js
+/javascripts/vendor/moment/min/moment.min.js
+/javascripts/vendor/animated-gif/dist/Animated_GIF.min.js
+/javascripts/vendor/angular/angular.min.js
+/javascripts/vendor/angular-route/angular-route.min.js
+/javascripts/vendor/angular-socket-io/socket.js
+/javascripts/vendor/gumhelper/gumhelper.js
+/javascripts/lib/videoShooter.js
+/javascripts/vendor/localforage/dist/localForage.js
+/javascripts/app.js
+/javascripts/factories.js
+/javascripts/controllers.js
+/javascripts/blocked/blocked.js
+/javascripts/dashboard/dashboard.js
+/javascripts/friend/friend.js
+/javascripts/home/home.js
+/javascripts/message/message.js
+/javascripts/profile/profile.js
 /fonts/DroidSansMono-webfont.woff
 /images/avatar.gif
 /images/background.png
 /images/background@2X.png
 /images/icons/favicon.png
+/images/icons/256-icon.png
+/images/icons/128-icon.png
+/images/icons/114-icon.png
+/images/icons/72-icon.png
 /css/main.css
 
 # catch-all for anything else

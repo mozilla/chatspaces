@@ -1,5 +1,5 @@
 doctype html
-html(ng-app='chatspaces')
+html(ng-app='chatspaces', manifest='#{appcache}')
   head
     title Chatspaces
     meta(content='width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', name='viewport')
@@ -24,7 +24,7 @@ html(ng-app='chatspaces')
     script(src='/javascripts/vendor/jquery/jquery.min.js')
     script(src='/javascripts/vendor/moment/min/moment.min.js')
     script(src='/javascripts/vendor/animated-gif/dist/Animated_GIF.min.js')
-    script(src='/javascripts/vendor/angular/angular.js')
+    script(src='/javascripts/vendor/angular/angular.min.js')
     script(src='/javascripts/vendor/angular-route/angular-route.min.js')
     script(src='/javascripts/vendor/angular-socket-io/socket.js')
     script(src='/javascripts/vendor/gumhelper/gumhelper.js')

@@ -1072,4 +1072,8 @@ video {
     body {
         background-image: url('/images/background@2X.png');
     }
+
+    .main-logo {
+        background: url('/images/logo@2X.png') no-repeat;
+    }
 }
