@@ -1068,12 +1068,14 @@ video {
     }
 }
 
-@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min--moz-device-pixel-ratio: 2) {
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min--moz-device-pixel-ratio: 2), (min-resolution: 2dppx) {
     body {
         background-image: url('/images/background@2X.png');
+        background-size: auto 50px;
     }
 
     .main-logo {
         background: url('/images/logo@2X.png') no-repeat;
+        background-size: auto 300px;
     }
 }
